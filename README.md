@@ -13,13 +13,14 @@ yarn add @kimafinance/kima-transaction-api
 ## Usage
 
 ```ts
-import { submitKimaTransaction } from '@kimafinance/kima-transaction-backend'
+import { submitKimaTransaction, SupportNetworks, CurrencyOptions } from '@kimafinance/kima-transaction-backend'
 
 const txResult = await submitKimaTransaction({
     originAddress: "0x1234123412341234123412341234123412341234",
-    originChain: "Ethereum",
+    originChain: SupportNetworks.Ethereum,
     targetAddress: "0x1234123412341234123412341234123412341234",
-    targetChain: "Polygon",
+    targetChain: SupportNetworks.Polygon,
+    symbol: CurrencyOptions.USDT,
     amount: 100,
     fee: 0.3
 })
@@ -31,13 +32,15 @@ const txResult = await submitKimaTransaction({
 
 `submitKimaTransaction` : Submit a transaction to transfer liquidity from one change to another.
 
-    - `originAddress (string)`: sending address
-    - `originChain (string)`: sending chain
-    - `targetAddress (string)`: receiving address
-    - `targetChain (string)`: receiving chain
-    - `amount (number)`: amount of token to transfer
-    - `fee (number)`: amount of token that kima consumes to pay gas fee for pulling & releasing token transactions
+    - `originAddress`: sending address
+    - `originChain`: sending chain
+    - `targetAddress`: receiving address
+    - `targetChain`: receiving chain
+    - `symbol`: token symbol
+    - `amount`: amount of token to transfer
+    - `fee`: amount of token that kima consumes to pay gas fee for pulling & releasing token transactions
 
 ## Environment Variables
 
 `KIMA_BACKEND_MNEMONIC` : Seed phrase of developer wallet. This wallet must have KIMA token to submit a transaction to kima chain.
+`KIMA_BACKEND_NODE_PROVIDER` : Node provider for kima chain

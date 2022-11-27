@@ -1,40 +1,44 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MsgClientImpl = exports.MsgCancelTransactionResponse = exports.MsgCancelTransaction = exports.MsgDrainTransactionResponse = exports.MsgDrainTransaction = exports.MsgProvisionTransactionResponse = exports.MsgProvisionTransaction = exports.MsgUpdateGasFeeResponse = exports.MsgUpdateGasFee = exports.MsgKeysignVoteResponse = exports.MsgKeysignVote = exports.MsgUpdateBalanceResponse = exports.MsgUpdateBalance = exports.MsgObservationVoteResponse = exports.MsgObservationVote = exports.MsgFetchBalanceResponse = exports.MsgFetchBalance = exports.MsgApproveTransactionResponse = exports.MsgApproveTransaction = exports.MsgRequestTransactionResponse = exports.MsgRequestTransaction = exports.protobufPackage = void 0;
+exports.MsgClientImpl = exports.MsgClearTssInfoResponse = exports.MsgClearTssInfo = exports.MsgRemoveWhitelistedResponse = exports.MsgRemoveWhitelisted = exports.MsgUpdateTssPubkeyResponse = exports.MsgUpdateTssPubkey = exports.MsgAddPubkeyResponse = exports.MsgAddPubkey = exports.MsgSetAdminResponse = exports.MsgSetAdmin = exports.MsgAddWhitelistedResponse = exports.MsgAddWhitelisted = exports.MsgCancelTransactionResponse = exports.MsgCancelTransaction = exports.MsgDrainTransactionResponse = exports.MsgDrainTransaction = exports.MsgProvisionTransactionResponse = exports.MsgProvisionTransaction = exports.MsgUpdateGasFeeResponse = exports.MsgUpdateGasFee = exports.MsgKeysignVoteResponse = exports.MsgKeysignVote = exports.MsgUpdateBalanceResponse = exports.MsgUpdateBalance = exports.MsgObservationVoteResponse = exports.MsgObservationVote = exports.MsgFetchBalanceResponse = exports.MsgFetchBalance = exports.MsgApproveTransactionResponse = exports.MsgApproveTransaction = exports.MsgRequestTransactionResponse = exports.MsgRequestTransaction = exports.protobufPackage = void 0;
 /* eslint-disable */
 const minimal_1 = require("protobufjs/minimal");
-exports.protobufPackage = 'DiversifiTechnologies.diversifi.diversifi';
+exports.protobufPackage = "KimaFinance.kima.kima";
 const baseMsgRequestTransaction = {
-    creator: '',
-    originChain: '',
-    originAddress: '',
-    targetChain: '',
-    targetAddress: '',
-    amount: '',
-    fee: ''
+    creator: "",
+    originChain: "",
+    originAddress: "",
+    targetChain: "",
+    targetAddress: "",
+    symbol: "",
+    amount: "",
+    fee: "",
 };
 exports.MsgRequestTransaction = {
     encode(message, writer = minimal_1.Writer.create()) {
-        if (message.creator !== '') {
+        if (message.creator !== "") {
             writer.uint32(10).string(message.creator);
         }
-        if (message.originChain !== '') {
+        if (message.originChain !== "") {
             writer.uint32(18).string(message.originChain);
         }
-        if (message.originAddress !== '') {
+        if (message.originAddress !== "") {
             writer.uint32(26).string(message.originAddress);
         }
-        if (message.targetChain !== '') {
+        if (message.targetChain !== "") {
             writer.uint32(34).string(message.targetChain);
         }
-        if (message.targetAddress !== '') {
+        if (message.targetAddress !== "") {
             writer.uint32(42).string(message.targetAddress);
         }
-        if (message.amount !== '') {
-            writer.uint32(50).string(message.amount);
+        if (message.symbol !== "") {
+            writer.uint32(50).string(message.symbol);
         }
-        if (message.fee !== '') {
-            writer.uint32(58).string(message.fee);
+        if (message.amount !== "") {
+            writer.uint32(58).string(message.amount);
+        }
+        if (message.fee !== "") {
+            writer.uint32(66).string(message.fee);
         }
         return writer;
     },
@@ -61,9 +65,12 @@ exports.MsgRequestTransaction = {
                     message.targetAddress = reader.string();
                     break;
                 case 6:
-                    message.amount = reader.string();
+                    message.symbol = reader.string();
                     break;
                 case 7:
+                    message.amount = reader.string();
+                    break;
+                case 8:
                     message.fee = reader.string();
                     break;
                 default:
@@ -79,55 +86,64 @@ exports.MsgRequestTransaction = {
             message.creator = String(object.creator);
         }
         else {
-            message.creator = '';
+            message.creator = "";
         }
         if (object.originChain !== undefined && object.originChain !== null) {
             message.originChain = String(object.originChain);
         }
         else {
-            message.originChain = '';
+            message.originChain = "";
         }
         if (object.originAddress !== undefined && object.originAddress !== null) {
             message.originAddress = String(object.originAddress);
         }
         else {
-            message.originAddress = '';
+            message.originAddress = "";
         }
         if (object.targetChain !== undefined && object.targetChain !== null) {
             message.targetChain = String(object.targetChain);
         }
         else {
-            message.targetChain = '';
+            message.targetChain = "";
         }
         if (object.targetAddress !== undefined && object.targetAddress !== null) {
             message.targetAddress = String(object.targetAddress);
         }
         else {
-            message.targetAddress = '';
+            message.targetAddress = "";
+        }
+        if (object.symbol !== undefined && object.symbol !== null) {
+            message.symbol = String(object.symbol);
+        }
+        else {
+            message.symbol = "";
         }
         if (object.amount !== undefined && object.amount !== null) {
             message.amount = String(object.amount);
         }
         else {
-            message.amount = '';
+            message.amount = "";
         }
         if (object.fee !== undefined && object.fee !== null) {
             message.fee = String(object.fee);
         }
         else {
-            message.fee = '';
+            message.fee = "";
         }
         return message;
     },
     toJSON(message) {
         const obj = {};
         message.creator !== undefined && (obj.creator = message.creator);
-        message.originChain !== undefined && (obj.originChain = message.originChain);
+        message.originChain !== undefined &&
+            (obj.originChain = message.originChain);
         message.originAddress !== undefined &&
             (obj.originAddress = message.originAddress);
-        message.targetChain !== undefined && (obj.targetChain = message.targetChain);
+        message.targetChain !== undefined &&
+            (obj.targetChain = message.targetChain);
         message.targetAddress !== undefined &&
             (obj.targetAddress = message.targetAddress);
+        message.symbol !== undefined && (obj.symbol = message.symbol);
         message.amount !== undefined && (obj.amount = message.amount);
         message.fee !== undefined && (obj.fee = message.fee);
         return obj;
@@ -138,55 +154,68 @@ exports.MsgRequestTransaction = {
             message.creator = object.creator;
         }
         else {
-            message.creator = '';
+            message.creator = "";
         }
         if (object.originChain !== undefined && object.originChain !== null) {
             message.originChain = object.originChain;
         }
         else {
-            message.originChain = '';
+            message.originChain = "";
         }
         if (object.originAddress !== undefined && object.originAddress !== null) {
             message.originAddress = object.originAddress;
         }
         else {
-            message.originAddress = '';
+            message.originAddress = "";
         }
         if (object.targetChain !== undefined && object.targetChain !== null) {
             message.targetChain = object.targetChain;
         }
         else {
-            message.targetChain = '';
+            message.targetChain = "";
         }
         if (object.targetAddress !== undefined && object.targetAddress !== null) {
             message.targetAddress = object.targetAddress;
         }
         else {
-            message.targetAddress = '';
+            message.targetAddress = "";
+        }
+        if (object.symbol !== undefined && object.symbol !== null) {
+            message.symbol = object.symbol;
+        }
+        else {
+            message.symbol = "";
         }
         if (object.amount !== undefined && object.amount !== null) {
             message.amount = object.amount;
         }
         else {
-            message.amount = '';
+            message.amount = "";
         }
         if (object.fee !== undefined && object.fee !== null) {
             message.fee = object.fee;
         }
         else {
-            message.fee = '';
+            message.fee = "";
         }
         return message;
-    }
+    },
 };
-const baseMsgRequestTransactionResponse = { code: '', msg: '' };
+const baseMsgRequestTransactionResponse = {
+    code: "",
+    msg: "",
+    txId: "",
+};
 exports.MsgRequestTransactionResponse = {
     encode(message, writer = minimal_1.Writer.create()) {
-        if (message.code !== '') {
+        if (message.code !== "") {
             writer.uint32(10).string(message.code);
         }
-        if (message.msg !== '') {
+        if (message.msg !== "") {
             writer.uint32(18).string(message.msg);
+        }
+        if (message.txId !== "") {
+            writer.uint32(26).string(message.txId);
         }
         return writer;
     },
@@ -194,7 +223,7 @@ exports.MsgRequestTransactionResponse = {
         const reader = input instanceof Uint8Array ? new minimal_1.Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
         const message = {
-            ...baseMsgRequestTransactionResponse
+            ...baseMsgRequestTransactionResponse,
         };
         while (reader.pos < end) {
             const tag = reader.uint32();
@@ -205,6 +234,9 @@ exports.MsgRequestTransactionResponse = {
                 case 2:
                     message.msg = reader.string();
                     break;
+                case 3:
+                    message.txId = reader.string();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -214,19 +246,25 @@ exports.MsgRequestTransactionResponse = {
     },
     fromJSON(object) {
         const message = {
-            ...baseMsgRequestTransactionResponse
+            ...baseMsgRequestTransactionResponse,
         };
         if (object.code !== undefined && object.code !== null) {
             message.code = String(object.code);
         }
         else {
-            message.code = '';
+            message.code = "";
         }
         if (object.msg !== undefined && object.msg !== null) {
             message.msg = String(object.msg);
         }
         else {
-            message.msg = '';
+            message.msg = "";
+        }
+        if (object.txId !== undefined && object.txId !== null) {
+            message.txId = String(object.txId);
+        }
+        else {
+            message.txId = "";
         }
         return message;
     },
@@ -234,45 +272,52 @@ exports.MsgRequestTransactionResponse = {
         const obj = {};
         message.code !== undefined && (obj.code = message.code);
         message.msg !== undefined && (obj.msg = message.msg);
+        message.txId !== undefined && (obj.txId = message.txId);
         return obj;
     },
     fromPartial(object) {
         const message = {
-            ...baseMsgRequestTransactionResponse
+            ...baseMsgRequestTransactionResponse,
         };
         if (object.code !== undefined && object.code !== null) {
             message.code = object.code;
         }
         else {
-            message.code = '';
+            message.code = "";
         }
         if (object.msg !== undefined && object.msg !== null) {
             message.msg = object.msg;
         }
         else {
-            message.msg = '';
+            message.msg = "";
+        }
+        if (object.txId !== undefined && object.txId !== null) {
+            message.txId = object.txId;
+        }
+        else {
+            message.txId = "";
         }
         return message;
-    }
+    },
 };
 const baseMsgApproveTransaction = {
-    creator: '',
-    txHash: '',
-    success: '',
-    signedKey: ''
+    creator: "",
+    txHash: "",
+    success: "",
+    signedKey: "",
 };
 exports.MsgApproveTransaction = {
     encode(message, writer = minimal_1.Writer.create()) {
-        if (message.creator !== '') {
+        if (message.creator !== "") {
             writer.uint32(10).string(message.creator);
         }
-        if (message.txHash !== '') {
+        if (message.txHash !== "") {
             writer.uint32(18).string(message.txHash);
         }
-        if (message.success !== '') {
+        if (message.success !== "") {
             writer.uint32(26).string(message.success);
         }
-        if (message.signedKey !== '') {
+        if (message.signedKey !== "") {
             writer.uint32(34).string(message.signedKey);
         }
         return writer;
@@ -309,25 +354,25 @@ exports.MsgApproveTransaction = {
             message.creator = String(object.creator);
         }
         else {
-            message.creator = '';
+            message.creator = "";
         }
         if (object.txHash !== undefined && object.txHash !== null) {
             message.txHash = String(object.txHash);
         }
         else {
-            message.txHash = '';
+            message.txHash = "";
         }
         if (object.success !== undefined && object.success !== null) {
             message.success = String(object.success);
         }
         else {
-            message.success = '';
+            message.success = "";
         }
         if (object.signedKey !== undefined && object.signedKey !== null) {
             message.signedKey = String(object.signedKey);
         }
         else {
-            message.signedKey = '';
+            message.signedKey = "";
         }
         return message;
     },
@@ -345,36 +390,36 @@ exports.MsgApproveTransaction = {
             message.creator = object.creator;
         }
         else {
-            message.creator = '';
+            message.creator = "";
         }
         if (object.txHash !== undefined && object.txHash !== null) {
             message.txHash = object.txHash;
         }
         else {
-            message.txHash = '';
+            message.txHash = "";
         }
         if (object.success !== undefined && object.success !== null) {
             message.success = object.success;
         }
         else {
-            message.success = '';
+            message.success = "";
         }
         if (object.signedKey !== undefined && object.signedKey !== null) {
             message.signedKey = object.signedKey;
         }
         else {
-            message.signedKey = '';
+            message.signedKey = "";
         }
         return message;
-    }
+    },
 };
-const baseMsgApproveTransactionResponse = { code: '', msg: '' };
+const baseMsgApproveTransactionResponse = { code: "", msg: "" };
 exports.MsgApproveTransactionResponse = {
     encode(message, writer = minimal_1.Writer.create()) {
-        if (message.code !== '') {
+        if (message.code !== "") {
             writer.uint32(10).string(message.code);
         }
-        if (message.msg !== '') {
+        if (message.msg !== "") {
             writer.uint32(18).string(message.msg);
         }
         return writer;
@@ -383,7 +428,7 @@ exports.MsgApproveTransactionResponse = {
         const reader = input instanceof Uint8Array ? new minimal_1.Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
         const message = {
-            ...baseMsgApproveTransactionResponse
+            ...baseMsgApproveTransactionResponse,
         };
         while (reader.pos < end) {
             const tag = reader.uint32();
@@ -403,19 +448,19 @@ exports.MsgApproveTransactionResponse = {
     },
     fromJSON(object) {
         const message = {
-            ...baseMsgApproveTransactionResponse
+            ...baseMsgApproveTransactionResponse,
         };
         if (object.code !== undefined && object.code !== null) {
             message.code = String(object.code);
         }
         else {
-            message.code = '';
+            message.code = "";
         }
         if (object.msg !== undefined && object.msg !== null) {
             message.msg = String(object.msg);
         }
         else {
-            message.msg = '';
+            message.msg = "";
         }
         return message;
     },
@@ -427,27 +472,27 @@ exports.MsgApproveTransactionResponse = {
     },
     fromPartial(object) {
         const message = {
-            ...baseMsgApproveTransactionResponse
+            ...baseMsgApproveTransactionResponse,
         };
         if (object.code !== undefined && object.code !== null) {
             message.code = object.code;
         }
         else {
-            message.code = '';
+            message.code = "";
         }
         if (object.msg !== undefined && object.msg !== null) {
             message.msg = object.msg;
         }
         else {
-            message.msg = '';
+            message.msg = "";
         }
         return message;
-    }
+    },
 };
-const baseMsgFetchBalance = { creator: '' };
+const baseMsgFetchBalance = { creator: "" };
 exports.MsgFetchBalance = {
     encode(message, writer = minimal_1.Writer.create()) {
-        if (message.creator !== '') {
+        if (message.creator !== "") {
             writer.uint32(10).string(message.creator);
         }
         return writer;
@@ -475,7 +520,7 @@ exports.MsgFetchBalance = {
             message.creator = String(object.creator);
         }
         else {
-            message.creator = '';
+            message.creator = "";
         }
         return message;
     },
@@ -490,18 +535,18 @@ exports.MsgFetchBalance = {
             message.creator = object.creator;
         }
         else {
-            message.creator = '';
+            message.creator = "";
         }
         return message;
-    }
+    },
 };
-const baseMsgFetchBalanceResponse = { code: '', result: '' };
+const baseMsgFetchBalanceResponse = { code: "", result: "" };
 exports.MsgFetchBalanceResponse = {
     encode(message, writer = minimal_1.Writer.create()) {
-        if (message.code !== '') {
+        if (message.code !== "") {
             writer.uint32(10).string(message.code);
         }
-        if (message.result !== '') {
+        if (message.result !== "") {
             writer.uint32(18).string(message.result);
         }
         return writer;
@@ -510,7 +555,7 @@ exports.MsgFetchBalanceResponse = {
         const reader = input instanceof Uint8Array ? new minimal_1.Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
         const message = {
-            ...baseMsgFetchBalanceResponse
+            ...baseMsgFetchBalanceResponse,
         };
         while (reader.pos < end) {
             const tag = reader.uint32();
@@ -530,19 +575,19 @@ exports.MsgFetchBalanceResponse = {
     },
     fromJSON(object) {
         const message = {
-            ...baseMsgFetchBalanceResponse
+            ...baseMsgFetchBalanceResponse,
         };
         if (object.code !== undefined && object.code !== null) {
             message.code = String(object.code);
         }
         else {
-            message.code = '';
+            message.code = "";
         }
         if (object.result !== undefined && object.result !== null) {
             message.result = String(object.result);
         }
         else {
-            message.result = '';
+            message.result = "";
         }
         return message;
     },
@@ -554,49 +599,49 @@ exports.MsgFetchBalanceResponse = {
     },
     fromPartial(object) {
         const message = {
-            ...baseMsgFetchBalanceResponse
+            ...baseMsgFetchBalanceResponse,
         };
         if (object.code !== undefined && object.code !== null) {
             message.code = object.code;
         }
         else {
-            message.code = '';
+            message.code = "";
         }
         if (object.result !== undefined && object.result !== null) {
             message.result = object.result;
         }
         else {
-            message.result = '';
+            message.result = "";
         }
         return message;
-    }
+    },
 };
 const baseMsgObservationVote = {
-    creator: '',
-    txHash: '',
-    chainId: '',
-    from: '',
-    to: '',
-    amount: ''
+    creator: "",
+    txHash: "",
+    chainId: "",
+    from: "",
+    to: "",
+    amount: "",
 };
 exports.MsgObservationVote = {
     encode(message, writer = minimal_1.Writer.create()) {
-        if (message.creator !== '') {
+        if (message.creator !== "") {
             writer.uint32(10).string(message.creator);
         }
-        if (message.txHash !== '') {
+        if (message.txHash !== "") {
             writer.uint32(18).string(message.txHash);
         }
-        if (message.chainId !== '') {
+        if (message.chainId !== "") {
             writer.uint32(26).string(message.chainId);
         }
-        if (message.from !== '') {
+        if (message.from !== "") {
             writer.uint32(34).string(message.from);
         }
-        if (message.to !== '') {
+        if (message.to !== "") {
             writer.uint32(42).string(message.to);
         }
-        if (message.amount !== '') {
+        if (message.amount !== "") {
             writer.uint32(50).string(message.amount);
         }
         return writer;
@@ -639,37 +684,37 @@ exports.MsgObservationVote = {
             message.creator = String(object.creator);
         }
         else {
-            message.creator = '';
+            message.creator = "";
         }
         if (object.txHash !== undefined && object.txHash !== null) {
             message.txHash = String(object.txHash);
         }
         else {
-            message.txHash = '';
+            message.txHash = "";
         }
         if (object.chainId !== undefined && object.chainId !== null) {
             message.chainId = String(object.chainId);
         }
         else {
-            message.chainId = '';
+            message.chainId = "";
         }
         if (object.from !== undefined && object.from !== null) {
             message.from = String(object.from);
         }
         else {
-            message.from = '';
+            message.from = "";
         }
         if (object.to !== undefined && object.to !== null) {
             message.to = String(object.to);
         }
         else {
-            message.to = '';
+            message.to = "";
         }
         if (object.amount !== undefined && object.amount !== null) {
             message.amount = String(object.amount);
         }
         else {
-            message.amount = '';
+            message.amount = "";
         }
         return message;
     },
@@ -689,48 +734,48 @@ exports.MsgObservationVote = {
             message.creator = object.creator;
         }
         else {
-            message.creator = '';
+            message.creator = "";
         }
         if (object.txHash !== undefined && object.txHash !== null) {
             message.txHash = object.txHash;
         }
         else {
-            message.txHash = '';
+            message.txHash = "";
         }
         if (object.chainId !== undefined && object.chainId !== null) {
             message.chainId = object.chainId;
         }
         else {
-            message.chainId = '';
+            message.chainId = "";
         }
         if (object.from !== undefined && object.from !== null) {
             message.from = object.from;
         }
         else {
-            message.from = '';
+            message.from = "";
         }
         if (object.to !== undefined && object.to !== null) {
             message.to = object.to;
         }
         else {
-            message.to = '';
+            message.to = "";
         }
         if (object.amount !== undefined && object.amount !== null) {
             message.amount = object.amount;
         }
         else {
-            message.amount = '';
+            message.amount = "";
         }
         return message;
-    }
+    },
 };
-const baseMsgObservationVoteResponse = { code: '', msg: '' };
+const baseMsgObservationVoteResponse = { code: "", msg: "" };
 exports.MsgObservationVoteResponse = {
     encode(message, writer = minimal_1.Writer.create()) {
-        if (message.code !== '') {
+        if (message.code !== "") {
             writer.uint32(10).string(message.code);
         }
-        if (message.msg !== '') {
+        if (message.msg !== "") {
             writer.uint32(18).string(message.msg);
         }
         return writer;
@@ -739,7 +784,7 @@ exports.MsgObservationVoteResponse = {
         const reader = input instanceof Uint8Array ? new minimal_1.Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
         const message = {
-            ...baseMsgObservationVoteResponse
+            ...baseMsgObservationVoteResponse,
         };
         while (reader.pos < end) {
             const tag = reader.uint32();
@@ -759,19 +804,19 @@ exports.MsgObservationVoteResponse = {
     },
     fromJSON(object) {
         const message = {
-            ...baseMsgObservationVoteResponse
+            ...baseMsgObservationVoteResponse,
         };
         if (object.code !== undefined && object.code !== null) {
             message.code = String(object.code);
         }
         else {
-            message.code = '';
+            message.code = "";
         }
         if (object.msg !== undefined && object.msg !== null) {
             message.msg = String(object.msg);
         }
         else {
-            message.msg = '';
+            message.msg = "";
         }
         return message;
     },
@@ -783,41 +828,41 @@ exports.MsgObservationVoteResponse = {
     },
     fromPartial(object) {
         const message = {
-            ...baseMsgObservationVoteResponse
+            ...baseMsgObservationVoteResponse,
         };
         if (object.code !== undefined && object.code !== null) {
             message.code = object.code;
         }
         else {
-            message.code = '';
+            message.code = "";
         }
         if (object.msg !== undefined && object.msg !== null) {
             message.msg = object.msg;
         }
         else {
-            message.msg = '';
+            message.msg = "";
         }
         return message;
-    }
+    },
 };
 const baseMsgUpdateBalance = {
-    creator: '',
-    chainId: '',
-    balance: '',
-    decimal: ''
+    creator: "",
+    chainId: "",
+    balance: "",
+    decimal: "",
 };
 exports.MsgUpdateBalance = {
     encode(message, writer = minimal_1.Writer.create()) {
-        if (message.creator !== '') {
+        if (message.creator !== "") {
             writer.uint32(10).string(message.creator);
         }
-        if (message.chainId !== '') {
+        if (message.chainId !== "") {
             writer.uint32(18).string(message.chainId);
         }
-        if (message.balance !== '') {
+        if (message.balance !== "") {
             writer.uint32(26).string(message.balance);
         }
-        if (message.decimal !== '') {
+        if (message.decimal !== "") {
             writer.uint32(34).string(message.decimal);
         }
         return writer;
@@ -854,25 +899,25 @@ exports.MsgUpdateBalance = {
             message.creator = String(object.creator);
         }
         else {
-            message.creator = '';
+            message.creator = "";
         }
         if (object.chainId !== undefined && object.chainId !== null) {
             message.chainId = String(object.chainId);
         }
         else {
-            message.chainId = '';
+            message.chainId = "";
         }
         if (object.balance !== undefined && object.balance !== null) {
             message.balance = String(object.balance);
         }
         else {
-            message.balance = '';
+            message.balance = "";
         }
         if (object.decimal !== undefined && object.decimal !== null) {
             message.decimal = String(object.decimal);
         }
         else {
-            message.decimal = '';
+            message.decimal = "";
         }
         return message;
     },
@@ -890,36 +935,36 @@ exports.MsgUpdateBalance = {
             message.creator = object.creator;
         }
         else {
-            message.creator = '';
+            message.creator = "";
         }
         if (object.chainId !== undefined && object.chainId !== null) {
             message.chainId = object.chainId;
         }
         else {
-            message.chainId = '';
+            message.chainId = "";
         }
         if (object.balance !== undefined && object.balance !== null) {
             message.balance = object.balance;
         }
         else {
-            message.balance = '';
+            message.balance = "";
         }
         if (object.decimal !== undefined && object.decimal !== null) {
             message.decimal = object.decimal;
         }
         else {
-            message.decimal = '';
+            message.decimal = "";
         }
         return message;
-    }
+    },
 };
-const baseMsgUpdateBalanceResponse = { code: '', msg: '' };
+const baseMsgUpdateBalanceResponse = { code: "", msg: "" };
 exports.MsgUpdateBalanceResponse = {
     encode(message, writer = minimal_1.Writer.create()) {
-        if (message.code !== '') {
+        if (message.code !== "") {
             writer.uint32(10).string(message.code);
         }
-        if (message.msg !== '') {
+        if (message.msg !== "") {
             writer.uint32(18).string(message.msg);
         }
         return writer;
@@ -928,7 +973,7 @@ exports.MsgUpdateBalanceResponse = {
         const reader = input instanceof Uint8Array ? new minimal_1.Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
         const message = {
-            ...baseMsgUpdateBalanceResponse
+            ...baseMsgUpdateBalanceResponse,
         };
         while (reader.pos < end) {
             const tag = reader.uint32();
@@ -948,19 +993,19 @@ exports.MsgUpdateBalanceResponse = {
     },
     fromJSON(object) {
         const message = {
-            ...baseMsgUpdateBalanceResponse
+            ...baseMsgUpdateBalanceResponse,
         };
         if (object.code !== undefined && object.code !== null) {
             message.code = String(object.code);
         }
         else {
-            message.code = '';
+            message.code = "";
         }
         if (object.msg !== undefined && object.msg !== null) {
             message.msg = String(object.msg);
         }
         else {
-            message.msg = '';
+            message.msg = "";
         }
         return message;
     },
@@ -972,33 +1017,33 @@ exports.MsgUpdateBalanceResponse = {
     },
     fromPartial(object) {
         const message = {
-            ...baseMsgUpdateBalanceResponse
+            ...baseMsgUpdateBalanceResponse,
         };
         if (object.code !== undefined && object.code !== null) {
             message.code = object.code;
         }
         else {
-            message.code = '';
+            message.code = "";
         }
         if (object.msg !== undefined && object.msg !== null) {
             message.msg = object.msg;
         }
         else {
-            message.msg = '';
+            message.msg = "";
         }
         return message;
-    }
+    },
 };
-const baseMsgKeysignVote = { creator: '', txHash: '', pubKey: '' };
+const baseMsgKeysignVote = { creator: "", txHash: "", pubKey: "" };
 exports.MsgKeysignVote = {
     encode(message, writer = minimal_1.Writer.create()) {
-        if (message.creator !== '') {
+        if (message.creator !== "") {
             writer.uint32(10).string(message.creator);
         }
-        if (message.txHash !== '') {
+        if (message.txHash !== "") {
             writer.uint32(18).string(message.txHash);
         }
-        if (message.pubKey !== '') {
+        if (message.pubKey !== "") {
             writer.uint32(26).string(message.pubKey);
         }
         return writer;
@@ -1032,19 +1077,19 @@ exports.MsgKeysignVote = {
             message.creator = String(object.creator);
         }
         else {
-            message.creator = '';
+            message.creator = "";
         }
         if (object.txHash !== undefined && object.txHash !== null) {
             message.txHash = String(object.txHash);
         }
         else {
-            message.txHash = '';
+            message.txHash = "";
         }
         if (object.pubKey !== undefined && object.pubKey !== null) {
             message.pubKey = String(object.pubKey);
         }
         else {
-            message.pubKey = '';
+            message.pubKey = "";
         }
         return message;
     },
@@ -1061,30 +1106,30 @@ exports.MsgKeysignVote = {
             message.creator = object.creator;
         }
         else {
-            message.creator = '';
+            message.creator = "";
         }
         if (object.txHash !== undefined && object.txHash !== null) {
             message.txHash = object.txHash;
         }
         else {
-            message.txHash = '';
+            message.txHash = "";
         }
         if (object.pubKey !== undefined && object.pubKey !== null) {
             message.pubKey = object.pubKey;
         }
         else {
-            message.pubKey = '';
+            message.pubKey = "";
         }
         return message;
-    }
+    },
 };
-const baseMsgKeysignVoteResponse = { code: '', msg: '' };
+const baseMsgKeysignVoteResponse = { code: "", msg: "" };
 exports.MsgKeysignVoteResponse = {
     encode(message, writer = minimal_1.Writer.create()) {
-        if (message.code !== '') {
+        if (message.code !== "") {
             writer.uint32(10).string(message.code);
         }
-        if (message.msg !== '') {
+        if (message.msg !== "") {
             writer.uint32(18).string(message.msg);
         }
         return writer;
@@ -1115,13 +1160,13 @@ exports.MsgKeysignVoteResponse = {
             message.code = String(object.code);
         }
         else {
-            message.code = '';
+            message.code = "";
         }
         if (object.msg !== undefined && object.msg !== null) {
             message.msg = String(object.msg);
         }
         else {
-            message.msg = '';
+            message.msg = "";
         }
         return message;
     },
@@ -1137,27 +1182,27 @@ exports.MsgKeysignVoteResponse = {
             message.code = object.code;
         }
         else {
-            message.code = '';
+            message.code = "";
         }
         if (object.msg !== undefined && object.msg !== null) {
             message.msg = object.msg;
         }
         else {
-            message.msg = '';
+            message.msg = "";
         }
         return message;
-    }
+    },
 };
-const baseMsgUpdateGasFee = { creator: '', chainId: '', fee: '' };
+const baseMsgUpdateGasFee = { creator: "", chainId: "", fee: "" };
 exports.MsgUpdateGasFee = {
     encode(message, writer = minimal_1.Writer.create()) {
-        if (message.creator !== '') {
+        if (message.creator !== "") {
             writer.uint32(10).string(message.creator);
         }
-        if (message.chainId !== '') {
+        if (message.chainId !== "") {
             writer.uint32(18).string(message.chainId);
         }
-        if (message.fee !== '') {
+        if (message.fee !== "") {
             writer.uint32(26).string(message.fee);
         }
         return writer;
@@ -1191,19 +1236,19 @@ exports.MsgUpdateGasFee = {
             message.creator = String(object.creator);
         }
         else {
-            message.creator = '';
+            message.creator = "";
         }
         if (object.chainId !== undefined && object.chainId !== null) {
             message.chainId = String(object.chainId);
         }
         else {
-            message.chainId = '';
+            message.chainId = "";
         }
         if (object.fee !== undefined && object.fee !== null) {
             message.fee = String(object.fee);
         }
         else {
-            message.fee = '';
+            message.fee = "";
         }
         return message;
     },
@@ -1220,37 +1265,49 @@ exports.MsgUpdateGasFee = {
             message.creator = object.creator;
         }
         else {
-            message.creator = '';
+            message.creator = "";
         }
         if (object.chainId !== undefined && object.chainId !== null) {
             message.chainId = object.chainId;
         }
         else {
-            message.chainId = '';
+            message.chainId = "";
         }
         if (object.fee !== undefined && object.fee !== null) {
             message.fee = object.fee;
         }
         else {
-            message.fee = '';
+            message.fee = "";
         }
         return message;
-    }
+    },
 };
-const baseMsgUpdateGasFeeResponse = {};
+const baseMsgUpdateGasFeeResponse = { code: "", msg: "" };
 exports.MsgUpdateGasFeeResponse = {
-    encode(_, writer = minimal_1.Writer.create()) {
+    encode(message, writer = minimal_1.Writer.create()) {
+        if (message.code !== "") {
+            writer.uint32(10).string(message.code);
+        }
+        if (message.msg !== "") {
+            writer.uint32(18).string(message.msg);
+        }
         return writer;
     },
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new minimal_1.Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
         const message = {
-            ...baseMsgUpdateGasFeeResponse
+            ...baseMsgUpdateGasFeeResponse,
         };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
+                case 1:
+                    message.code = reader.string();
+                    break;
+                case 2:
+                    message.msg = reader.string();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -1258,53 +1315,79 @@ exports.MsgUpdateGasFeeResponse = {
         }
         return message;
     },
-    fromJSON(_) {
+    fromJSON(object) {
         const message = {
-            ...baseMsgUpdateGasFeeResponse
+            ...baseMsgUpdateGasFeeResponse,
         };
+        if (object.code !== undefined && object.code !== null) {
+            message.code = String(object.code);
+        }
+        else {
+            message.code = "";
+        }
+        if (object.msg !== undefined && object.msg !== null) {
+            message.msg = String(object.msg);
+        }
+        else {
+            message.msg = "";
+        }
         return message;
     },
-    toJSON(_) {
+    toJSON(message) {
         const obj = {};
+        message.code !== undefined && (obj.code = message.code);
+        message.msg !== undefined && (obj.msg = message.msg);
         return obj;
     },
-    fromPartial(_) {
+    fromPartial(object) {
         const message = {
-            ...baseMsgUpdateGasFeeResponse
+            ...baseMsgUpdateGasFeeResponse,
         };
+        if (object.code !== undefined && object.code !== null) {
+            message.code = object.code;
+        }
+        else {
+            message.code = "";
+        }
+        if (object.msg !== undefined && object.msg !== null) {
+            message.msg = object.msg;
+        }
+        else {
+            message.msg = "";
+        }
         return message;
-    }
+    },
 };
 const baseMsgProvisionTransaction = {
-    creator: '',
-    fromChain: '',
-    fromAddress: '',
-    symbol: '',
-    tokenAddr: '',
-    amount: '',
-    options: ''
+    creator: "",
+    fromChain: "",
+    fromAddress: "",
+    symbol: "",
+    tokenAddr: "",
+    amount: "",
+    options: "",
 };
 exports.MsgProvisionTransaction = {
     encode(message, writer = minimal_1.Writer.create()) {
-        if (message.creator !== '') {
+        if (message.creator !== "") {
             writer.uint32(10).string(message.creator);
         }
-        if (message.fromChain !== '') {
+        if (message.fromChain !== "") {
             writer.uint32(18).string(message.fromChain);
         }
-        if (message.fromAddress !== '') {
+        if (message.fromAddress !== "") {
             writer.uint32(26).string(message.fromAddress);
         }
-        if (message.symbol !== '') {
+        if (message.symbol !== "") {
             writer.uint32(34).string(message.symbol);
         }
-        if (message.tokenAddr !== '') {
+        if (message.tokenAddr !== "") {
             writer.uint32(42).string(message.tokenAddr);
         }
-        if (message.amount !== '') {
+        if (message.amount !== "") {
             writer.uint32(50).string(message.amount);
         }
-        if (message.options !== '') {
+        if (message.options !== "") {
             writer.uint32(58).string(message.options);
         }
         return writer;
@@ -1313,7 +1396,7 @@ exports.MsgProvisionTransaction = {
         const reader = input instanceof Uint8Array ? new minimal_1.Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
         const message = {
-            ...baseMsgProvisionTransaction
+            ...baseMsgProvisionTransaction,
         };
         while (reader.pos < end) {
             const tag = reader.uint32();
@@ -1348,49 +1431,49 @@ exports.MsgProvisionTransaction = {
     },
     fromJSON(object) {
         const message = {
-            ...baseMsgProvisionTransaction
+            ...baseMsgProvisionTransaction,
         };
         if (object.creator !== undefined && object.creator !== null) {
             message.creator = String(object.creator);
         }
         else {
-            message.creator = '';
+            message.creator = "";
         }
         if (object.fromChain !== undefined && object.fromChain !== null) {
             message.fromChain = String(object.fromChain);
         }
         else {
-            message.fromChain = '';
+            message.fromChain = "";
         }
         if (object.fromAddress !== undefined && object.fromAddress !== null) {
             message.fromAddress = String(object.fromAddress);
         }
         else {
-            message.fromAddress = '';
+            message.fromAddress = "";
         }
         if (object.symbol !== undefined && object.symbol !== null) {
             message.symbol = String(object.symbol);
         }
         else {
-            message.symbol = '';
+            message.symbol = "";
         }
         if (object.tokenAddr !== undefined && object.tokenAddr !== null) {
             message.tokenAddr = String(object.tokenAddr);
         }
         else {
-            message.tokenAddr = '';
+            message.tokenAddr = "";
         }
         if (object.amount !== undefined && object.amount !== null) {
             message.amount = String(object.amount);
         }
         else {
-            message.amount = '';
+            message.amount = "";
         }
         if (object.options !== undefined && object.options !== null) {
             message.options = String(object.options);
         }
         else {
-            message.options = '';
+            message.options = "";
         }
         return message;
     },
@@ -1398,7 +1481,8 @@ exports.MsgProvisionTransaction = {
         const obj = {};
         message.creator !== undefined && (obj.creator = message.creator);
         message.fromChain !== undefined && (obj.fromChain = message.fromChain);
-        message.fromAddress !== undefined && (obj.fromAddress = message.fromAddress);
+        message.fromAddress !== undefined &&
+            (obj.fromAddress = message.fromAddress);
         message.symbol !== undefined && (obj.symbol = message.symbol);
         message.tokenAddr !== undefined && (obj.tokenAddr = message.tokenAddr);
         message.amount !== undefined && (obj.amount = message.amount);
@@ -1407,67 +1491,79 @@ exports.MsgProvisionTransaction = {
     },
     fromPartial(object) {
         const message = {
-            ...baseMsgProvisionTransaction
+            ...baseMsgProvisionTransaction,
         };
         if (object.creator !== undefined && object.creator !== null) {
             message.creator = object.creator;
         }
         else {
-            message.creator = '';
+            message.creator = "";
         }
         if (object.fromChain !== undefined && object.fromChain !== null) {
             message.fromChain = object.fromChain;
         }
         else {
-            message.fromChain = '';
+            message.fromChain = "";
         }
         if (object.fromAddress !== undefined && object.fromAddress !== null) {
             message.fromAddress = object.fromAddress;
         }
         else {
-            message.fromAddress = '';
+            message.fromAddress = "";
         }
         if (object.symbol !== undefined && object.symbol !== null) {
             message.symbol = object.symbol;
         }
         else {
-            message.symbol = '';
+            message.symbol = "";
         }
         if (object.tokenAddr !== undefined && object.tokenAddr !== null) {
             message.tokenAddr = object.tokenAddr;
         }
         else {
-            message.tokenAddr = '';
+            message.tokenAddr = "";
         }
         if (object.amount !== undefined && object.amount !== null) {
             message.amount = object.amount;
         }
         else {
-            message.amount = '';
+            message.amount = "";
         }
         if (object.options !== undefined && object.options !== null) {
             message.options = object.options;
         }
         else {
-            message.options = '';
+            message.options = "";
         }
         return message;
-    }
+    },
 };
-const baseMsgProvisionTransactionResponse = {};
+const baseMsgProvisionTransactionResponse = { code: "", msg: "" };
 exports.MsgProvisionTransactionResponse = {
-    encode(_, writer = minimal_1.Writer.create()) {
+    encode(message, writer = minimal_1.Writer.create()) {
+        if (message.code !== "") {
+            writer.uint32(10).string(message.code);
+        }
+        if (message.msg !== "") {
+            writer.uint32(18).string(message.msg);
+        }
         return writer;
     },
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new minimal_1.Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
         const message = {
-            ...baseMsgProvisionTransactionResponse
+            ...baseMsgProvisionTransactionResponse,
         };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
+                case 1:
+                    message.code = reader.string();
+                    break;
+                case 2:
+                    message.msg = reader.string();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -1475,53 +1571,79 @@ exports.MsgProvisionTransactionResponse = {
         }
         return message;
     },
-    fromJSON(_) {
+    fromJSON(object) {
         const message = {
-            ...baseMsgProvisionTransactionResponse
+            ...baseMsgProvisionTransactionResponse,
         };
+        if (object.code !== undefined && object.code !== null) {
+            message.code = String(object.code);
+        }
+        else {
+            message.code = "";
+        }
+        if (object.msg !== undefined && object.msg !== null) {
+            message.msg = String(object.msg);
+        }
+        else {
+            message.msg = "";
+        }
         return message;
     },
-    toJSON(_) {
+    toJSON(message) {
         const obj = {};
+        message.code !== undefined && (obj.code = message.code);
+        message.msg !== undefined && (obj.msg = message.msg);
         return obj;
     },
-    fromPartial(_) {
+    fromPartial(object) {
         const message = {
-            ...baseMsgProvisionTransactionResponse
+            ...baseMsgProvisionTransactionResponse,
         };
+        if (object.code !== undefined && object.code !== null) {
+            message.code = object.code;
+        }
+        else {
+            message.code = "";
+        }
+        if (object.msg !== undefined && object.msg !== null) {
+            message.msg = object.msg;
+        }
+        else {
+            message.msg = "";
+        }
         return message;
-    }
+    },
 };
 const baseMsgDrainTransaction = {
-    creator: '',
-    fromChain: '',
-    toChain: '',
-    toAddress: '',
-    nftAddr: '',
-    amount: '',
-    options: ''
+    creator: "",
+    fromChain: "",
+    toChain: "",
+    toAddress: "",
+    nftAddr: "",
+    amount: "",
+    options: "",
 };
 exports.MsgDrainTransaction = {
     encode(message, writer = minimal_1.Writer.create()) {
-        if (message.creator !== '') {
+        if (message.creator !== "") {
             writer.uint32(10).string(message.creator);
         }
-        if (message.fromChain !== '') {
+        if (message.fromChain !== "") {
             writer.uint32(18).string(message.fromChain);
         }
-        if (message.toChain !== '') {
+        if (message.toChain !== "") {
             writer.uint32(26).string(message.toChain);
         }
-        if (message.toAddress !== '') {
+        if (message.toAddress !== "") {
             writer.uint32(34).string(message.toAddress);
         }
-        if (message.nftAddr !== '') {
+        if (message.nftAddr !== "") {
             writer.uint32(42).string(message.nftAddr);
         }
-        if (message.amount !== '') {
+        if (message.amount !== "") {
             writer.uint32(50).string(message.amount);
         }
-        if (message.options !== '') {
+        if (message.options !== "") {
             writer.uint32(58).string(message.options);
         }
         return writer;
@@ -1567,43 +1689,43 @@ exports.MsgDrainTransaction = {
             message.creator = String(object.creator);
         }
         else {
-            message.creator = '';
+            message.creator = "";
         }
         if (object.fromChain !== undefined && object.fromChain !== null) {
             message.fromChain = String(object.fromChain);
         }
         else {
-            message.fromChain = '';
+            message.fromChain = "";
         }
         if (object.toChain !== undefined && object.toChain !== null) {
             message.toChain = String(object.toChain);
         }
         else {
-            message.toChain = '';
+            message.toChain = "";
         }
         if (object.toAddress !== undefined && object.toAddress !== null) {
             message.toAddress = String(object.toAddress);
         }
         else {
-            message.toAddress = '';
+            message.toAddress = "";
         }
         if (object.nftAddr !== undefined && object.nftAddr !== null) {
             message.nftAddr = String(object.nftAddr);
         }
         else {
-            message.nftAddr = '';
+            message.nftAddr = "";
         }
         if (object.amount !== undefined && object.amount !== null) {
             message.amount = String(object.amount);
         }
         else {
-            message.amount = '';
+            message.amount = "";
         }
         if (object.options !== undefined && object.options !== null) {
             message.options = String(object.options);
         }
         else {
-            message.options = '';
+            message.options = "";
         }
         return message;
     },
@@ -1624,61 +1746,73 @@ exports.MsgDrainTransaction = {
             message.creator = object.creator;
         }
         else {
-            message.creator = '';
+            message.creator = "";
         }
         if (object.fromChain !== undefined && object.fromChain !== null) {
             message.fromChain = object.fromChain;
         }
         else {
-            message.fromChain = '';
+            message.fromChain = "";
         }
         if (object.toChain !== undefined && object.toChain !== null) {
             message.toChain = object.toChain;
         }
         else {
-            message.toChain = '';
+            message.toChain = "";
         }
         if (object.toAddress !== undefined && object.toAddress !== null) {
             message.toAddress = object.toAddress;
         }
         else {
-            message.toAddress = '';
+            message.toAddress = "";
         }
         if (object.nftAddr !== undefined && object.nftAddr !== null) {
             message.nftAddr = object.nftAddr;
         }
         else {
-            message.nftAddr = '';
+            message.nftAddr = "";
         }
         if (object.amount !== undefined && object.amount !== null) {
             message.amount = object.amount;
         }
         else {
-            message.amount = '';
+            message.amount = "";
         }
         if (object.options !== undefined && object.options !== null) {
             message.options = object.options;
         }
         else {
-            message.options = '';
+            message.options = "";
         }
         return message;
-    }
+    },
 };
-const baseMsgDrainTransactionResponse = {};
+const baseMsgDrainTransactionResponse = { code: "", msg: "" };
 exports.MsgDrainTransactionResponse = {
-    encode(_, writer = minimal_1.Writer.create()) {
+    encode(message, writer = minimal_1.Writer.create()) {
+        if (message.code !== "") {
+            writer.uint32(10).string(message.code);
+        }
+        if (message.msg !== "") {
+            writer.uint32(18).string(message.msg);
+        }
         return writer;
     },
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new minimal_1.Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
         const message = {
-            ...baseMsgDrainTransactionResponse
+            ...baseMsgDrainTransactionResponse,
         };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
+                case 1:
+                    message.code = reader.string();
+                    break;
+                case 2:
+                    message.msg = reader.string();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -1686,30 +1820,56 @@ exports.MsgDrainTransactionResponse = {
         }
         return message;
     },
-    fromJSON(_) {
+    fromJSON(object) {
         const message = {
-            ...baseMsgDrainTransactionResponse
+            ...baseMsgDrainTransactionResponse,
         };
+        if (object.code !== undefined && object.code !== null) {
+            message.code = String(object.code);
+        }
+        else {
+            message.code = "";
+        }
+        if (object.msg !== undefined && object.msg !== null) {
+            message.msg = String(object.msg);
+        }
+        else {
+            message.msg = "";
+        }
         return message;
     },
-    toJSON(_) {
+    toJSON(message) {
         const obj = {};
+        message.code !== undefined && (obj.code = message.code);
+        message.msg !== undefined && (obj.msg = message.msg);
         return obj;
     },
-    fromPartial(_) {
+    fromPartial(object) {
         const message = {
-            ...baseMsgDrainTransactionResponse
+            ...baseMsgDrainTransactionResponse,
         };
+        if (object.code !== undefined && object.code !== null) {
+            message.code = object.code;
+        }
+        else {
+            message.code = "";
+        }
+        if (object.msg !== undefined && object.msg !== null) {
+            message.msg = object.msg;
+        }
+        else {
+            message.msg = "";
+        }
         return message;
-    }
+    },
 };
-const baseMsgCancelTransaction = { creator: '', transactionId: '' };
+const baseMsgCancelTransaction = { creator: "", transactionId: "" };
 exports.MsgCancelTransaction = {
     encode(message, writer = minimal_1.Writer.create()) {
-        if (message.creator !== '') {
+        if (message.creator !== "") {
             writer.uint32(10).string(message.creator);
         }
-        if (message.transactionId !== '') {
+        if (message.transactionId !== "") {
             writer.uint32(18).string(message.transactionId);
         }
         return writer;
@@ -1740,13 +1900,13 @@ exports.MsgCancelTransaction = {
             message.creator = String(object.creator);
         }
         else {
-            message.creator = '';
+            message.creator = "";
         }
         if (object.transactionId !== undefined && object.transactionId !== null) {
             message.transactionId = String(object.transactionId);
         }
         else {
-            message.transactionId = '';
+            message.transactionId = "";
         }
         return message;
     },
@@ -1763,31 +1923,43 @@ exports.MsgCancelTransaction = {
             message.creator = object.creator;
         }
         else {
-            message.creator = '';
+            message.creator = "";
         }
         if (object.transactionId !== undefined && object.transactionId !== null) {
             message.transactionId = object.transactionId;
         }
         else {
-            message.transactionId = '';
+            message.transactionId = "";
         }
         return message;
-    }
+    },
 };
-const baseMsgCancelTransactionResponse = {};
+const baseMsgCancelTransactionResponse = { code: "", msg: "" };
 exports.MsgCancelTransactionResponse = {
-    encode(_, writer = minimal_1.Writer.create()) {
+    encode(message, writer = minimal_1.Writer.create()) {
+        if (message.code !== "") {
+            writer.uint32(10).string(message.code);
+        }
+        if (message.msg !== "") {
+            writer.uint32(18).string(message.msg);
+        }
         return writer;
     },
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new minimal_1.Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
         const message = {
-            ...baseMsgCancelTransactionResponse
+            ...baseMsgCancelTransactionResponse,
         };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
+                case 1:
+                    message.code = reader.string();
+                    break;
+                case 2:
+                    message.msg = reader.string();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -1795,22 +1967,937 @@ exports.MsgCancelTransactionResponse = {
         }
         return message;
     },
-    fromJSON(_) {
+    fromJSON(object) {
         const message = {
-            ...baseMsgCancelTransactionResponse
+            ...baseMsgCancelTransactionResponse,
         };
+        if (object.code !== undefined && object.code !== null) {
+            message.code = String(object.code);
+        }
+        else {
+            message.code = "";
+        }
+        if (object.msg !== undefined && object.msg !== null) {
+            message.msg = String(object.msg);
+        }
+        else {
+            message.msg = "";
+        }
         return message;
     },
-    toJSON(_) {
+    toJSON(message) {
         const obj = {};
+        message.code !== undefined && (obj.code = message.code);
+        message.msg !== undefined && (obj.msg = message.msg);
         return obj;
     },
-    fromPartial(_) {
+    fromPartial(object) {
         const message = {
-            ...baseMsgCancelTransactionResponse
+            ...baseMsgCancelTransactionResponse,
         };
+        if (object.code !== undefined && object.code !== null) {
+            message.code = object.code;
+        }
+        else {
+            message.code = "";
+        }
+        if (object.msg !== undefined && object.msg !== null) {
+            message.msg = object.msg;
+        }
+        else {
+            message.msg = "";
+        }
         return message;
-    }
+    },
+};
+const baseMsgAddWhitelisted = { creator: "", address: "" };
+exports.MsgAddWhitelisted = {
+    encode(message, writer = minimal_1.Writer.create()) {
+        if (message.creator !== "") {
+            writer.uint32(10).string(message.creator);
+        }
+        if (message.address !== "") {
+            writer.uint32(18).string(message.address);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new minimal_1.Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgAddWhitelisted };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.creator = reader.string();
+                    break;
+                case 2:
+                    message.address = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgAddWhitelisted };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = String(object.creator);
+        }
+        else {
+            message.creator = "";
+        }
+        if (object.address !== undefined && object.address !== null) {
+            message.address = String(object.address);
+        }
+        else {
+            message.address = "";
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.creator !== undefined && (obj.creator = message.creator);
+        message.address !== undefined && (obj.address = message.address);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgAddWhitelisted };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = object.creator;
+        }
+        else {
+            message.creator = "";
+        }
+        if (object.address !== undefined && object.address !== null) {
+            message.address = object.address;
+        }
+        else {
+            message.address = "";
+        }
+        return message;
+    },
+};
+const baseMsgAddWhitelistedResponse = { code: "", msg: "" };
+exports.MsgAddWhitelistedResponse = {
+    encode(message, writer = minimal_1.Writer.create()) {
+        if (message.code !== "") {
+            writer.uint32(10).string(message.code);
+        }
+        if (message.msg !== "") {
+            writer.uint32(18).string(message.msg);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new minimal_1.Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = {
+            ...baseMsgAddWhitelistedResponse,
+        };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.code = reader.string();
+                    break;
+                case 2:
+                    message.msg = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = {
+            ...baseMsgAddWhitelistedResponse,
+        };
+        if (object.code !== undefined && object.code !== null) {
+            message.code = String(object.code);
+        }
+        else {
+            message.code = "";
+        }
+        if (object.msg !== undefined && object.msg !== null) {
+            message.msg = String(object.msg);
+        }
+        else {
+            message.msg = "";
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.code !== undefined && (obj.code = message.code);
+        message.msg !== undefined && (obj.msg = message.msg);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = {
+            ...baseMsgAddWhitelistedResponse,
+        };
+        if (object.code !== undefined && object.code !== null) {
+            message.code = object.code;
+        }
+        else {
+            message.code = "";
+        }
+        if (object.msg !== undefined && object.msg !== null) {
+            message.msg = object.msg;
+        }
+        else {
+            message.msg = "";
+        }
+        return message;
+    },
+};
+const baseMsgSetAdmin = { creator: "" };
+exports.MsgSetAdmin = {
+    encode(message, writer = minimal_1.Writer.create()) {
+        if (message.creator !== "") {
+            writer.uint32(10).string(message.creator);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new minimal_1.Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgSetAdmin };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.creator = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgSetAdmin };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = String(object.creator);
+        }
+        else {
+            message.creator = "";
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.creator !== undefined && (obj.creator = message.creator);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgSetAdmin };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = object.creator;
+        }
+        else {
+            message.creator = "";
+        }
+        return message;
+    },
+};
+const baseMsgSetAdminResponse = { code: "", msg: "" };
+exports.MsgSetAdminResponse = {
+    encode(message, writer = minimal_1.Writer.create()) {
+        if (message.code !== "") {
+            writer.uint32(10).string(message.code);
+        }
+        if (message.msg !== "") {
+            writer.uint32(18).string(message.msg);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new minimal_1.Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgSetAdminResponse };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.code = reader.string();
+                    break;
+                case 2:
+                    message.msg = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgSetAdminResponse };
+        if (object.code !== undefined && object.code !== null) {
+            message.code = String(object.code);
+        }
+        else {
+            message.code = "";
+        }
+        if (object.msg !== undefined && object.msg !== null) {
+            message.msg = String(object.msg);
+        }
+        else {
+            message.msg = "";
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.code !== undefined && (obj.code = message.code);
+        message.msg !== undefined && (obj.msg = message.msg);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgSetAdminResponse };
+        if (object.code !== undefined && object.code !== null) {
+            message.code = object.code;
+        }
+        else {
+            message.code = "";
+        }
+        if (object.msg !== undefined && object.msg !== null) {
+            message.msg = object.msg;
+        }
+        else {
+            message.msg = "";
+        }
+        return message;
+    },
+};
+const baseMsgAddPubkey = { creator: "", pubkey: "" };
+exports.MsgAddPubkey = {
+    encode(message, writer = minimal_1.Writer.create()) {
+        if (message.creator !== "") {
+            writer.uint32(10).string(message.creator);
+        }
+        if (message.pubkey !== "") {
+            writer.uint32(18).string(message.pubkey);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new minimal_1.Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgAddPubkey };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.creator = reader.string();
+                    break;
+                case 2:
+                    message.pubkey = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgAddPubkey };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = String(object.creator);
+        }
+        else {
+            message.creator = "";
+        }
+        if (object.pubkey !== undefined && object.pubkey !== null) {
+            message.pubkey = String(object.pubkey);
+        }
+        else {
+            message.pubkey = "";
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.creator !== undefined && (obj.creator = message.creator);
+        message.pubkey !== undefined && (obj.pubkey = message.pubkey);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgAddPubkey };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = object.creator;
+        }
+        else {
+            message.creator = "";
+        }
+        if (object.pubkey !== undefined && object.pubkey !== null) {
+            message.pubkey = object.pubkey;
+        }
+        else {
+            message.pubkey = "";
+        }
+        return message;
+    },
+};
+const baseMsgAddPubkeyResponse = { code: "", msg: "" };
+exports.MsgAddPubkeyResponse = {
+    encode(message, writer = minimal_1.Writer.create()) {
+        if (message.code !== "") {
+            writer.uint32(10).string(message.code);
+        }
+        if (message.msg !== "") {
+            writer.uint32(18).string(message.msg);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new minimal_1.Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgAddPubkeyResponse };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.code = reader.string();
+                    break;
+                case 2:
+                    message.msg = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgAddPubkeyResponse };
+        if (object.code !== undefined && object.code !== null) {
+            message.code = String(object.code);
+        }
+        else {
+            message.code = "";
+        }
+        if (object.msg !== undefined && object.msg !== null) {
+            message.msg = String(object.msg);
+        }
+        else {
+            message.msg = "";
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.code !== undefined && (obj.code = message.code);
+        message.msg !== undefined && (obj.msg = message.msg);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgAddPubkeyResponse };
+        if (object.code !== undefined && object.code !== null) {
+            message.code = object.code;
+        }
+        else {
+            message.code = "";
+        }
+        if (object.msg !== undefined && object.msg !== null) {
+            message.msg = object.msg;
+        }
+        else {
+            message.msg = "";
+        }
+        return message;
+    },
+};
+const baseMsgUpdateTssPubkey = {
+    creator: "",
+    tssPubkey: "",
+    ecdsa: "",
+    ebdsa: "",
+    reserved: "",
+};
+exports.MsgUpdateTssPubkey = {
+    encode(message, writer = minimal_1.Writer.create()) {
+        if (message.creator !== "") {
+            writer.uint32(10).string(message.creator);
+        }
+        if (message.tssPubkey !== "") {
+            writer.uint32(18).string(message.tssPubkey);
+        }
+        if (message.ecdsa !== "") {
+            writer.uint32(26).string(message.ecdsa);
+        }
+        if (message.ebdsa !== "") {
+            writer.uint32(34).string(message.ebdsa);
+        }
+        if (message.reserved !== "") {
+            writer.uint32(42).string(message.reserved);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new minimal_1.Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgUpdateTssPubkey };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.creator = reader.string();
+                    break;
+                case 2:
+                    message.tssPubkey = reader.string();
+                    break;
+                case 3:
+                    message.ecdsa = reader.string();
+                    break;
+                case 4:
+                    message.ebdsa = reader.string();
+                    break;
+                case 5:
+                    message.reserved = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgUpdateTssPubkey };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = String(object.creator);
+        }
+        else {
+            message.creator = "";
+        }
+        if (object.tssPubkey !== undefined && object.tssPubkey !== null) {
+            message.tssPubkey = String(object.tssPubkey);
+        }
+        else {
+            message.tssPubkey = "";
+        }
+        if (object.ecdsa !== undefined && object.ecdsa !== null) {
+            message.ecdsa = String(object.ecdsa);
+        }
+        else {
+            message.ecdsa = "";
+        }
+        if (object.ebdsa !== undefined && object.ebdsa !== null) {
+            message.ebdsa = String(object.ebdsa);
+        }
+        else {
+            message.ebdsa = "";
+        }
+        if (object.reserved !== undefined && object.reserved !== null) {
+            message.reserved = String(object.reserved);
+        }
+        else {
+            message.reserved = "";
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.creator !== undefined && (obj.creator = message.creator);
+        message.tssPubkey !== undefined && (obj.tssPubkey = message.tssPubkey);
+        message.ecdsa !== undefined && (obj.ecdsa = message.ecdsa);
+        message.ebdsa !== undefined && (obj.ebdsa = message.ebdsa);
+        message.reserved !== undefined && (obj.reserved = message.reserved);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgUpdateTssPubkey };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = object.creator;
+        }
+        else {
+            message.creator = "";
+        }
+        if (object.tssPubkey !== undefined && object.tssPubkey !== null) {
+            message.tssPubkey = object.tssPubkey;
+        }
+        else {
+            message.tssPubkey = "";
+        }
+        if (object.ecdsa !== undefined && object.ecdsa !== null) {
+            message.ecdsa = object.ecdsa;
+        }
+        else {
+            message.ecdsa = "";
+        }
+        if (object.ebdsa !== undefined && object.ebdsa !== null) {
+            message.ebdsa = object.ebdsa;
+        }
+        else {
+            message.ebdsa = "";
+        }
+        if (object.reserved !== undefined && object.reserved !== null) {
+            message.reserved = object.reserved;
+        }
+        else {
+            message.reserved = "";
+        }
+        return message;
+    },
+};
+const baseMsgUpdateTssPubkeyResponse = { code: "", msg: "" };
+exports.MsgUpdateTssPubkeyResponse = {
+    encode(message, writer = minimal_1.Writer.create()) {
+        if (message.code !== "") {
+            writer.uint32(10).string(message.code);
+        }
+        if (message.msg !== "") {
+            writer.uint32(18).string(message.msg);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new minimal_1.Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = {
+            ...baseMsgUpdateTssPubkeyResponse,
+        };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.code = reader.string();
+                    break;
+                case 2:
+                    message.msg = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = {
+            ...baseMsgUpdateTssPubkeyResponse,
+        };
+        if (object.code !== undefined && object.code !== null) {
+            message.code = String(object.code);
+        }
+        else {
+            message.code = "";
+        }
+        if (object.msg !== undefined && object.msg !== null) {
+            message.msg = String(object.msg);
+        }
+        else {
+            message.msg = "";
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.code !== undefined && (obj.code = message.code);
+        message.msg !== undefined && (obj.msg = message.msg);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = {
+            ...baseMsgUpdateTssPubkeyResponse,
+        };
+        if (object.code !== undefined && object.code !== null) {
+            message.code = object.code;
+        }
+        else {
+            message.code = "";
+        }
+        if (object.msg !== undefined && object.msg !== null) {
+            message.msg = object.msg;
+        }
+        else {
+            message.msg = "";
+        }
+        return message;
+    },
+};
+const baseMsgRemoveWhitelisted = { creator: "", address: "" };
+exports.MsgRemoveWhitelisted = {
+    encode(message, writer = minimal_1.Writer.create()) {
+        if (message.creator !== "") {
+            writer.uint32(10).string(message.creator);
+        }
+        if (message.address !== "") {
+            writer.uint32(18).string(message.address);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new minimal_1.Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgRemoveWhitelisted };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.creator = reader.string();
+                    break;
+                case 2:
+                    message.address = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgRemoveWhitelisted };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = String(object.creator);
+        }
+        else {
+            message.creator = "";
+        }
+        if (object.address !== undefined && object.address !== null) {
+            message.address = String(object.address);
+        }
+        else {
+            message.address = "";
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.creator !== undefined && (obj.creator = message.creator);
+        message.address !== undefined && (obj.address = message.address);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgRemoveWhitelisted };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = object.creator;
+        }
+        else {
+            message.creator = "";
+        }
+        if (object.address !== undefined && object.address !== null) {
+            message.address = object.address;
+        }
+        else {
+            message.address = "";
+        }
+        return message;
+    },
+};
+const baseMsgRemoveWhitelistedResponse = { code: "", msg: "" };
+exports.MsgRemoveWhitelistedResponse = {
+    encode(message, writer = minimal_1.Writer.create()) {
+        if (message.code !== "") {
+            writer.uint32(10).string(message.code);
+        }
+        if (message.msg !== "") {
+            writer.uint32(18).string(message.msg);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new minimal_1.Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = {
+            ...baseMsgRemoveWhitelistedResponse,
+        };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.code = reader.string();
+                    break;
+                case 2:
+                    message.msg = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = {
+            ...baseMsgRemoveWhitelistedResponse,
+        };
+        if (object.code !== undefined && object.code !== null) {
+            message.code = String(object.code);
+        }
+        else {
+            message.code = "";
+        }
+        if (object.msg !== undefined && object.msg !== null) {
+            message.msg = String(object.msg);
+        }
+        else {
+            message.msg = "";
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.code !== undefined && (obj.code = message.code);
+        message.msg !== undefined && (obj.msg = message.msg);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = {
+            ...baseMsgRemoveWhitelistedResponse,
+        };
+        if (object.code !== undefined && object.code !== null) {
+            message.code = object.code;
+        }
+        else {
+            message.code = "";
+        }
+        if (object.msg !== undefined && object.msg !== null) {
+            message.msg = object.msg;
+        }
+        else {
+            message.msg = "";
+        }
+        return message;
+    },
+};
+const baseMsgClearTssInfo = { creator: "" };
+exports.MsgClearTssInfo = {
+    encode(message, writer = minimal_1.Writer.create()) {
+        if (message.creator !== "") {
+            writer.uint32(10).string(message.creator);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new minimal_1.Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgClearTssInfo };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.creator = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgClearTssInfo };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = String(object.creator);
+        }
+        else {
+            message.creator = "";
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.creator !== undefined && (obj.creator = message.creator);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgClearTssInfo };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = object.creator;
+        }
+        else {
+            message.creator = "";
+        }
+        return message;
+    },
+};
+const baseMsgClearTssInfoResponse = { code: "", msg: "" };
+exports.MsgClearTssInfoResponse = {
+    encode(message, writer = minimal_1.Writer.create()) {
+        if (message.code !== "") {
+            writer.uint32(10).string(message.code);
+        }
+        if (message.msg !== "") {
+            writer.uint32(18).string(message.msg);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new minimal_1.Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = {
+            ...baseMsgClearTssInfoResponse,
+        };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.code = reader.string();
+                    break;
+                case 2:
+                    message.msg = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = {
+            ...baseMsgClearTssInfoResponse,
+        };
+        if (object.code !== undefined && object.code !== null) {
+            message.code = String(object.code);
+        }
+        else {
+            message.code = "";
+        }
+        if (object.msg !== undefined && object.msg !== null) {
+            message.msg = String(object.msg);
+        }
+        else {
+            message.msg = "";
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.code !== undefined && (obj.code = message.code);
+        message.msg !== undefined && (obj.msg = message.msg);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = {
+            ...baseMsgClearTssInfoResponse,
+        };
+        if (object.code !== undefined && object.code !== null) {
+            message.code = object.code;
+        }
+        else {
+            message.code = "";
+        }
+        if (object.msg !== undefined && object.msg !== null) {
+            message.msg = object.msg;
+        }
+        else {
+            message.msg = "";
+        }
+        return message;
+    },
 };
 class MsgClientImpl {
     rpc;
@@ -1819,53 +2906,83 @@ class MsgClientImpl {
     }
     RequestTransaction(request) {
         const data = exports.MsgRequestTransaction.encode(request).finish();
-        const promise = this.rpc.request('DiversifiTechnologies.diversifi.diversifi.Msg', 'RequestTransaction', data);
+        const promise = this.rpc.request("KimaFinance.kima.kima.Msg", "RequestTransaction", data);
         return promise.then((data) => exports.MsgRequestTransactionResponse.decode(new minimal_1.Reader(data)));
     }
     ApproveTransaction(request) {
         const data = exports.MsgApproveTransaction.encode(request).finish();
-        const promise = this.rpc.request('DiversifiTechnologies.diversifi.diversifi.Msg', 'ApproveTransaction', data);
+        const promise = this.rpc.request("KimaFinance.kima.kima.Msg", "ApproveTransaction", data);
         return promise.then((data) => exports.MsgApproveTransactionResponse.decode(new minimal_1.Reader(data)));
     }
     FetchBalance(request) {
         const data = exports.MsgFetchBalance.encode(request).finish();
-        const promise = this.rpc.request('DiversifiTechnologies.diversifi.diversifi.Msg', 'FetchBalance', data);
+        const promise = this.rpc.request("KimaFinance.kima.kima.Msg", "FetchBalance", data);
         return promise.then((data) => exports.MsgFetchBalanceResponse.decode(new minimal_1.Reader(data)));
     }
     ObservationVote(request) {
         const data = exports.MsgObservationVote.encode(request).finish();
-        const promise = this.rpc.request('DiversifiTechnologies.diversifi.diversifi.Msg', 'ObservationVote', data);
+        const promise = this.rpc.request("KimaFinance.kima.kima.Msg", "ObservationVote", data);
         return promise.then((data) => exports.MsgObservationVoteResponse.decode(new minimal_1.Reader(data)));
     }
     UpdateBalance(request) {
         const data = exports.MsgUpdateBalance.encode(request).finish();
-        const promise = this.rpc.request('DiversifiTechnologies.diversifi.diversifi.Msg', 'UpdateBalance', data);
+        const promise = this.rpc.request("KimaFinance.kima.kima.Msg", "UpdateBalance", data);
         return promise.then((data) => exports.MsgUpdateBalanceResponse.decode(new minimal_1.Reader(data)));
     }
     KeysignVote(request) {
         const data = exports.MsgKeysignVote.encode(request).finish();
-        const promise = this.rpc.request('DiversifiTechnologies.diversifi.diversifi.Msg', 'KeysignVote', data);
+        const promise = this.rpc.request("KimaFinance.kima.kima.Msg", "KeysignVote", data);
         return promise.then((data) => exports.MsgKeysignVoteResponse.decode(new minimal_1.Reader(data)));
     }
     UpdateGasFee(request) {
         const data = exports.MsgUpdateGasFee.encode(request).finish();
-        const promise = this.rpc.request('DiversifiTechnologies.diversifi.diversifi.Msg', 'UpdateGasFee', data);
+        const promise = this.rpc.request("KimaFinance.kima.kima.Msg", "UpdateGasFee", data);
         return promise.then((data) => exports.MsgUpdateGasFeeResponse.decode(new minimal_1.Reader(data)));
     }
     ProvisionTransaction(request) {
         const data = exports.MsgProvisionTransaction.encode(request).finish();
-        const promise = this.rpc.request('DiversifiTechnologies.diversifi.diversifi.Msg', 'ProvisionTransaction', data);
+        const promise = this.rpc.request("KimaFinance.kima.kima.Msg", "ProvisionTransaction", data);
         return promise.then((data) => exports.MsgProvisionTransactionResponse.decode(new minimal_1.Reader(data)));
     }
     DrainTransaction(request) {
         const data = exports.MsgDrainTransaction.encode(request).finish();
-        const promise = this.rpc.request('DiversifiTechnologies.diversifi.diversifi.Msg', 'DrainTransaction', data);
+        const promise = this.rpc.request("KimaFinance.kima.kima.Msg", "DrainTransaction", data);
         return promise.then((data) => exports.MsgDrainTransactionResponse.decode(new minimal_1.Reader(data)));
     }
     CancelTransaction(request) {
         const data = exports.MsgCancelTransaction.encode(request).finish();
-        const promise = this.rpc.request('DiversifiTechnologies.diversifi.diversifi.Msg', 'CancelTransaction', data);
+        const promise = this.rpc.request("KimaFinance.kima.kima.Msg", "CancelTransaction", data);
         return promise.then((data) => exports.MsgCancelTransactionResponse.decode(new minimal_1.Reader(data)));
+    }
+    AddWhitelisted(request) {
+        const data = exports.MsgAddWhitelisted.encode(request).finish();
+        const promise = this.rpc.request("KimaFinance.kima.kima.Msg", "AddWhitelisted", data);
+        return promise.then((data) => exports.MsgAddWhitelistedResponse.decode(new minimal_1.Reader(data)));
+    }
+    SetAdmin(request) {
+        const data = exports.MsgSetAdmin.encode(request).finish();
+        const promise = this.rpc.request("KimaFinance.kima.kima.Msg", "SetAdmin", data);
+        return promise.then((data) => exports.MsgSetAdminResponse.decode(new minimal_1.Reader(data)));
+    }
+    AddPubkey(request) {
+        const data = exports.MsgAddPubkey.encode(request).finish();
+        const promise = this.rpc.request("KimaFinance.kima.kima.Msg", "AddPubkey", data);
+        return promise.then((data) => exports.MsgAddPubkeyResponse.decode(new minimal_1.Reader(data)));
+    }
+    UpdateTssPubkey(request) {
+        const data = exports.MsgUpdateTssPubkey.encode(request).finish();
+        const promise = this.rpc.request("KimaFinance.kima.kima.Msg", "UpdateTssPubkey", data);
+        return promise.then((data) => exports.MsgUpdateTssPubkeyResponse.decode(new minimal_1.Reader(data)));
+    }
+    RemoveWhitelisted(request) {
+        const data = exports.MsgRemoveWhitelisted.encode(request).finish();
+        const promise = this.rpc.request("KimaFinance.kima.kima.Msg", "RemoveWhitelisted", data);
+        return promise.then((data) => exports.MsgRemoveWhitelistedResponse.decode(new minimal_1.Reader(data)));
+    }
+    ClearTssInfo(request) {
+        const data = exports.MsgClearTssInfo.encode(request).finish();
+        const promise = this.rpc.request("KimaFinance.kima.kima.Msg", "ClearTssInfo", data);
+        return promise.then((data) => exports.MsgClearTssInfoResponse.decode(new minimal_1.Reader(data)));
     }
 }
 exports.MsgClientImpl = MsgClientImpl;

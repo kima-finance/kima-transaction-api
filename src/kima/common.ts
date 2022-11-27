@@ -1,67 +1,42 @@
-import { SigningStargateClient, StdFee } from '@cosmjs/stargate'
-import dotenv from 'dotenv'
-import { Registry, OfflineSigner, EncodeObject } from '@cosmjs/proto-signing'
-import {
-  MsgRequestTransaction,
-  MsgApproveTransaction,
-  MsgFetchBalance
-} from './tx'
+import { SigningStargateClient, StdFee } from "@cosmjs/stargate";
+import dotenv from "dotenv";
+import { Registry, OfflineSigner, EncodeObject } from "@cosmjs/proto-signing";
+import { MsgRequestTransaction } from "./tx";
 
-dotenv.config()
+dotenv.config();
 
 const defaultFee = {
   amount: [],
-  gas: '200000'
-}
+  gas: "200000",
+};
 
 interface SignAndBroadcastOptions {
-  fee: StdFee
-  memo?: string
+  fee: StdFee;
+  memo?: string;
 }
 
 const types = [
-  [
-    '/DiversifiTechnologies.diversifi.diversifi.MsgRequestTransaction',
-    MsgRequestTransaction
-  ],
-  [
-    '/DiversifiTechnologies.diversifi.diversifi.MsgApproveTransaction',
-    MsgApproveTransaction
-  ],
-  [
-    '/DiversifiTechnologies.diversifi.diversifi.MsgFetchBalance',
-    MsgFetchBalance
-  ]
-]
+  ["/KimaFinance.kima.kima.MsgRequestTransaction", MsgRequestTransaction],
+];
 
-export const registry = new Registry(<any>types)
+export const registry = new Registry(<any>types);
 
 export const TxClient = async (wallet: OfflineSigner) => {
   const client = await SigningStargateClient.connectWithSigner(
-    'https://' + process.env.KIMA_BACKEND_DIVERSIFI_NODE_PROVIDER1,
+    "http://" + process.env.KIMA_BACKEND_NODE_PROVIDER,
     wallet,
     { registry }
-  )
-  const { address } = (await wallet.getAccounts())[0]
+  );
+  const { address } = (await wallet.getAccounts())[0];
 
   return {
     signAndBroadcast: (
       msgs: EncodeObject[],
-      { fee, memo }: SignAndBroadcastOptions = { fee: defaultFee, memo: '' }
+      { fee, memo }: SignAndBroadcastOptions = { fee: defaultFee, memo: "" }
     ) => client.signAndBroadcast(address, msgs, fee, memo),
     msgRequestTransaction: (data: MsgRequestTransaction): EncodeObject => ({
-      typeUrl:
-        '/DiversifiTechnologies.diversifi.diversifi.MsgRequestTransaction',
-      value: MsgRequestTransaction.fromPartial(data)
+      typeUrl: "/KimaFinance.kima.kima.MsgRequestTransaction",
+      value: MsgRequestTransaction.fromPartial(data),
     }),
-    msgApproveTransaction: (data: MsgApproveTransaction): EncodeObject => ({
-      typeUrl:
-        '/DiversifiTechnologies.diversifi.diversifi.MsgApproveTransaction',
-      value: MsgApproveTransaction.fromPartial(data)
-    }),
-    msgFetchBalance: (data: MsgFetchBalance): EncodeObject => ({
-      typeUrl: '/DiversifiTechnologies.diversifi.diversifi.MsgFetchBalance',
-      value: MsgFetchBalance.fromPartial(data)
-    })
-  }
-}
+  };
+};

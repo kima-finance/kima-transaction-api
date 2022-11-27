@@ -1,17 +1,19 @@
-import { Reader, Writer } from 'protobufjs/minimal';
-export declare const protobufPackage = "DiversifiTechnologies.diversifi.diversifi";
+import { Reader, Writer } from "protobufjs/minimal";
+export declare const protobufPackage = "KimaFinance.kima.kima";
 export interface MsgRequestTransaction {
     creator: string;
     originChain: string;
     originAddress: string;
     targetChain: string;
     targetAddress: string;
+    symbol: string;
     amount: string;
     fee: string;
 }
 export interface MsgRequestTransactionResponse {
     code: string;
     msg: string;
+    txId: string;
 }
 export interface MsgApproveTransaction {
     creator: string;
@@ -67,6 +69,8 @@ export interface MsgUpdateGasFee {
     fee: string;
 }
 export interface MsgUpdateGasFeeResponse {
+    code: string;
+    msg: string;
 }
 export interface MsgProvisionTransaction {
     creator: string;
@@ -78,6 +82,8 @@ export interface MsgProvisionTransaction {
     options: string;
 }
 export interface MsgProvisionTransactionResponse {
+    code: string;
+    msg: string;
 }
 export interface MsgDrainTransaction {
     creator: string;
@@ -89,12 +95,65 @@ export interface MsgDrainTransaction {
     options: string;
 }
 export interface MsgDrainTransactionResponse {
+    code: string;
+    msg: string;
 }
 export interface MsgCancelTransaction {
     creator: string;
     transactionId: string;
 }
 export interface MsgCancelTransactionResponse {
+    code: string;
+    msg: string;
+}
+export interface MsgAddWhitelisted {
+    creator: string;
+    address: string;
+}
+export interface MsgAddWhitelistedResponse {
+    code: string;
+    msg: string;
+}
+export interface MsgSetAdmin {
+    creator: string;
+}
+export interface MsgSetAdminResponse {
+    code: string;
+    msg: string;
+}
+export interface MsgAddPubkey {
+    creator: string;
+    pubkey: string;
+}
+export interface MsgAddPubkeyResponse {
+    code: string;
+    msg: string;
+}
+export interface MsgUpdateTssPubkey {
+    creator: string;
+    tssPubkey: string;
+    ecdsa: string;
+    ebdsa: string;
+    reserved: string;
+}
+export interface MsgUpdateTssPubkeyResponse {
+    code: string;
+    msg: string;
+}
+export interface MsgRemoveWhitelisted {
+    creator: string;
+    address: string;
+}
+export interface MsgRemoveWhitelistedResponse {
+    code: string;
+    msg: string;
+}
+export interface MsgClearTssInfo {
+    creator: string;
+}
+export interface MsgClearTssInfoResponse {
+    code: string;
+    msg: string;
 }
 export declare const MsgRequestTransaction: {
     encode(message: MsgRequestTransaction, writer?: Writer): Writer;
@@ -188,11 +247,11 @@ export declare const MsgUpdateGasFee: {
     fromPartial(object: DeepPartial<MsgUpdateGasFee>): MsgUpdateGasFee;
 };
 export declare const MsgUpdateGasFeeResponse: {
-    encode(_: MsgUpdateGasFeeResponse, writer?: Writer): Writer;
+    encode(message: MsgUpdateGasFeeResponse, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): MsgUpdateGasFeeResponse;
-    fromJSON(_: any): MsgUpdateGasFeeResponse;
-    toJSON(_: MsgUpdateGasFeeResponse): unknown;
-    fromPartial(_: DeepPartial<MsgUpdateGasFeeResponse>): MsgUpdateGasFeeResponse;
+    fromJSON(object: any): MsgUpdateGasFeeResponse;
+    toJSON(message: MsgUpdateGasFeeResponse): unknown;
+    fromPartial(object: DeepPartial<MsgUpdateGasFeeResponse>): MsgUpdateGasFeeResponse;
 };
 export declare const MsgProvisionTransaction: {
     encode(message: MsgProvisionTransaction, writer?: Writer): Writer;
@@ -202,11 +261,11 @@ export declare const MsgProvisionTransaction: {
     fromPartial(object: DeepPartial<MsgProvisionTransaction>): MsgProvisionTransaction;
 };
 export declare const MsgProvisionTransactionResponse: {
-    encode(_: MsgProvisionTransactionResponse, writer?: Writer): Writer;
+    encode(message: MsgProvisionTransactionResponse, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): MsgProvisionTransactionResponse;
-    fromJSON(_: any): MsgProvisionTransactionResponse;
-    toJSON(_: MsgProvisionTransactionResponse): unknown;
-    fromPartial(_: DeepPartial<MsgProvisionTransactionResponse>): MsgProvisionTransactionResponse;
+    fromJSON(object: any): MsgProvisionTransactionResponse;
+    toJSON(message: MsgProvisionTransactionResponse): unknown;
+    fromPartial(object: DeepPartial<MsgProvisionTransactionResponse>): MsgProvisionTransactionResponse;
 };
 export declare const MsgDrainTransaction: {
     encode(message: MsgDrainTransaction, writer?: Writer): Writer;
@@ -216,11 +275,11 @@ export declare const MsgDrainTransaction: {
     fromPartial(object: DeepPartial<MsgDrainTransaction>): MsgDrainTransaction;
 };
 export declare const MsgDrainTransactionResponse: {
-    encode(_: MsgDrainTransactionResponse, writer?: Writer): Writer;
+    encode(message: MsgDrainTransactionResponse, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): MsgDrainTransactionResponse;
-    fromJSON(_: any): MsgDrainTransactionResponse;
-    toJSON(_: MsgDrainTransactionResponse): unknown;
-    fromPartial(_: DeepPartial<MsgDrainTransactionResponse>): MsgDrainTransactionResponse;
+    fromJSON(object: any): MsgDrainTransactionResponse;
+    toJSON(message: MsgDrainTransactionResponse): unknown;
+    fromPartial(object: DeepPartial<MsgDrainTransactionResponse>): MsgDrainTransactionResponse;
 };
 export declare const MsgCancelTransaction: {
     encode(message: MsgCancelTransaction, writer?: Writer): Writer;
@@ -230,11 +289,95 @@ export declare const MsgCancelTransaction: {
     fromPartial(object: DeepPartial<MsgCancelTransaction>): MsgCancelTransaction;
 };
 export declare const MsgCancelTransactionResponse: {
-    encode(_: MsgCancelTransactionResponse, writer?: Writer): Writer;
+    encode(message: MsgCancelTransactionResponse, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): MsgCancelTransactionResponse;
-    fromJSON(_: any): MsgCancelTransactionResponse;
-    toJSON(_: MsgCancelTransactionResponse): unknown;
-    fromPartial(_: DeepPartial<MsgCancelTransactionResponse>): MsgCancelTransactionResponse;
+    fromJSON(object: any): MsgCancelTransactionResponse;
+    toJSON(message: MsgCancelTransactionResponse): unknown;
+    fromPartial(object: DeepPartial<MsgCancelTransactionResponse>): MsgCancelTransactionResponse;
+};
+export declare const MsgAddWhitelisted: {
+    encode(message: MsgAddWhitelisted, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgAddWhitelisted;
+    fromJSON(object: any): MsgAddWhitelisted;
+    toJSON(message: MsgAddWhitelisted): unknown;
+    fromPartial(object: DeepPartial<MsgAddWhitelisted>): MsgAddWhitelisted;
+};
+export declare const MsgAddWhitelistedResponse: {
+    encode(message: MsgAddWhitelistedResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgAddWhitelistedResponse;
+    fromJSON(object: any): MsgAddWhitelistedResponse;
+    toJSON(message: MsgAddWhitelistedResponse): unknown;
+    fromPartial(object: DeepPartial<MsgAddWhitelistedResponse>): MsgAddWhitelistedResponse;
+};
+export declare const MsgSetAdmin: {
+    encode(message: MsgSetAdmin, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgSetAdmin;
+    fromJSON(object: any): MsgSetAdmin;
+    toJSON(message: MsgSetAdmin): unknown;
+    fromPartial(object: DeepPartial<MsgSetAdmin>): MsgSetAdmin;
+};
+export declare const MsgSetAdminResponse: {
+    encode(message: MsgSetAdminResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgSetAdminResponse;
+    fromJSON(object: any): MsgSetAdminResponse;
+    toJSON(message: MsgSetAdminResponse): unknown;
+    fromPartial(object: DeepPartial<MsgSetAdminResponse>): MsgSetAdminResponse;
+};
+export declare const MsgAddPubkey: {
+    encode(message: MsgAddPubkey, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgAddPubkey;
+    fromJSON(object: any): MsgAddPubkey;
+    toJSON(message: MsgAddPubkey): unknown;
+    fromPartial(object: DeepPartial<MsgAddPubkey>): MsgAddPubkey;
+};
+export declare const MsgAddPubkeyResponse: {
+    encode(message: MsgAddPubkeyResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgAddPubkeyResponse;
+    fromJSON(object: any): MsgAddPubkeyResponse;
+    toJSON(message: MsgAddPubkeyResponse): unknown;
+    fromPartial(object: DeepPartial<MsgAddPubkeyResponse>): MsgAddPubkeyResponse;
+};
+export declare const MsgUpdateTssPubkey: {
+    encode(message: MsgUpdateTssPubkey, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgUpdateTssPubkey;
+    fromJSON(object: any): MsgUpdateTssPubkey;
+    toJSON(message: MsgUpdateTssPubkey): unknown;
+    fromPartial(object: DeepPartial<MsgUpdateTssPubkey>): MsgUpdateTssPubkey;
+};
+export declare const MsgUpdateTssPubkeyResponse: {
+    encode(message: MsgUpdateTssPubkeyResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgUpdateTssPubkeyResponse;
+    fromJSON(object: any): MsgUpdateTssPubkeyResponse;
+    toJSON(message: MsgUpdateTssPubkeyResponse): unknown;
+    fromPartial(object: DeepPartial<MsgUpdateTssPubkeyResponse>): MsgUpdateTssPubkeyResponse;
+};
+export declare const MsgRemoveWhitelisted: {
+    encode(message: MsgRemoveWhitelisted, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgRemoveWhitelisted;
+    fromJSON(object: any): MsgRemoveWhitelisted;
+    toJSON(message: MsgRemoveWhitelisted): unknown;
+    fromPartial(object: DeepPartial<MsgRemoveWhitelisted>): MsgRemoveWhitelisted;
+};
+export declare const MsgRemoveWhitelistedResponse: {
+    encode(message: MsgRemoveWhitelistedResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgRemoveWhitelistedResponse;
+    fromJSON(object: any): MsgRemoveWhitelistedResponse;
+    toJSON(message: MsgRemoveWhitelistedResponse): unknown;
+    fromPartial(object: DeepPartial<MsgRemoveWhitelistedResponse>): MsgRemoveWhitelistedResponse;
+};
+export declare const MsgClearTssInfo: {
+    encode(message: MsgClearTssInfo, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgClearTssInfo;
+    fromJSON(object: any): MsgClearTssInfo;
+    toJSON(message: MsgClearTssInfo): unknown;
+    fromPartial(object: DeepPartial<MsgClearTssInfo>): MsgClearTssInfo;
+};
+export declare const MsgClearTssInfoResponse: {
+    encode(message: MsgClearTssInfoResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgClearTssInfoResponse;
+    fromJSON(object: any): MsgClearTssInfoResponse;
+    toJSON(message: MsgClearTssInfoResponse): unknown;
+    fromPartial(object: DeepPartial<MsgClearTssInfoResponse>): MsgClearTssInfoResponse;
 };
 /** Msg defines the Msg service. */
 export interface Msg {
@@ -247,8 +390,14 @@ export interface Msg {
     UpdateGasFee(request: MsgUpdateGasFee): Promise<MsgUpdateGasFeeResponse>;
     ProvisionTransaction(request: MsgProvisionTransaction): Promise<MsgProvisionTransactionResponse>;
     DrainTransaction(request: MsgDrainTransaction): Promise<MsgDrainTransactionResponse>;
-    /** this line is used by starport scaffolding # proto/tx/rpc */
     CancelTransaction(request: MsgCancelTransaction): Promise<MsgCancelTransactionResponse>;
+    AddWhitelisted(request: MsgAddWhitelisted): Promise<MsgAddWhitelistedResponse>;
+    SetAdmin(request: MsgSetAdmin): Promise<MsgSetAdminResponse>;
+    AddPubkey(request: MsgAddPubkey): Promise<MsgAddPubkeyResponse>;
+    UpdateTssPubkey(request: MsgUpdateTssPubkey): Promise<MsgUpdateTssPubkeyResponse>;
+    RemoveWhitelisted(request: MsgRemoveWhitelisted): Promise<MsgRemoveWhitelistedResponse>;
+    /** this line is used by starport scaffolding # proto/tx/rpc */
+    ClearTssInfo(request: MsgClearTssInfo): Promise<MsgClearTssInfoResponse>;
 }
 export declare class MsgClientImpl implements Msg {
     private readonly rpc;
@@ -263,6 +412,12 @@ export declare class MsgClientImpl implements Msg {
     ProvisionTransaction(request: MsgProvisionTransaction): Promise<MsgProvisionTransactionResponse>;
     DrainTransaction(request: MsgDrainTransaction): Promise<MsgDrainTransactionResponse>;
     CancelTransaction(request: MsgCancelTransaction): Promise<MsgCancelTransactionResponse>;
+    AddWhitelisted(request: MsgAddWhitelisted): Promise<MsgAddWhitelistedResponse>;
+    SetAdmin(request: MsgSetAdmin): Promise<MsgSetAdminResponse>;
+    AddPubkey(request: MsgAddPubkey): Promise<MsgAddPubkeyResponse>;
+    UpdateTssPubkey(request: MsgUpdateTssPubkey): Promise<MsgUpdateTssPubkeyResponse>;
+    RemoveWhitelisted(request: MsgRemoveWhitelisted): Promise<MsgRemoveWhitelistedResponse>;
+    ClearTssInfo(request: MsgClearTssInfo): Promise<MsgClearTssInfoResponse>;
 }
 interface Rpc {
     request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
