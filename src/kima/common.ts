@@ -23,7 +23,7 @@ export const registry = new Registry(<any>types);
 
 export const TxClient = async (wallet: OfflineSigner) => {
   const client = await SigningStargateClient.connectWithSigner(
-    "http://" + process.env.KIMA_BACKEND_NODE_PROVIDER,
+    process.env.KIMA_BACKEND_NODE_PROVIDER as string,
     wallet,
     { registry }
   );

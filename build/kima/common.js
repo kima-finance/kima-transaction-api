@@ -18,7 +18,7 @@ const types = [
 ];
 exports.registry = new proto_signing_1.Registry(types);
 const TxClient = async (wallet) => {
-    const client = await stargate_1.SigningStargateClient.connectWithSigner("http://" + process.env.KIMA_BACKEND_NODE_PROVIDER, wallet, { registry: exports.registry });
+    const client = await stargate_1.SigningStargateClient.connectWithSigner(process.env.KIMA_BACKEND_NODE_PROVIDER, wallet, { registry: exports.registry });
     const { address } = (await wallet.getAccounts())[0];
     return {
         signAndBroadcast: (msgs, { fee, memo } = { fee: defaultFee, memo: "" }) => client.signAndBroadcast(address, msgs, fee, memo),
