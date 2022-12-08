@@ -43,4 +43,5 @@ const txResult = await submitKimaTransaction({
 ## Environment Variables
 
 `KIMA_BACKEND_MNEMONIC` : Seed phrase of developer wallet. This wallet must have KIMA token to submit a transaction to kima chain.
+
 `KIMA_BACKEND_NODE_PROVIDER` : Node provider for kima chain
