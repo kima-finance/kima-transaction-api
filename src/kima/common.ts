@@ -1,7 +1,7 @@
 import { SigningStargateClient, StdFee } from "@cosmjs/stargate";
 import dotenv from "dotenv";
 import { Registry, OfflineSigner, EncodeObject } from "@cosmjs/proto-signing";
-import { MsgRequestTransaction } from "./tx";
+import { MsgRequestTransaction, MsgSetTxHash } from "./tx";
 
 dotenv.config();
 
@@ -17,6 +17,7 @@ interface SignAndBroadcastOptions {
 
 const types = [
   ["/KimaFinance.kima.kima.MsgRequestTransaction", MsgRequestTransaction],
+  ["/KimaFinance.kima.kima.MsgSetTxHash", MsgSetTxHash],
 ];
 
 export const registry = new Registry(<any>types);
@@ -37,6 +38,10 @@ export const TxClient = async (wallet: OfflineSigner) => {
     msgRequestTransaction: (data: MsgRequestTransaction): EncodeObject => ({
       typeUrl: "/KimaFinance.kima.kima.MsgRequestTransaction",
       value: MsgRequestTransaction.fromPartial(data),
+    }),
+    msgSetTxHash: (data: MsgSetTxHash): EncodeObject => ({
+      typeUrl: "/KimaFinance.kima.kima.MsgSetTxHash",
+      value: MsgSetTxHash.fromPartial(data),
     }),
   };
 };

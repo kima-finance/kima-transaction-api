@@ -22,7 +22,8 @@ export interface MsgRequestTransactionResponse {
 
 export interface MsgApproveTransaction {
   creator: string;
-  txHash: string;
+  txCHash: string;
+  txTHash: string;
   success: string;
   signedKey: string;
 }
@@ -48,6 +49,7 @@ export interface MsgObservationVote {
   from: string;
   to: string;
   amount: string;
+  payType: string;
 }
 
 export interface MsgObservationVoteResponse {
@@ -186,6 +188,69 @@ export interface MsgClearTssInfo {
 }
 
 export interface MsgClearTssInfoResponse {
+  code: string;
+  msg: string;
+}
+
+export interface MsgAddChain {
+  creator: string;
+  name: string;
+  symbol: string;
+  tokens: string[];
+}
+
+export interface MsgAddChainResponse {
+  code: string;
+  msg: string;
+}
+
+export interface MsgUpdateTssHash {
+  creator: string;
+  txId: string;
+  tssPullHash: string;
+}
+
+export interface MsgUpdateTssHashResponse {
+  code: string;
+  msg: string;
+}
+
+export interface MsgUpdateChainStatus {
+  creator: string;
+  chainSymbol: string;
+  disabled: boolean;
+}
+
+export interface MsgUpdateChainStatusResponse {
+  code: string;
+  msg: string;
+}
+
+export interface MsgAddToken {
+  creator: string;
+  chainSymbol: string;
+  tokenSymbol: string;
+}
+
+export interface MsgAddTokenResponse {
+  code: string;
+  msg: string;
+}
+
+export interface MsgUpdateTssStatus {
+  creator: string;
+  status: string;
+}
+
+export interface MsgUpdateTssStatusResponse {}
+
+export interface MsgSetTxHash {
+  creator: string;
+  txId: string;
+  txHash: string;
+}
+
+export interface MsgSetTxHashResponse {
   code: string;
   msg: string;
 }
@@ -491,7 +556,8 @@ export const MsgRequestTransactionResponse = {
 
 const baseMsgApproveTransaction: object = {
   creator: "",
-  txHash: "",
+  txCHash: "",
+  txTHash: "",
   success: "",
   signedKey: "",
 };
@@ -504,14 +570,17 @@ export const MsgApproveTransaction = {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (message.txHash !== "") {
-      writer.uint32(18).string(message.txHash);
+    if (message.txCHash !== "") {
+      writer.uint32(18).string(message.txCHash);
+    }
+    if (message.txTHash !== "") {
+      writer.uint32(26).string(message.txTHash);
     }
     if (message.success !== "") {
-      writer.uint32(26).string(message.success);
+      writer.uint32(34).string(message.success);
     }
     if (message.signedKey !== "") {
-      writer.uint32(34).string(message.signedKey);
+      writer.uint32(42).string(message.signedKey);
     }
     return writer;
   },
@@ -527,12 +596,15 @@ export const MsgApproveTransaction = {
           message.creator = reader.string();
           break;
         case 2:
-          message.txHash = reader.string();
+          message.txCHash = reader.string();
           break;
         case 3:
-          message.success = reader.string();
+          message.txTHash = reader.string();
           break;
         case 4:
+          message.success = reader.string();
+          break;
+        case 5:
           message.signedKey = reader.string();
           break;
         default:
@@ -550,10 +622,15 @@ export const MsgApproveTransaction = {
     } else {
       message.creator = "";
     }
-    if (object.txHash !== undefined && object.txHash !== null) {
-      message.txHash = String(object.txHash);
+    if (object.txCHash !== undefined && object.txCHash !== null) {
+      message.txCHash = String(object.txCHash);
     } else {
-      message.txHash = "";
+      message.txCHash = "";
+    }
+    if (object.txTHash !== undefined && object.txTHash !== null) {
+      message.txTHash = String(object.txTHash);
+    } else {
+      message.txTHash = "";
     }
     if (object.success !== undefined && object.success !== null) {
       message.success = String(object.success);
@@ -571,7 +648,8 @@ export const MsgApproveTransaction = {
   toJSON(message: MsgApproveTransaction): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.txHash !== undefined && (obj.txHash = message.txHash);
+    message.txCHash !== undefined && (obj.txCHash = message.txCHash);
+    message.txTHash !== undefined && (obj.txTHash = message.txTHash);
     message.success !== undefined && (obj.success = message.success);
     message.signedKey !== undefined && (obj.signedKey = message.signedKey);
     return obj;
@@ -586,10 +664,15 @@ export const MsgApproveTransaction = {
     } else {
       message.creator = "";
     }
-    if (object.txHash !== undefined && object.txHash !== null) {
-      message.txHash = object.txHash;
+    if (object.txCHash !== undefined && object.txCHash !== null) {
+      message.txCHash = object.txCHash;
     } else {
-      message.txHash = "";
+      message.txCHash = "";
+    }
+    if (object.txTHash !== undefined && object.txTHash !== null) {
+      message.txTHash = object.txTHash;
+    } else {
+      message.txTHash = "";
     }
     if (object.success !== undefined && object.success !== null) {
       message.success = object.success;
@@ -836,6 +919,7 @@ const baseMsgObservationVote: object = {
   from: "",
   to: "",
   amount: "",
+  payType: "",
 };
 
 export const MsgObservationVote = {
@@ -860,6 +944,9 @@ export const MsgObservationVote = {
     }
     if (message.amount !== "") {
       writer.uint32(50).string(message.amount);
+    }
+    if (message.payType !== "") {
+      writer.uint32(58).string(message.payType);
     }
     return writer;
   },
@@ -888,6 +975,9 @@ export const MsgObservationVote = {
           break;
         case 6:
           message.amount = reader.string();
+          break;
+        case 7:
+          message.payType = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -929,6 +1019,11 @@ export const MsgObservationVote = {
     } else {
       message.amount = "";
     }
+    if (object.payType !== undefined && object.payType !== null) {
+      message.payType = String(object.payType);
+    } else {
+      message.payType = "";
+    }
     return message;
   },
 
@@ -940,6 +1035,7 @@ export const MsgObservationVote = {
     message.from !== undefined && (obj.from = message.from);
     message.to !== undefined && (obj.to = message.to);
     message.amount !== undefined && (obj.amount = message.amount);
+    message.payType !== undefined && (obj.payType = message.payType);
     return obj;
   },
 
@@ -974,6 +1070,11 @@ export const MsgObservationVote = {
       message.amount = object.amount;
     } else {
       message.amount = "";
+    }
+    if (object.payType !== undefined && object.payType !== null) {
+      message.payType = object.payType;
+    } else {
+      message.payType = "";
     }
     return message;
   },
@@ -3231,6 +3332,1019 @@ export const MsgClearTssInfoResponse = {
   },
 };
 
+const baseMsgAddChain: object = {
+  creator: "",
+  name: "",
+  symbol: "",
+  tokens: "",
+};
+
+export const MsgAddChain = {
+  encode(message: MsgAddChain, writer: Writer = Writer.create()): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    if (message.symbol !== "") {
+      writer.uint32(26).string(message.symbol);
+    }
+    for (const v of message.tokens) {
+      writer.uint32(34).string(v!);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgAddChain {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgAddChain } as MsgAddChain;
+    message.tokens = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.name = reader.string();
+          break;
+        case 3:
+          message.symbol = reader.string();
+          break;
+        case 4:
+          message.tokens.push(reader.string());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgAddChain {
+    const message = { ...baseMsgAddChain } as MsgAddChain;
+    message.tokens = [];
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = String(object.name);
+    } else {
+      message.name = "";
+    }
+    if (object.symbol !== undefined && object.symbol !== null) {
+      message.symbol = String(object.symbol);
+    } else {
+      message.symbol = "";
+    }
+    if (object.tokens !== undefined && object.tokens !== null) {
+      for (const e of object.tokens) {
+        message.tokens.push(String(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: MsgAddChain): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.name !== undefined && (obj.name = message.name);
+    message.symbol !== undefined && (obj.symbol = message.symbol);
+    if (message.tokens) {
+      obj.tokens = message.tokens.map((e) => e);
+    } else {
+      obj.tokens = [];
+    }
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<MsgAddChain>): MsgAddChain {
+    const message = { ...baseMsgAddChain } as MsgAddChain;
+    message.tokens = [];
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    } else {
+      message.name = "";
+    }
+    if (object.symbol !== undefined && object.symbol !== null) {
+      message.symbol = object.symbol;
+    } else {
+      message.symbol = "";
+    }
+    if (object.tokens !== undefined && object.tokens !== null) {
+      for (const e of object.tokens) {
+        message.tokens.push(e);
+      }
+    }
+    return message;
+  },
+};
+
+const baseMsgAddChainResponse: object = { code: "", msg: "" };
+
+export const MsgAddChainResponse = {
+  encode(
+    message: MsgAddChainResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.code !== "") {
+      writer.uint32(10).string(message.code);
+    }
+    if (message.msg !== "") {
+      writer.uint32(18).string(message.msg);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgAddChainResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgAddChainResponse } as MsgAddChainResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.code = reader.string();
+          break;
+        case 2:
+          message.msg = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgAddChainResponse {
+    const message = { ...baseMsgAddChainResponse } as MsgAddChainResponse;
+    if (object.code !== undefined && object.code !== null) {
+      message.code = String(object.code);
+    } else {
+      message.code = "";
+    }
+    if (object.msg !== undefined && object.msg !== null) {
+      message.msg = String(object.msg);
+    } else {
+      message.msg = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgAddChainResponse): unknown {
+    const obj: any = {};
+    message.code !== undefined && (obj.code = message.code);
+    message.msg !== undefined && (obj.msg = message.msg);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<MsgAddChainResponse>): MsgAddChainResponse {
+    const message = { ...baseMsgAddChainResponse } as MsgAddChainResponse;
+    if (object.code !== undefined && object.code !== null) {
+      message.code = object.code;
+    } else {
+      message.code = "";
+    }
+    if (object.msg !== undefined && object.msg !== null) {
+      message.msg = object.msg;
+    } else {
+      message.msg = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgUpdateTssHash: object = { creator: "", txId: "", tssPullHash: "" };
+
+export const MsgUpdateTssHash = {
+  encode(message: MsgUpdateTssHash, writer: Writer = Writer.create()): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.txId !== "") {
+      writer.uint32(18).string(message.txId);
+    }
+    if (message.tssPullHash !== "") {
+      writer.uint32(26).string(message.tssPullHash);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgUpdateTssHash {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgUpdateTssHash } as MsgUpdateTssHash;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.txId = reader.string();
+          break;
+        case 3:
+          message.tssPullHash = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdateTssHash {
+    const message = { ...baseMsgUpdateTssHash } as MsgUpdateTssHash;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.txId !== undefined && object.txId !== null) {
+      message.txId = String(object.txId);
+    } else {
+      message.txId = "";
+    }
+    if (object.tssPullHash !== undefined && object.tssPullHash !== null) {
+      message.tssPullHash = String(object.tssPullHash);
+    } else {
+      message.tssPullHash = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgUpdateTssHash): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.txId !== undefined && (obj.txId = message.txId);
+    message.tssPullHash !== undefined &&
+      (obj.tssPullHash = message.tssPullHash);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<MsgUpdateTssHash>): MsgUpdateTssHash {
+    const message = { ...baseMsgUpdateTssHash } as MsgUpdateTssHash;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.txId !== undefined && object.txId !== null) {
+      message.txId = object.txId;
+    } else {
+      message.txId = "";
+    }
+    if (object.tssPullHash !== undefined && object.tssPullHash !== null) {
+      message.tssPullHash = object.tssPullHash;
+    } else {
+      message.tssPullHash = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgUpdateTssHashResponse: object = { code: "", msg: "" };
+
+export const MsgUpdateTssHashResponse = {
+  encode(
+    message: MsgUpdateTssHashResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.code !== "") {
+      writer.uint32(10).string(message.code);
+    }
+    if (message.msg !== "") {
+      writer.uint32(18).string(message.msg);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgUpdateTssHashResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgUpdateTssHashResponse,
+    } as MsgUpdateTssHashResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.code = reader.string();
+          break;
+        case 2:
+          message.msg = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdateTssHashResponse {
+    const message = {
+      ...baseMsgUpdateTssHashResponse,
+    } as MsgUpdateTssHashResponse;
+    if (object.code !== undefined && object.code !== null) {
+      message.code = String(object.code);
+    } else {
+      message.code = "";
+    }
+    if (object.msg !== undefined && object.msg !== null) {
+      message.msg = String(object.msg);
+    } else {
+      message.msg = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgUpdateTssHashResponse): unknown {
+    const obj: any = {};
+    message.code !== undefined && (obj.code = message.code);
+    message.msg !== undefined && (obj.msg = message.msg);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgUpdateTssHashResponse>
+  ): MsgUpdateTssHashResponse {
+    const message = {
+      ...baseMsgUpdateTssHashResponse,
+    } as MsgUpdateTssHashResponse;
+    if (object.code !== undefined && object.code !== null) {
+      message.code = object.code;
+    } else {
+      message.code = "";
+    }
+    if (object.msg !== undefined && object.msg !== null) {
+      message.msg = object.msg;
+    } else {
+      message.msg = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgUpdateChainStatus: object = {
+  creator: "",
+  chainSymbol: "",
+  disabled: false,
+};
+
+export const MsgUpdateChainStatus = {
+  encode(
+    message: MsgUpdateChainStatus,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.chainSymbol !== "") {
+      writer.uint32(18).string(message.chainSymbol);
+    }
+    if (message.disabled === true) {
+      writer.uint32(24).bool(message.disabled);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgUpdateChainStatus {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgUpdateChainStatus } as MsgUpdateChainStatus;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.chainSymbol = reader.string();
+          break;
+        case 3:
+          message.disabled = reader.bool();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdateChainStatus {
+    const message = { ...baseMsgUpdateChainStatus } as MsgUpdateChainStatus;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.chainSymbol !== undefined && object.chainSymbol !== null) {
+      message.chainSymbol = String(object.chainSymbol);
+    } else {
+      message.chainSymbol = "";
+    }
+    if (object.disabled !== undefined && object.disabled !== null) {
+      message.disabled = Boolean(object.disabled);
+    } else {
+      message.disabled = false;
+    }
+    return message;
+  },
+
+  toJSON(message: MsgUpdateChainStatus): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.chainSymbol !== undefined &&
+      (obj.chainSymbol = message.chainSymbol);
+    message.disabled !== undefined && (obj.disabled = message.disabled);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<MsgUpdateChainStatus>): MsgUpdateChainStatus {
+    const message = { ...baseMsgUpdateChainStatus } as MsgUpdateChainStatus;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.chainSymbol !== undefined && object.chainSymbol !== null) {
+      message.chainSymbol = object.chainSymbol;
+    } else {
+      message.chainSymbol = "";
+    }
+    if (object.disabled !== undefined && object.disabled !== null) {
+      message.disabled = object.disabled;
+    } else {
+      message.disabled = false;
+    }
+    return message;
+  },
+};
+
+const baseMsgUpdateChainStatusResponse: object = { code: "", msg: "" };
+
+export const MsgUpdateChainStatusResponse = {
+  encode(
+    message: MsgUpdateChainStatusResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.code !== "") {
+      writer.uint32(10).string(message.code);
+    }
+    if (message.msg !== "") {
+      writer.uint32(18).string(message.msg);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgUpdateChainStatusResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgUpdateChainStatusResponse,
+    } as MsgUpdateChainStatusResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.code = reader.string();
+          break;
+        case 2:
+          message.msg = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdateChainStatusResponse {
+    const message = {
+      ...baseMsgUpdateChainStatusResponse,
+    } as MsgUpdateChainStatusResponse;
+    if (object.code !== undefined && object.code !== null) {
+      message.code = String(object.code);
+    } else {
+      message.code = "";
+    }
+    if (object.msg !== undefined && object.msg !== null) {
+      message.msg = String(object.msg);
+    } else {
+      message.msg = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgUpdateChainStatusResponse): unknown {
+    const obj: any = {};
+    message.code !== undefined && (obj.code = message.code);
+    message.msg !== undefined && (obj.msg = message.msg);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgUpdateChainStatusResponse>
+  ): MsgUpdateChainStatusResponse {
+    const message = {
+      ...baseMsgUpdateChainStatusResponse,
+    } as MsgUpdateChainStatusResponse;
+    if (object.code !== undefined && object.code !== null) {
+      message.code = object.code;
+    } else {
+      message.code = "";
+    }
+    if (object.msg !== undefined && object.msg !== null) {
+      message.msg = object.msg;
+    } else {
+      message.msg = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgAddToken: object = {
+  creator: "",
+  chainSymbol: "",
+  tokenSymbol: "",
+};
+
+export const MsgAddToken = {
+  encode(message: MsgAddToken, writer: Writer = Writer.create()): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.chainSymbol !== "") {
+      writer.uint32(18).string(message.chainSymbol);
+    }
+    if (message.tokenSymbol !== "") {
+      writer.uint32(26).string(message.tokenSymbol);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgAddToken {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgAddToken } as MsgAddToken;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.chainSymbol = reader.string();
+          break;
+        case 3:
+          message.tokenSymbol = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgAddToken {
+    const message = { ...baseMsgAddToken } as MsgAddToken;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.chainSymbol !== undefined && object.chainSymbol !== null) {
+      message.chainSymbol = String(object.chainSymbol);
+    } else {
+      message.chainSymbol = "";
+    }
+    if (object.tokenSymbol !== undefined && object.tokenSymbol !== null) {
+      message.tokenSymbol = String(object.tokenSymbol);
+    } else {
+      message.tokenSymbol = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgAddToken): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.chainSymbol !== undefined &&
+      (obj.chainSymbol = message.chainSymbol);
+    message.tokenSymbol !== undefined &&
+      (obj.tokenSymbol = message.tokenSymbol);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<MsgAddToken>): MsgAddToken {
+    const message = { ...baseMsgAddToken } as MsgAddToken;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.chainSymbol !== undefined && object.chainSymbol !== null) {
+      message.chainSymbol = object.chainSymbol;
+    } else {
+      message.chainSymbol = "";
+    }
+    if (object.tokenSymbol !== undefined && object.tokenSymbol !== null) {
+      message.tokenSymbol = object.tokenSymbol;
+    } else {
+      message.tokenSymbol = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgAddTokenResponse: object = { code: "", msg: "" };
+
+export const MsgAddTokenResponse = {
+  encode(
+    message: MsgAddTokenResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.code !== "") {
+      writer.uint32(10).string(message.code);
+    }
+    if (message.msg !== "") {
+      writer.uint32(18).string(message.msg);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgAddTokenResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgAddTokenResponse } as MsgAddTokenResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.code = reader.string();
+          break;
+        case 2:
+          message.msg = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgAddTokenResponse {
+    const message = { ...baseMsgAddTokenResponse } as MsgAddTokenResponse;
+    if (object.code !== undefined && object.code !== null) {
+      message.code = String(object.code);
+    } else {
+      message.code = "";
+    }
+    if (object.msg !== undefined && object.msg !== null) {
+      message.msg = String(object.msg);
+    } else {
+      message.msg = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgAddTokenResponse): unknown {
+    const obj: any = {};
+    message.code !== undefined && (obj.code = message.code);
+    message.msg !== undefined && (obj.msg = message.msg);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<MsgAddTokenResponse>): MsgAddTokenResponse {
+    const message = { ...baseMsgAddTokenResponse } as MsgAddTokenResponse;
+    if (object.code !== undefined && object.code !== null) {
+      message.code = object.code;
+    } else {
+      message.code = "";
+    }
+    if (object.msg !== undefined && object.msg !== null) {
+      message.msg = object.msg;
+    } else {
+      message.msg = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgUpdateTssStatus: object = { creator: "", status: "" };
+
+export const MsgUpdateTssStatus = {
+  encode(
+    message: MsgUpdateTssStatus,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.status !== "") {
+      writer.uint32(18).string(message.status);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgUpdateTssStatus {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgUpdateTssStatus } as MsgUpdateTssStatus;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.status = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdateTssStatus {
+    const message = { ...baseMsgUpdateTssStatus } as MsgUpdateTssStatus;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = String(object.status);
+    } else {
+      message.status = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgUpdateTssStatus): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.status !== undefined && (obj.status = message.status);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<MsgUpdateTssStatus>): MsgUpdateTssStatus {
+    const message = { ...baseMsgUpdateTssStatus } as MsgUpdateTssStatus;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = object.status;
+    } else {
+      message.status = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgUpdateTssStatusResponse: object = {};
+
+export const MsgUpdateTssStatusResponse = {
+  encode(
+    _: MsgUpdateTssStatusResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgUpdateTssStatusResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgUpdateTssStatusResponse,
+    } as MsgUpdateTssStatusResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgUpdateTssStatusResponse {
+    const message = {
+      ...baseMsgUpdateTssStatusResponse,
+    } as MsgUpdateTssStatusResponse;
+    return message;
+  },
+
+  toJSON(_: MsgUpdateTssStatusResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(
+    _: DeepPartial<MsgUpdateTssStatusResponse>
+  ): MsgUpdateTssStatusResponse {
+    const message = {
+      ...baseMsgUpdateTssStatusResponse,
+    } as MsgUpdateTssStatusResponse;
+    return message;
+  },
+};
+
+const baseMsgSetTxHash: object = { creator: "", txId: "", txHash: "" };
+
+export const MsgSetTxHash = {
+  encode(message: MsgSetTxHash, writer: Writer = Writer.create()): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.txId !== "") {
+      writer.uint32(18).string(message.txId);
+    }
+    if (message.txHash !== "") {
+      writer.uint32(26).string(message.txHash);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgSetTxHash {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgSetTxHash } as MsgSetTxHash;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.txId = reader.string();
+          break;
+        case 3:
+          message.txHash = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgSetTxHash {
+    const message = { ...baseMsgSetTxHash } as MsgSetTxHash;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.txId !== undefined && object.txId !== null) {
+      message.txId = String(object.txId);
+    } else {
+      message.txId = "";
+    }
+    if (object.txHash !== undefined && object.txHash !== null) {
+      message.txHash = String(object.txHash);
+    } else {
+      message.txHash = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgSetTxHash): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.txId !== undefined && (obj.txId = message.txId);
+    message.txHash !== undefined && (obj.txHash = message.txHash);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<MsgSetTxHash>): MsgSetTxHash {
+    const message = { ...baseMsgSetTxHash } as MsgSetTxHash;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.txId !== undefined && object.txId !== null) {
+      message.txId = object.txId;
+    } else {
+      message.txId = "";
+    }
+    if (object.txHash !== undefined && object.txHash !== null) {
+      message.txHash = object.txHash;
+    } else {
+      message.txHash = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgSetTxHashResponse: object = { code: "", msg: "" };
+
+export const MsgSetTxHashResponse = {
+  encode(
+    message: MsgSetTxHashResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.code !== "") {
+      writer.uint32(10).string(message.code);
+    }
+    if (message.msg !== "") {
+      writer.uint32(18).string(message.msg);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgSetTxHashResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgSetTxHashResponse } as MsgSetTxHashResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.code = reader.string();
+          break;
+        case 2:
+          message.msg = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgSetTxHashResponse {
+    const message = { ...baseMsgSetTxHashResponse } as MsgSetTxHashResponse;
+    if (object.code !== undefined && object.code !== null) {
+      message.code = String(object.code);
+    } else {
+      message.code = "";
+    }
+    if (object.msg !== undefined && object.msg !== null) {
+      message.msg = String(object.msg);
+    } else {
+      message.msg = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgSetTxHashResponse): unknown {
+    const obj: any = {};
+    message.code !== undefined && (obj.code = message.code);
+    message.msg !== undefined && (obj.msg = message.msg);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<MsgSetTxHashResponse>): MsgSetTxHashResponse {
+    const message = { ...baseMsgSetTxHashResponse } as MsgSetTxHashResponse;
+    if (object.code !== undefined && object.code !== null) {
+      message.code = object.code;
+    } else {
+      message.code = "";
+    }
+    if (object.msg !== undefined && object.msg !== null) {
+      message.msg = object.msg;
+    } else {
+      message.msg = "";
+    }
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
   RequestTransaction(
@@ -3266,8 +4380,18 @@ export interface Msg {
   RemoveWhitelisted(
     request: MsgRemoveWhitelisted
   ): Promise<MsgRemoveWhitelistedResponse>;
-  /** this line is used by starport scaffolding # proto/tx/rpc */
   ClearTssInfo(request: MsgClearTssInfo): Promise<MsgClearTssInfoResponse>;
+  AddChain(request: MsgAddChain): Promise<MsgAddChainResponse>;
+  UpdateTssHash(request: MsgUpdateTssHash): Promise<MsgUpdateTssHashResponse>;
+  UpdateChainStatus(
+    request: MsgUpdateChainStatus
+  ): Promise<MsgUpdateChainStatusResponse>;
+  AddToken(request: MsgAddToken): Promise<MsgAddTokenResponse>;
+  UpdateTssStatus(
+    request: MsgUpdateTssStatus
+  ): Promise<MsgUpdateTssStatusResponse>;
+  /** this line is used by starport scaffolding # proto/tx/rpc */
+  SetTxHash(request: MsgSetTxHash): Promise<MsgSetTxHashResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -3480,6 +4604,78 @@ export class MsgClientImpl implements Msg {
     );
     return promise.then((data) =>
       MsgClearTssInfoResponse.decode(new Reader(data))
+    );
+  }
+
+  AddChain(request: MsgAddChain): Promise<MsgAddChainResponse> {
+    const data = MsgAddChain.encode(request).finish();
+    const promise = this.rpc.request(
+      "KimaFinance.kima.kima.Msg",
+      "AddChain",
+      data
+    );
+    return promise.then((data) => MsgAddChainResponse.decode(new Reader(data)));
+  }
+
+  UpdateTssHash(request: MsgUpdateTssHash): Promise<MsgUpdateTssHashResponse> {
+    const data = MsgUpdateTssHash.encode(request).finish();
+    const promise = this.rpc.request(
+      "KimaFinance.kima.kima.Msg",
+      "UpdateTssHash",
+      data
+    );
+    return promise.then((data) =>
+      MsgUpdateTssHashResponse.decode(new Reader(data))
+    );
+  }
+
+  UpdateChainStatus(
+    request: MsgUpdateChainStatus
+  ): Promise<MsgUpdateChainStatusResponse> {
+    const data = MsgUpdateChainStatus.encode(request).finish();
+    const promise = this.rpc.request(
+      "KimaFinance.kima.kima.Msg",
+      "UpdateChainStatus",
+      data
+    );
+    return promise.then((data) =>
+      MsgUpdateChainStatusResponse.decode(new Reader(data))
+    );
+  }
+
+  AddToken(request: MsgAddToken): Promise<MsgAddTokenResponse> {
+    const data = MsgAddToken.encode(request).finish();
+    const promise = this.rpc.request(
+      "KimaFinance.kima.kima.Msg",
+      "AddToken",
+      data
+    );
+    return promise.then((data) => MsgAddTokenResponse.decode(new Reader(data)));
+  }
+
+  UpdateTssStatus(
+    request: MsgUpdateTssStatus
+  ): Promise<MsgUpdateTssStatusResponse> {
+    const data = MsgUpdateTssStatus.encode(request).finish();
+    const promise = this.rpc.request(
+      "KimaFinance.kima.kima.Msg",
+      "UpdateTssStatus",
+      data
+    );
+    return promise.then((data) =>
+      MsgUpdateTssStatusResponse.decode(new Reader(data))
+    );
+  }
+
+  SetTxHash(request: MsgSetTxHash): Promise<MsgSetTxHashResponse> {
+    const data = MsgSetTxHash.encode(request).finish();
+    const promise = this.rpc.request(
+      "KimaFinance.kima.kima.Msg",
+      "SetTxHash",
+      data
+    );
+    return promise.then((data) =>
+      MsgSetTxHashResponse.decode(new Reader(data))
     );
   }
 }

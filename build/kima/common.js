@@ -15,6 +15,7 @@ const defaultFee = {
 };
 const types = [
     ["/KimaFinance.kima.kima.MsgRequestTransaction", tx_1.MsgRequestTransaction],
+    ["/KimaFinance.kima.kima.MsgSetTxHash", tx_1.MsgSetTxHash],
 ];
 exports.registry = new proto_signing_1.Registry(types);
 const TxClient = async (wallet) => {
@@ -25,6 +26,10 @@ const TxClient = async (wallet) => {
         msgRequestTransaction: (data) => ({
             typeUrl: "/KimaFinance.kima.kima.MsgRequestTransaction",
             value: tx_1.MsgRequestTransaction.fromPartial(data),
+        }),
+        msgSetTxHash: (data) => ({
+            typeUrl: "/KimaFinance.kima.kima.MsgSetTxHash",
+            value: tx_1.MsgSetTxHash.fromPartial(data),
         }),
     };
 };

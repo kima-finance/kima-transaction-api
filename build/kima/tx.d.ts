@@ -17,7 +17,8 @@ export interface MsgRequestTransactionResponse {
 }
 export interface MsgApproveTransaction {
     creator: string;
-    txHash: string;
+    txCHash: string;
+    txTHash: string;
     success: string;
     signedKey: string;
 }
@@ -39,6 +40,7 @@ export interface MsgObservationVote {
     from: string;
     to: string;
     amount: string;
+    payType: string;
 }
 export interface MsgObservationVoteResponse {
     code: string;
@@ -152,6 +154,58 @@ export interface MsgClearTssInfo {
     creator: string;
 }
 export interface MsgClearTssInfoResponse {
+    code: string;
+    msg: string;
+}
+export interface MsgAddChain {
+    creator: string;
+    name: string;
+    symbol: string;
+    tokens: string[];
+}
+export interface MsgAddChainResponse {
+    code: string;
+    msg: string;
+}
+export interface MsgUpdateTssHash {
+    creator: string;
+    txId: string;
+    tssPullHash: string;
+}
+export interface MsgUpdateTssHashResponse {
+    code: string;
+    msg: string;
+}
+export interface MsgUpdateChainStatus {
+    creator: string;
+    chainSymbol: string;
+    disabled: boolean;
+}
+export interface MsgUpdateChainStatusResponse {
+    code: string;
+    msg: string;
+}
+export interface MsgAddToken {
+    creator: string;
+    chainSymbol: string;
+    tokenSymbol: string;
+}
+export interface MsgAddTokenResponse {
+    code: string;
+    msg: string;
+}
+export interface MsgUpdateTssStatus {
+    creator: string;
+    status: string;
+}
+export interface MsgUpdateTssStatusResponse {
+}
+export interface MsgSetTxHash {
+    creator: string;
+    txId: string;
+    txHash: string;
+}
+export interface MsgSetTxHashResponse {
     code: string;
     msg: string;
 }
@@ -379,6 +433,90 @@ export declare const MsgClearTssInfoResponse: {
     toJSON(message: MsgClearTssInfoResponse): unknown;
     fromPartial(object: DeepPartial<MsgClearTssInfoResponse>): MsgClearTssInfoResponse;
 };
+export declare const MsgAddChain: {
+    encode(message: MsgAddChain, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgAddChain;
+    fromJSON(object: any): MsgAddChain;
+    toJSON(message: MsgAddChain): unknown;
+    fromPartial(object: DeepPartial<MsgAddChain>): MsgAddChain;
+};
+export declare const MsgAddChainResponse: {
+    encode(message: MsgAddChainResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgAddChainResponse;
+    fromJSON(object: any): MsgAddChainResponse;
+    toJSON(message: MsgAddChainResponse): unknown;
+    fromPartial(object: DeepPartial<MsgAddChainResponse>): MsgAddChainResponse;
+};
+export declare const MsgUpdateTssHash: {
+    encode(message: MsgUpdateTssHash, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgUpdateTssHash;
+    fromJSON(object: any): MsgUpdateTssHash;
+    toJSON(message: MsgUpdateTssHash): unknown;
+    fromPartial(object: DeepPartial<MsgUpdateTssHash>): MsgUpdateTssHash;
+};
+export declare const MsgUpdateTssHashResponse: {
+    encode(message: MsgUpdateTssHashResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgUpdateTssHashResponse;
+    fromJSON(object: any): MsgUpdateTssHashResponse;
+    toJSON(message: MsgUpdateTssHashResponse): unknown;
+    fromPartial(object: DeepPartial<MsgUpdateTssHashResponse>): MsgUpdateTssHashResponse;
+};
+export declare const MsgUpdateChainStatus: {
+    encode(message: MsgUpdateChainStatus, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgUpdateChainStatus;
+    fromJSON(object: any): MsgUpdateChainStatus;
+    toJSON(message: MsgUpdateChainStatus): unknown;
+    fromPartial(object: DeepPartial<MsgUpdateChainStatus>): MsgUpdateChainStatus;
+};
+export declare const MsgUpdateChainStatusResponse: {
+    encode(message: MsgUpdateChainStatusResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgUpdateChainStatusResponse;
+    fromJSON(object: any): MsgUpdateChainStatusResponse;
+    toJSON(message: MsgUpdateChainStatusResponse): unknown;
+    fromPartial(object: DeepPartial<MsgUpdateChainStatusResponse>): MsgUpdateChainStatusResponse;
+};
+export declare const MsgAddToken: {
+    encode(message: MsgAddToken, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgAddToken;
+    fromJSON(object: any): MsgAddToken;
+    toJSON(message: MsgAddToken): unknown;
+    fromPartial(object: DeepPartial<MsgAddToken>): MsgAddToken;
+};
+export declare const MsgAddTokenResponse: {
+    encode(message: MsgAddTokenResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgAddTokenResponse;
+    fromJSON(object: any): MsgAddTokenResponse;
+    toJSON(message: MsgAddTokenResponse): unknown;
+    fromPartial(object: DeepPartial<MsgAddTokenResponse>): MsgAddTokenResponse;
+};
+export declare const MsgUpdateTssStatus: {
+    encode(message: MsgUpdateTssStatus, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgUpdateTssStatus;
+    fromJSON(object: any): MsgUpdateTssStatus;
+    toJSON(message: MsgUpdateTssStatus): unknown;
+    fromPartial(object: DeepPartial<MsgUpdateTssStatus>): MsgUpdateTssStatus;
+};
+export declare const MsgUpdateTssStatusResponse: {
+    encode(_: MsgUpdateTssStatusResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgUpdateTssStatusResponse;
+    fromJSON(_: any): MsgUpdateTssStatusResponse;
+    toJSON(_: MsgUpdateTssStatusResponse): unknown;
+    fromPartial(_: DeepPartial<MsgUpdateTssStatusResponse>): MsgUpdateTssStatusResponse;
+};
+export declare const MsgSetTxHash: {
+    encode(message: MsgSetTxHash, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgSetTxHash;
+    fromJSON(object: any): MsgSetTxHash;
+    toJSON(message: MsgSetTxHash): unknown;
+    fromPartial(object: DeepPartial<MsgSetTxHash>): MsgSetTxHash;
+};
+export declare const MsgSetTxHashResponse: {
+    encode(message: MsgSetTxHashResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgSetTxHashResponse;
+    fromJSON(object: any): MsgSetTxHashResponse;
+    toJSON(message: MsgSetTxHashResponse): unknown;
+    fromPartial(object: DeepPartial<MsgSetTxHashResponse>): MsgSetTxHashResponse;
+};
 /** Msg defines the Msg service. */
 export interface Msg {
     RequestTransaction(request: MsgRequestTransaction): Promise<MsgRequestTransactionResponse>;
@@ -396,8 +534,14 @@ export interface Msg {
     AddPubkey(request: MsgAddPubkey): Promise<MsgAddPubkeyResponse>;
     UpdateTssPubkey(request: MsgUpdateTssPubkey): Promise<MsgUpdateTssPubkeyResponse>;
     RemoveWhitelisted(request: MsgRemoveWhitelisted): Promise<MsgRemoveWhitelistedResponse>;
-    /** this line is used by starport scaffolding # proto/tx/rpc */
     ClearTssInfo(request: MsgClearTssInfo): Promise<MsgClearTssInfoResponse>;
+    AddChain(request: MsgAddChain): Promise<MsgAddChainResponse>;
+    UpdateTssHash(request: MsgUpdateTssHash): Promise<MsgUpdateTssHashResponse>;
+    UpdateChainStatus(request: MsgUpdateChainStatus): Promise<MsgUpdateChainStatusResponse>;
+    AddToken(request: MsgAddToken): Promise<MsgAddTokenResponse>;
+    UpdateTssStatus(request: MsgUpdateTssStatus): Promise<MsgUpdateTssStatusResponse>;
+    /** this line is used by starport scaffolding # proto/tx/rpc */
+    SetTxHash(request: MsgSetTxHash): Promise<MsgSetTxHashResponse>;
 }
 export declare class MsgClientImpl implements Msg {
     private readonly rpc;
@@ -418,6 +562,12 @@ export declare class MsgClientImpl implements Msg {
     UpdateTssPubkey(request: MsgUpdateTssPubkey): Promise<MsgUpdateTssPubkeyResponse>;
     RemoveWhitelisted(request: MsgRemoveWhitelisted): Promise<MsgRemoveWhitelistedResponse>;
     ClearTssInfo(request: MsgClearTssInfo): Promise<MsgClearTssInfoResponse>;
+    AddChain(request: MsgAddChain): Promise<MsgAddChainResponse>;
+    UpdateTssHash(request: MsgUpdateTssHash): Promise<MsgUpdateTssHashResponse>;
+    UpdateChainStatus(request: MsgUpdateChainStatus): Promise<MsgUpdateChainStatusResponse>;
+    AddToken(request: MsgAddToken): Promise<MsgAddTokenResponse>;
+    UpdateTssStatus(request: MsgUpdateTssStatus): Promise<MsgUpdateTssStatusResponse>;
+    SetTxHash(request: MsgSetTxHash): Promise<MsgSetTxHashResponse>;
 }
 interface Rpc {
     request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;

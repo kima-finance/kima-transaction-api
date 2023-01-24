@@ -51,6 +51,28 @@ export async function submitKimaTransaction({
     fee: fee.toString(),
   };
 
-  const msg = await client.msgRequestTransaction(params);
-  return await client.signAndBroadcast([msg]);
+  let msg = await client.msgRequestTransaction(params);
+  const result = await client.signAndBroadcast([msg]);
+
+  let txId = "1";
+
+  for (const event of result.events) {
+    if (event.type === "transaction_requested") {
+      for (const attr of event.attributes) {
+        if (attr.key === "txId") {
+          txId = attr.value;
+        }
+      }
+    }
+  }
+
+  msg = await client.msgSetTxHash({
+    creator: firstAccount.address,
+    txId,
+    txHash: result.transactionHash,
+  });
+
+  const temp = await client.signAndBroadcast([msg]);
+
+  return result;
 }
