@@ -1,6 +1,6 @@
 # Kima Transaction API
 
-A wrapper around Kima's API, enabling sending and monitoring transactions
+A wrapper around Kima's API, enabling sending and monitoring transactions. This is for beta version
 
 ## Install
 
@@ -17,10 +17,10 @@ import { submitKimaTransaction, SupportNetworks, CurrencyOptions } from '@kimafi
 
 const txResult = await submitKimaTransaction({
     originAddress: "0x1234123412341234123412341234123412341234",
-    originChain: SupportNetworks.Ethereum,
+    originChain: 'ETH',
     targetAddress: "0x1234123412341234123412341234123412341234",
-    targetChain: SupportNetworks.Polygon,
-    symbol: CurrencyOptions.USDT,
+    targetChain: 'POL',
+    symbol: 'USDK',
     amount: 100,
     fee: 0.3
 })
@@ -43,5 +43,4 @@ const txResult = await submitKimaTransaction({
 ## Environment Variables
 
 `KIMA_BACKEND_MNEMONIC` : Seed phrase of developer wallet. This wallet must have KIMA token to submit a transaction to kima chain.
-
 `KIMA_BACKEND_NODE_PROVIDER` : Node provider for kima chain

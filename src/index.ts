@@ -2,12 +2,31 @@ import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { TxClient } from "./kima/common";
 import { MsgRequestTransaction } from "./kima/tx";
 
+export enum SupportedNetworks {
+  ETHEREUM = "ETH",
+  POLYGON = "POL",
+  AVALANCHE = "AVX",
+  SOLANA = "SOL",
+  FUSE = "FUS",
+  CELO = "CEL",
+  BSC = "BSC",
+  ARBITRIUM = "ARB",
+  OPTIMISM = "OPT",
+  POLYGON_ZKEVM = "ZKE",
+}
+
+export enum CurrencyOptions {
+  USDT = "USDT",
+  USDC = "USDC",
+  USDK = "USDK",
+}
+
 interface Props {
-  originChain: string;
+  originChain: SupportedNetworks;
   originAddress: string;
-  targetChain: string;
+  targetChain: SupportedNetworks;
   targetAddress: string;
-  symbol: string;
+  symbol: CurrencyOptions;
   amount: number;
   fee: number;
 }
