@@ -2,25 +2,12 @@ import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { TxClient } from "./kima/common";
 import { MsgRequestTransaction } from "./kima/tx";
 
-export enum SupportNetworks {
-  Ethereum = "ETH",
-  Polygon = "POL",
-  Avalanche = "AVX",
-  Solana = "SOL",
-}
-
-export enum CurrencyOptions {
-  USDK = "USDK",
-  USDT = "USDT",
-  USDC = "USDC",
-}
-
 interface Props {
-  originChain: SupportNetworks;
+  originChain: string;
   originAddress: string;
-  targetChain: SupportNetworks;
+  targetChain: string;
   targetAddress: string;
-  symbol: CurrencyOptions;
+  symbol: string;
   amount: number;
   fee: number;
 }
@@ -72,7 +59,7 @@ export async function submitKimaTransaction({
     txHash: result.transactionHash,
   });
 
-  const temp = await client.signAndBroadcast([msg]);
+  await client.signAndBroadcast([msg]);
 
   return result;
 }
