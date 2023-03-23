@@ -31,6 +31,11 @@ interface Props {
   fee: number;
 }
 
+const defaultWallet = await DirectSecp256k1HdWallet.fromMnemonic(
+    process.env.KIMA_BACKEND_MNEMONIC as string,
+    { prefix: "kima" }
+  );
+
 export async function submitKimaTransaction({
   originChain,
   originAddress,
@@ -39,13 +44,12 @@ export async function submitKimaTransaction({
   symbol,
   amount,
   fee,
+  fromAddress
+  wallet = defaultWallet
 }: Props) {
-  const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
-    process.env.KIMA_BACKEND_MNEMONIC as string,
-    { prefix: "kima" }
-  );
+  
   const client = await TxClient(wallet);
-  const [firstAccount] = await wallet.getAccounts();
+  const [firstAccount] = fromAddress ? [{address:fromAddress}] : await wallet.getAccounts();
   const params: MsgRequestTransaction = {
     creator: firstAccount.address,
     originChain,
