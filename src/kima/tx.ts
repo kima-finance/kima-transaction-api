@@ -22,7 +22,7 @@ export interface MsgRequestTransactionResponse {
 
 export interface MsgApproveTransaction {
   creator: string;
-  txCHash: string;
+  txId: string;
   txTHash: string;
   success: string;
   signedKey: string;
@@ -33,15 +33,6 @@ export interface MsgApproveTransactionResponse {
   msg: string;
 }
 
-export interface MsgFetchBalance {
-  creator: string;
-}
-
-export interface MsgFetchBalanceResponse {
-  code: string;
-  result: string;
-}
-
 export interface MsgObservationVote {
   creator: string;
   txHash: string;
@@ -50,6 +41,8 @@ export interface MsgObservationVote {
   to: string;
   amount: string;
   payType: string;
+  kimaTxID: string;
+  succeed: string;
 }
 
 export interface MsgObservationVoteResponse {
@@ -164,7 +157,7 @@ export interface MsgUpdateTssPubkey {
   creator: string;
   tssPubkey: string;
   ecdsa: string;
-  ebdsa: string;
+  eddsa: string;
   reserved: string;
 }
 
@@ -251,6 +244,28 @@ export interface MsgSetTxHash {
 }
 
 export interface MsgSetTxHashResponse {
+  code: string;
+  msg: string;
+}
+
+export interface MsgSetTxProcess {
+  creator: string;
+  txId: string;
+  timestamp: string;
+  msgId: string;
+}
+
+export interface MsgSetTxProcessResponse {}
+
+export interface MsgFinalizeTransaction {
+  creator: string;
+  txId: string;
+  txHash: string;
+  success: string;
+  signedKey: string;
+}
+
+export interface MsgFinalizeTransactionResponse {
   code: string;
   msg: string;
 }
@@ -556,7 +571,7 @@ export const MsgRequestTransactionResponse = {
 
 const baseMsgApproveTransaction: object = {
   creator: "",
-  txCHash: "",
+  txId: "",
   txTHash: "",
   success: "",
   signedKey: "",
@@ -570,8 +585,8 @@ export const MsgApproveTransaction = {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (message.txCHash !== "") {
-      writer.uint32(18).string(message.txCHash);
+    if (message.txId !== "") {
+      writer.uint32(18).string(message.txId);
     }
     if (message.txTHash !== "") {
       writer.uint32(26).string(message.txTHash);
@@ -596,7 +611,7 @@ export const MsgApproveTransaction = {
           message.creator = reader.string();
           break;
         case 2:
-          message.txCHash = reader.string();
+          message.txId = reader.string();
           break;
         case 3:
           message.txTHash = reader.string();
@@ -622,10 +637,10 @@ export const MsgApproveTransaction = {
     } else {
       message.creator = "";
     }
-    if (object.txCHash !== undefined && object.txCHash !== null) {
-      message.txCHash = String(object.txCHash);
+    if (object.txId !== undefined && object.txId !== null) {
+      message.txId = String(object.txId);
     } else {
-      message.txCHash = "";
+      message.txId = "";
     }
     if (object.txTHash !== undefined && object.txTHash !== null) {
       message.txTHash = String(object.txTHash);
@@ -648,7 +663,7 @@ export const MsgApproveTransaction = {
   toJSON(message: MsgApproveTransaction): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.txCHash !== undefined && (obj.txCHash = message.txCHash);
+    message.txId !== undefined && (obj.txId = message.txId);
     message.txTHash !== undefined && (obj.txTHash = message.txTHash);
     message.success !== undefined && (obj.success = message.success);
     message.signedKey !== undefined && (obj.signedKey = message.signedKey);
@@ -664,10 +679,10 @@ export const MsgApproveTransaction = {
     } else {
       message.creator = "";
     }
-    if (object.txCHash !== undefined && object.txCHash !== null) {
-      message.txCHash = object.txCHash;
+    if (object.txId !== undefined && object.txId !== null) {
+      message.txId = object.txId;
     } else {
-      message.txCHash = "";
+      message.txId = "";
     }
     if (object.txTHash !== undefined && object.txTHash !== null) {
       message.txTHash = object.txTHash;
@@ -774,144 +789,6 @@ export const MsgApproveTransactionResponse = {
   },
 };
 
-const baseMsgFetchBalance: object = { creator: "" };
-
-export const MsgFetchBalance = {
-  encode(message: MsgFetchBalance, writer: Writer = Writer.create()): Writer {
-    if (message.creator !== "") {
-      writer.uint32(10).string(message.creator);
-    }
-    return writer;
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): MsgFetchBalance {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgFetchBalance } as MsgFetchBalance;
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.creator = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): MsgFetchBalance {
-    const message = { ...baseMsgFetchBalance } as MsgFetchBalance;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    return message;
-  },
-
-  toJSON(message: MsgFetchBalance): unknown {
-    const obj: any = {};
-    message.creator !== undefined && (obj.creator = message.creator);
-    return obj;
-  },
-
-  fromPartial(object: DeepPartial<MsgFetchBalance>): MsgFetchBalance {
-    const message = { ...baseMsgFetchBalance } as MsgFetchBalance;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    return message;
-  },
-};
-
-const baseMsgFetchBalanceResponse: object = { code: "", result: "" };
-
-export const MsgFetchBalanceResponse = {
-  encode(
-    message: MsgFetchBalanceResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
-    if (message.code !== "") {
-      writer.uint32(10).string(message.code);
-    }
-    if (message.result !== "") {
-      writer.uint32(18).string(message.result);
-    }
-    return writer;
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): MsgFetchBalanceResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgFetchBalanceResponse,
-    } as MsgFetchBalanceResponse;
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.code = reader.string();
-          break;
-        case 2:
-          message.result = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): MsgFetchBalanceResponse {
-    const message = {
-      ...baseMsgFetchBalanceResponse,
-    } as MsgFetchBalanceResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = String(object.code);
-    } else {
-      message.code = "";
-    }
-    if (object.result !== undefined && object.result !== null) {
-      message.result = String(object.result);
-    } else {
-      message.result = "";
-    }
-    return message;
-  },
-
-  toJSON(message: MsgFetchBalanceResponse): unknown {
-    const obj: any = {};
-    message.code !== undefined && (obj.code = message.code);
-    message.result !== undefined && (obj.result = message.result);
-    return obj;
-  },
-
-  fromPartial(
-    object: DeepPartial<MsgFetchBalanceResponse>
-  ): MsgFetchBalanceResponse {
-    const message = {
-      ...baseMsgFetchBalanceResponse,
-    } as MsgFetchBalanceResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = object.code;
-    } else {
-      message.code = "";
-    }
-    if (object.result !== undefined && object.result !== null) {
-      message.result = object.result;
-    } else {
-      message.result = "";
-    }
-    return message;
-  },
-};
-
 const baseMsgObservationVote: object = {
   creator: "",
   txHash: "",
@@ -920,6 +797,8 @@ const baseMsgObservationVote: object = {
   to: "",
   amount: "",
   payType: "",
+  kimaTxID: "",
+  succeed: "",
 };
 
 export const MsgObservationVote = {
@@ -947,6 +826,12 @@ export const MsgObservationVote = {
     }
     if (message.payType !== "") {
       writer.uint32(58).string(message.payType);
+    }
+    if (message.kimaTxID !== "") {
+      writer.uint32(66).string(message.kimaTxID);
+    }
+    if (message.succeed !== "") {
+      writer.uint32(74).string(message.succeed);
     }
     return writer;
   },
@@ -978,6 +863,12 @@ export const MsgObservationVote = {
           break;
         case 7:
           message.payType = reader.string();
+          break;
+        case 8:
+          message.kimaTxID = reader.string();
+          break;
+        case 9:
+          message.succeed = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1024,6 +915,16 @@ export const MsgObservationVote = {
     } else {
       message.payType = "";
     }
+    if (object.kimaTxID !== undefined && object.kimaTxID !== null) {
+      message.kimaTxID = String(object.kimaTxID);
+    } else {
+      message.kimaTxID = "";
+    }
+    if (object.succeed !== undefined && object.succeed !== null) {
+      message.succeed = String(object.succeed);
+    } else {
+      message.succeed = "";
+    }
     return message;
   },
 
@@ -1036,6 +937,8 @@ export const MsgObservationVote = {
     message.to !== undefined && (obj.to = message.to);
     message.amount !== undefined && (obj.amount = message.amount);
     message.payType !== undefined && (obj.payType = message.payType);
+    message.kimaTxID !== undefined && (obj.kimaTxID = message.kimaTxID);
+    message.succeed !== undefined && (obj.succeed = message.succeed);
     return obj;
   },
 
@@ -1075,6 +978,16 @@ export const MsgObservationVote = {
       message.payType = object.payType;
     } else {
       message.payType = "";
+    }
+    if (object.kimaTxID !== undefined && object.kimaTxID !== null) {
+      message.kimaTxID = object.kimaTxID;
+    } else {
+      message.kimaTxID = "";
+    }
+    if (object.succeed !== undefined && object.succeed !== null) {
+      message.succeed = object.succeed;
+    } else {
+      message.succeed = "";
     }
     return message;
   },
@@ -2819,7 +2732,7 @@ const baseMsgUpdateTssPubkey: object = {
   creator: "",
   tssPubkey: "",
   ecdsa: "",
-  ebdsa: "",
+  eddsa: "",
   reserved: "",
 };
 
@@ -2837,8 +2750,8 @@ export const MsgUpdateTssPubkey = {
     if (message.ecdsa !== "") {
       writer.uint32(26).string(message.ecdsa);
     }
-    if (message.ebdsa !== "") {
-      writer.uint32(34).string(message.ebdsa);
+    if (message.eddsa !== "") {
+      writer.uint32(34).string(message.eddsa);
     }
     if (message.reserved !== "") {
       writer.uint32(42).string(message.reserved);
@@ -2863,7 +2776,7 @@ export const MsgUpdateTssPubkey = {
           message.ecdsa = reader.string();
           break;
         case 4:
-          message.ebdsa = reader.string();
+          message.eddsa = reader.string();
           break;
         case 5:
           message.reserved = reader.string();
@@ -2893,10 +2806,10 @@ export const MsgUpdateTssPubkey = {
     } else {
       message.ecdsa = "";
     }
-    if (object.ebdsa !== undefined && object.ebdsa !== null) {
-      message.ebdsa = String(object.ebdsa);
+    if (object.eddsa !== undefined && object.eddsa !== null) {
+      message.eddsa = String(object.eddsa);
     } else {
-      message.ebdsa = "";
+      message.eddsa = "";
     }
     if (object.reserved !== undefined && object.reserved !== null) {
       message.reserved = String(object.reserved);
@@ -2911,7 +2824,7 @@ export const MsgUpdateTssPubkey = {
     message.creator !== undefined && (obj.creator = message.creator);
     message.tssPubkey !== undefined && (obj.tssPubkey = message.tssPubkey);
     message.ecdsa !== undefined && (obj.ecdsa = message.ecdsa);
-    message.ebdsa !== undefined && (obj.ebdsa = message.ebdsa);
+    message.eddsa !== undefined && (obj.eddsa = message.eddsa);
     message.reserved !== undefined && (obj.reserved = message.reserved);
     return obj;
   },
@@ -2933,10 +2846,10 @@ export const MsgUpdateTssPubkey = {
     } else {
       message.ecdsa = "";
     }
-    if (object.ebdsa !== undefined && object.ebdsa !== null) {
-      message.ebdsa = object.ebdsa;
+    if (object.eddsa !== undefined && object.eddsa !== null) {
+      message.eddsa = object.eddsa;
     } else {
-      message.ebdsa = "";
+      message.eddsa = "";
     }
     if (object.reserved !== undefined && object.reserved !== null) {
       message.reserved = object.reserved;
@@ -4345,6 +4258,383 @@ export const MsgSetTxHashResponse = {
   },
 };
 
+const baseMsgSetTxProcess: object = {
+  creator: "",
+  txId: "",
+  timestamp: "",
+  msgId: "",
+};
+
+export const MsgSetTxProcess = {
+  encode(message: MsgSetTxProcess, writer: Writer = Writer.create()): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.txId !== "") {
+      writer.uint32(18).string(message.txId);
+    }
+    if (message.timestamp !== "") {
+      writer.uint32(26).string(message.timestamp);
+    }
+    if (message.msgId !== "") {
+      writer.uint32(34).string(message.msgId);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgSetTxProcess {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgSetTxProcess } as MsgSetTxProcess;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.txId = reader.string();
+          break;
+        case 3:
+          message.timestamp = reader.string();
+          break;
+        case 4:
+          message.msgId = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgSetTxProcess {
+    const message = { ...baseMsgSetTxProcess } as MsgSetTxProcess;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.txId !== undefined && object.txId !== null) {
+      message.txId = String(object.txId);
+    } else {
+      message.txId = "";
+    }
+    if (object.timestamp !== undefined && object.timestamp !== null) {
+      message.timestamp = String(object.timestamp);
+    } else {
+      message.timestamp = "";
+    }
+    if (object.msgId !== undefined && object.msgId !== null) {
+      message.msgId = String(object.msgId);
+    } else {
+      message.msgId = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgSetTxProcess): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.txId !== undefined && (obj.txId = message.txId);
+    message.timestamp !== undefined && (obj.timestamp = message.timestamp);
+    message.msgId !== undefined && (obj.msgId = message.msgId);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<MsgSetTxProcess>): MsgSetTxProcess {
+    const message = { ...baseMsgSetTxProcess } as MsgSetTxProcess;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.txId !== undefined && object.txId !== null) {
+      message.txId = object.txId;
+    } else {
+      message.txId = "";
+    }
+    if (object.timestamp !== undefined && object.timestamp !== null) {
+      message.timestamp = object.timestamp;
+    } else {
+      message.timestamp = "";
+    }
+    if (object.msgId !== undefined && object.msgId !== null) {
+      message.msgId = object.msgId;
+    } else {
+      message.msgId = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgSetTxProcessResponse: object = {};
+
+export const MsgSetTxProcessResponse = {
+  encode(_: MsgSetTxProcessResponse, writer: Writer = Writer.create()): Writer {
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgSetTxProcessResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgSetTxProcessResponse,
+    } as MsgSetTxProcessResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgSetTxProcessResponse {
+    const message = {
+      ...baseMsgSetTxProcessResponse,
+    } as MsgSetTxProcessResponse;
+    return message;
+  },
+
+  toJSON(_: MsgSetTxProcessResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(
+    _: DeepPartial<MsgSetTxProcessResponse>
+  ): MsgSetTxProcessResponse {
+    const message = {
+      ...baseMsgSetTxProcessResponse,
+    } as MsgSetTxProcessResponse;
+    return message;
+  },
+};
+
+const baseMsgFinalizeTransaction: object = {
+  creator: "",
+  txId: "",
+  txHash: "",
+  success: "",
+  signedKey: "",
+};
+
+export const MsgFinalizeTransaction = {
+  encode(
+    message: MsgFinalizeTransaction,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.txId !== "") {
+      writer.uint32(18).string(message.txId);
+    }
+    if (message.txHash !== "") {
+      writer.uint32(26).string(message.txHash);
+    }
+    if (message.success !== "") {
+      writer.uint32(34).string(message.success);
+    }
+    if (message.signedKey !== "") {
+      writer.uint32(42).string(message.signedKey);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgFinalizeTransaction {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgFinalizeTransaction } as MsgFinalizeTransaction;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.txId = reader.string();
+          break;
+        case 3:
+          message.txHash = reader.string();
+          break;
+        case 4:
+          message.success = reader.string();
+          break;
+        case 5:
+          message.signedKey = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgFinalizeTransaction {
+    const message = { ...baseMsgFinalizeTransaction } as MsgFinalizeTransaction;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.txId !== undefined && object.txId !== null) {
+      message.txId = String(object.txId);
+    } else {
+      message.txId = "";
+    }
+    if (object.txHash !== undefined && object.txHash !== null) {
+      message.txHash = String(object.txHash);
+    } else {
+      message.txHash = "";
+    }
+    if (object.success !== undefined && object.success !== null) {
+      message.success = String(object.success);
+    } else {
+      message.success = "";
+    }
+    if (object.signedKey !== undefined && object.signedKey !== null) {
+      message.signedKey = String(object.signedKey);
+    } else {
+      message.signedKey = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgFinalizeTransaction): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.txId !== undefined && (obj.txId = message.txId);
+    message.txHash !== undefined && (obj.txHash = message.txHash);
+    message.success !== undefined && (obj.success = message.success);
+    message.signedKey !== undefined && (obj.signedKey = message.signedKey);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgFinalizeTransaction>
+  ): MsgFinalizeTransaction {
+    const message = { ...baseMsgFinalizeTransaction } as MsgFinalizeTransaction;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.txId !== undefined && object.txId !== null) {
+      message.txId = object.txId;
+    } else {
+      message.txId = "";
+    }
+    if (object.txHash !== undefined && object.txHash !== null) {
+      message.txHash = object.txHash;
+    } else {
+      message.txHash = "";
+    }
+    if (object.success !== undefined && object.success !== null) {
+      message.success = object.success;
+    } else {
+      message.success = "";
+    }
+    if (object.signedKey !== undefined && object.signedKey !== null) {
+      message.signedKey = object.signedKey;
+    } else {
+      message.signedKey = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgFinalizeTransactionResponse: object = { code: "", msg: "" };
+
+export const MsgFinalizeTransactionResponse = {
+  encode(
+    message: MsgFinalizeTransactionResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.code !== "") {
+      writer.uint32(10).string(message.code);
+    }
+    if (message.msg !== "") {
+      writer.uint32(18).string(message.msg);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgFinalizeTransactionResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgFinalizeTransactionResponse,
+    } as MsgFinalizeTransactionResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.code = reader.string();
+          break;
+        case 2:
+          message.msg = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgFinalizeTransactionResponse {
+    const message = {
+      ...baseMsgFinalizeTransactionResponse,
+    } as MsgFinalizeTransactionResponse;
+    if (object.code !== undefined && object.code !== null) {
+      message.code = String(object.code);
+    } else {
+      message.code = "";
+    }
+    if (object.msg !== undefined && object.msg !== null) {
+      message.msg = String(object.msg);
+    } else {
+      message.msg = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgFinalizeTransactionResponse): unknown {
+    const obj: any = {};
+    message.code !== undefined && (obj.code = message.code);
+    message.msg !== undefined && (obj.msg = message.msg);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgFinalizeTransactionResponse>
+  ): MsgFinalizeTransactionResponse {
+    const message = {
+      ...baseMsgFinalizeTransactionResponse,
+    } as MsgFinalizeTransactionResponse;
+    if (object.code !== undefined && object.code !== null) {
+      message.code = object.code;
+    } else {
+      message.code = "";
+    }
+    if (object.msg !== undefined && object.msg !== null) {
+      message.msg = object.msg;
+    } else {
+      message.msg = "";
+    }
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
   RequestTransaction(
@@ -4353,7 +4643,6 @@ export interface Msg {
   ApproveTransaction(
     request: MsgApproveTransaction
   ): Promise<MsgApproveTransactionResponse>;
-  FetchBalance(request: MsgFetchBalance): Promise<MsgFetchBalanceResponse>;
   ObservationVote(
     request: MsgObservationVote
   ): Promise<MsgObservationVoteResponse>;
@@ -4390,8 +4679,12 @@ export interface Msg {
   UpdateTssStatus(
     request: MsgUpdateTssStatus
   ): Promise<MsgUpdateTssStatusResponse>;
-  /** this line is used by starport scaffolding # proto/tx/rpc */
   SetTxHash(request: MsgSetTxHash): Promise<MsgSetTxHashResponse>;
+  SetTxProcess(request: MsgSetTxProcess): Promise<MsgSetTxProcessResponse>;
+  /** this line is used by starport scaffolding # proto/tx/rpc */
+  FinalizeTransaction(
+    request: MsgFinalizeTransaction
+  ): Promise<MsgFinalizeTransactionResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -4424,18 +4717,6 @@ export class MsgClientImpl implements Msg {
     );
     return promise.then((data) =>
       MsgApproveTransactionResponse.decode(new Reader(data))
-    );
-  }
-
-  FetchBalance(request: MsgFetchBalance): Promise<MsgFetchBalanceResponse> {
-    const data = MsgFetchBalance.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
-      "FetchBalance",
-      data
-    );
-    return promise.then((data) =>
-      MsgFetchBalanceResponse.decode(new Reader(data))
     );
   }
 
@@ -4676,6 +4957,32 @@ export class MsgClientImpl implements Msg {
     );
     return promise.then((data) =>
       MsgSetTxHashResponse.decode(new Reader(data))
+    );
+  }
+
+  SetTxProcess(request: MsgSetTxProcess): Promise<MsgSetTxProcessResponse> {
+    const data = MsgSetTxProcess.encode(request).finish();
+    const promise = this.rpc.request(
+      "KimaFinance.kima.kima.Msg",
+      "SetTxProcess",
+      data
+    );
+    return promise.then((data) =>
+      MsgSetTxProcessResponse.decode(new Reader(data))
+    );
+  }
+
+  FinalizeTransaction(
+    request: MsgFinalizeTransaction
+  ): Promise<MsgFinalizeTransactionResponse> {
+    const data = MsgFinalizeTransaction.encode(request).finish();
+    const promise = this.rpc.request(
+      "KimaFinance.kima.kima.Msg",
+      "FinalizeTransaction",
+      data
+    );
+    return promise.then((data) =>
+      MsgFinalizeTransactionResponse.decode(new Reader(data))
     );
   }
 }
