@@ -16,8 +16,8 @@ interface SignAndBroadcastOptions {
 }
 
 const types = [
-  ["/KimaFinance.kima.MsgRequestTransaction", MsgRequestTransaction],
-  ["/KimaFinance.kima.MsgSetTxHash", MsgSetTxHash],
+  ["/KimaFinance.kima.kima.MsgRequestTransaction", MsgRequestTransaction],
+  ["/KimaFinance.kima.kima.MsgSetTxHash", MsgSetTxHash],
 ];
 
 export const registry = new Registry(<any>types);

@@ -31,6 +31,10 @@ interface Props {
   fee: number;
 }
 
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export async function submitKimaTransaction({
   originChain,
   originAddress,
@@ -60,13 +64,13 @@ export async function submitKimaTransaction({
   let msg = await client.msgRequestTransaction(params);
   const result = await client.signAndBroadcast([msg]);
 
-  let txId = "1";
+  let txId = 1;
 
   for (const event of result.events) {
     if (event.type === "transaction_requested") {
       for (const attr of event.attributes) {
         if (attr.key === "txId") {
-          txId = attr.value;
+          txId = +attr.value;
         }
       }
     }
@@ -78,7 +82,11 @@ export async function submitKimaTransaction({
     txHash: result.transactionHash,
   });
 
-  await client.signAndBroadcast([msg]);
+  let hashResult;
+  do {
+    hashResult = await client.signAndBroadcast([msg]);
+    await sleep(1000);
+  } while (hashResult.code !== 0);
 
   return result;
 }
