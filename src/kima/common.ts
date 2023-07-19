@@ -36,11 +36,11 @@ export const TxClient = async (wallet: OfflineSigner) => {
       { fee, memo }: SignAndBroadcastOptions = { fee: defaultFee, memo: "" }
     ) => client.signAndBroadcast(address, msgs, fee, memo),
     msgRequestTransaction: (data: MsgRequestTransaction): EncodeObject => ({
-      typeUrl: "/KimaFinance.kima.MsgRequestTransaction",
+      typeUrl: "/KimaFinance.kima.kima.MsgRequestTransaction",
       value: MsgRequestTransaction.fromPartial(data),
     }),
     msgSetTxHash: (data: MsgSetTxHash): EncodeObject => ({
-      typeUrl: "/KimaFinance.kima.MsgSetTxHash",
+      typeUrl: "/KimaFinance.kima.kima.MsgSetTxHash",
       value: MsgSetTxHash.fromPartial(data),
     }),
   };
