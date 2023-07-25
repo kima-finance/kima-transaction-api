@@ -7,7 +7,7 @@ dotenv.config();
 
 const defaultFee = {
   amount: [],
-  gas: "200000",
+  gas: "2000000",
 };
 
 interface SignAndBroadcastOptions {
