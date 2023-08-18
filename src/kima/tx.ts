@@ -2,7 +2,7 @@
 import { Reader, util, configure, Writer } from "protobufjs/minimal";
 import * as Long from "long";
 
-export const protobufPackage = "KimaFinance.kima.kima";
+export const protobufPackage = "KimaFinance.kima";
 
 export interface MsgRequestTransaction {
   creator: string;
@@ -154,6 +154,16 @@ export interface MsgAddPubkeyResponse {
   msg: string;
 }
 
+export interface MsgUpdatePubkeys {
+  creator: string;
+  pubkeys: string[];
+}
+
+export interface MsgUpdatePubkeysResponse {
+  code: string;
+  msg: string;
+}
+
 export interface MsgUpdateTssPubkey {
   creator: string;
   tssPubkey: string;
@@ -290,7 +300,7 @@ export interface MsgUpdateTokenResponse {}
 
 export interface MsgUpdatePoolRequest {
   creator: string;
-  reqId: string;
+  reqId: number;
   processed: string;
 }
 
@@ -303,6 +313,16 @@ export interface MsgLeaderReady {
 }
 
 export interface MsgLeaderReadyResponse {}
+
+export interface MsgAddPubkeyEddsa {
+  creator: string;
+  pubkey: string;
+}
+
+export interface MsgAddPubkeyEddsaResponse {
+  code: string;
+  msg: string;
+}
 
 const baseMsgRequestTransaction: object = {
   creator: "",
@@ -2762,6 +2782,171 @@ export const MsgAddPubkeyResponse = {
   },
 };
 
+const baseMsgUpdatePubkeys: object = { creator: "", pubkeys: "" };
+
+export const MsgUpdatePubkeys = {
+  encode(message: MsgUpdatePubkeys, writer: Writer = Writer.create()): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    for (const v of message.pubkeys) {
+      writer.uint32(18).string(v!);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgUpdatePubkeys {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgUpdatePubkeys } as MsgUpdatePubkeys;
+    message.pubkeys = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.pubkeys.push(reader.string());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdatePubkeys {
+    const message = { ...baseMsgUpdatePubkeys } as MsgUpdatePubkeys;
+    message.pubkeys = [];
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.pubkeys !== undefined && object.pubkeys !== null) {
+      for (const e of object.pubkeys) {
+        message.pubkeys.push(String(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: MsgUpdatePubkeys): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    if (message.pubkeys) {
+      obj.pubkeys = message.pubkeys.map((e) => e);
+    } else {
+      obj.pubkeys = [];
+    }
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<MsgUpdatePubkeys>): MsgUpdatePubkeys {
+    const message = { ...baseMsgUpdatePubkeys } as MsgUpdatePubkeys;
+    message.pubkeys = [];
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.pubkeys !== undefined && object.pubkeys !== null) {
+      for (const e of object.pubkeys) {
+        message.pubkeys.push(e);
+      }
+    }
+    return message;
+  },
+};
+
+const baseMsgUpdatePubkeysResponse: object = { code: "", msg: "" };
+
+export const MsgUpdatePubkeysResponse = {
+  encode(
+    message: MsgUpdatePubkeysResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.code !== "") {
+      writer.uint32(10).string(message.code);
+    }
+    if (message.msg !== "") {
+      writer.uint32(18).string(message.msg);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgUpdatePubkeysResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgUpdatePubkeysResponse,
+    } as MsgUpdatePubkeysResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.code = reader.string();
+          break;
+        case 2:
+          message.msg = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdatePubkeysResponse {
+    const message = {
+      ...baseMsgUpdatePubkeysResponse,
+    } as MsgUpdatePubkeysResponse;
+    if (object.code !== undefined && object.code !== null) {
+      message.code = String(object.code);
+    } else {
+      message.code = "";
+    }
+    if (object.msg !== undefined && object.msg !== null) {
+      message.msg = String(object.msg);
+    } else {
+      message.msg = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgUpdatePubkeysResponse): unknown {
+    const obj: any = {};
+    message.code !== undefined && (obj.code = message.code);
+    message.msg !== undefined && (obj.msg = message.msg);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgUpdatePubkeysResponse>
+  ): MsgUpdatePubkeysResponse {
+    const message = {
+      ...baseMsgUpdatePubkeysResponse,
+    } as MsgUpdatePubkeysResponse;
+    if (object.code !== undefined && object.code !== null) {
+      message.code = object.code;
+    } else {
+      message.code = "";
+    }
+    if (object.msg !== undefined && object.msg !== null) {
+      message.msg = object.msg;
+    } else {
+      message.msg = "";
+    }
+    return message;
+  },
+};
+
 const baseMsgUpdateTssPubkey: object = {
   creator: "",
   tssPubkey: "",
@@ -4956,7 +5141,7 @@ export const MsgUpdateTokenResponse = {
 
 const baseMsgUpdatePoolRequest: object = {
   creator: "",
-  reqId: "",
+  reqId: 0,
   processed: "",
 };
 
@@ -4968,8 +5153,8 @@ export const MsgUpdatePoolRequest = {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (message.reqId !== "") {
-      writer.uint32(18).string(message.reqId);
+    if (message.reqId !== 0) {
+      writer.uint32(16).uint64(message.reqId);
     }
     if (message.processed !== "") {
       writer.uint32(26).string(message.processed);
@@ -4988,7 +5173,7 @@ export const MsgUpdatePoolRequest = {
           message.creator = reader.string();
           break;
         case 2:
-          message.reqId = reader.string();
+          message.reqId = longToNumber(reader.uint64() as Long);
           break;
         case 3:
           message.processed = reader.string();
@@ -5009,9 +5194,9 @@ export const MsgUpdatePoolRequest = {
       message.creator = "";
     }
     if (object.reqId !== undefined && object.reqId !== null) {
-      message.reqId = String(object.reqId);
+      message.reqId = Number(object.reqId);
     } else {
-      message.reqId = "";
+      message.reqId = 0;
     }
     if (object.processed !== undefined && object.processed !== null) {
       message.processed = String(object.processed);
@@ -5039,7 +5224,7 @@ export const MsgUpdatePoolRequest = {
     if (object.reqId !== undefined && object.reqId !== null) {
       message.reqId = object.reqId;
     } else {
-      message.reqId = "";
+      message.reqId = 0;
     }
     if (object.processed !== undefined && object.processed !== null) {
       message.processed = object.processed;
@@ -5229,6 +5414,164 @@ export const MsgLeaderReadyResponse = {
   },
 };
 
+const baseMsgAddPubkeyEddsa: object = { creator: "", pubkey: "" };
+
+export const MsgAddPubkeyEddsa = {
+  encode(message: MsgAddPubkeyEddsa, writer: Writer = Writer.create()): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.pubkey !== "") {
+      writer.uint32(18).string(message.pubkey);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgAddPubkeyEddsa {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgAddPubkeyEddsa } as MsgAddPubkeyEddsa;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.pubkey = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgAddPubkeyEddsa {
+    const message = { ...baseMsgAddPubkeyEddsa } as MsgAddPubkeyEddsa;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.pubkey !== undefined && object.pubkey !== null) {
+      message.pubkey = String(object.pubkey);
+    } else {
+      message.pubkey = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgAddPubkeyEddsa): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.pubkey !== undefined && (obj.pubkey = message.pubkey);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<MsgAddPubkeyEddsa>): MsgAddPubkeyEddsa {
+    const message = { ...baseMsgAddPubkeyEddsa } as MsgAddPubkeyEddsa;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.pubkey !== undefined && object.pubkey !== null) {
+      message.pubkey = object.pubkey;
+    } else {
+      message.pubkey = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgAddPubkeyEddsaResponse: object = { code: "", msg: "" };
+
+export const MsgAddPubkeyEddsaResponse = {
+  encode(
+    message: MsgAddPubkeyEddsaResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.code !== "") {
+      writer.uint32(10).string(message.code);
+    }
+    if (message.msg !== "") {
+      writer.uint32(18).string(message.msg);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgAddPubkeyEddsaResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgAddPubkeyEddsaResponse,
+    } as MsgAddPubkeyEddsaResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.code = reader.string();
+          break;
+        case 2:
+          message.msg = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgAddPubkeyEddsaResponse {
+    const message = {
+      ...baseMsgAddPubkeyEddsaResponse,
+    } as MsgAddPubkeyEddsaResponse;
+    if (object.code !== undefined && object.code !== null) {
+      message.code = String(object.code);
+    } else {
+      message.code = "";
+    }
+    if (object.msg !== undefined && object.msg !== null) {
+      message.msg = String(object.msg);
+    } else {
+      message.msg = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgAddPubkeyEddsaResponse): unknown {
+    const obj: any = {};
+    message.code !== undefined && (obj.code = message.code);
+    message.msg !== undefined && (obj.msg = message.msg);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgAddPubkeyEddsaResponse>
+  ): MsgAddPubkeyEddsaResponse {
+    const message = {
+      ...baseMsgAddPubkeyEddsaResponse,
+    } as MsgAddPubkeyEddsaResponse;
+    if (object.code !== undefined && object.code !== null) {
+      message.code = object.code;
+    } else {
+      message.code = "";
+    }
+    if (object.msg !== undefined && object.msg !== null) {
+      message.msg = object.msg;
+    } else {
+      message.msg = "";
+    }
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
   RequestTransaction(
@@ -5257,6 +5600,7 @@ export interface Msg {
   ): Promise<MsgAddWhitelistedResponse>;
   SetAdmin(request: MsgSetAdmin): Promise<MsgSetAdminResponse>;
   AddPubkey(request: MsgAddPubkey): Promise<MsgAddPubkeyResponse>;
+  UpdatePubkeys(request: MsgUpdatePubkeys): Promise<MsgUpdatePubkeysResponse>;
   UpdateTssPubkey(
     request: MsgUpdateTssPubkey
   ): Promise<MsgUpdateTssPubkeyResponse>;
@@ -5283,8 +5627,11 @@ export interface Msg {
   UpdatePoolRequest(
     request: MsgUpdatePoolRequest
   ): Promise<MsgUpdatePoolRequestResponse>;
-  /** this line is used by starport scaffolding # proto/tx/rpc */
   LeaderReady(request: MsgLeaderReady): Promise<MsgLeaderReadyResponse>;
+  /** this line is used by starport scaffolding # proto/tx/rpc */
+  AddPubkeyEddsa(
+    request: MsgAddPubkeyEddsa
+  ): Promise<MsgAddPubkeyEddsaResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -5297,7 +5644,7 @@ export class MsgClientImpl implements Msg {
   ): Promise<MsgRequestTransactionResponse> {
     const data = MsgRequestTransaction.encode(request).finish();
     const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
+      "KimaFinance.kima.Msg",
       "RequestTransaction",
       data
     );
@@ -5311,7 +5658,7 @@ export class MsgClientImpl implements Msg {
   ): Promise<MsgApproveTransactionResponse> {
     const data = MsgApproveTransaction.encode(request).finish();
     const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
+      "KimaFinance.kima.Msg",
       "ApproveTransaction",
       data
     );
@@ -5325,7 +5672,7 @@ export class MsgClientImpl implements Msg {
   ): Promise<MsgObservationVoteResponse> {
     const data = MsgObservationVote.encode(request).finish();
     const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
+      "KimaFinance.kima.Msg",
       "ObservationVote",
       data
     );
@@ -5337,7 +5684,7 @@ export class MsgClientImpl implements Msg {
   UpdateBalance(request: MsgUpdateBalance): Promise<MsgUpdateBalanceResponse> {
     const data = MsgUpdateBalance.encode(request).finish();
     const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
+      "KimaFinance.kima.Msg",
       "UpdateBalance",
       data
     );
@@ -5349,7 +5696,7 @@ export class MsgClientImpl implements Msg {
   KeysignVote(request: MsgKeysignVote): Promise<MsgKeysignVoteResponse> {
     const data = MsgKeysignVote.encode(request).finish();
     const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
+      "KimaFinance.kima.Msg",
       "KeysignVote",
       data
     );
@@ -5361,7 +5708,7 @@ export class MsgClientImpl implements Msg {
   UpdateGasFee(request: MsgUpdateGasFee): Promise<MsgUpdateGasFeeResponse> {
     const data = MsgUpdateGasFee.encode(request).finish();
     const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
+      "KimaFinance.kima.Msg",
       "UpdateGasFee",
       data
     );
@@ -5375,7 +5722,7 @@ export class MsgClientImpl implements Msg {
   ): Promise<MsgProvisionTransactionResponse> {
     const data = MsgProvisionTransaction.encode(request).finish();
     const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
+      "KimaFinance.kima.Msg",
       "ProvisionTransaction",
       data
     );
@@ -5389,7 +5736,7 @@ export class MsgClientImpl implements Msg {
   ): Promise<MsgDrainTransactionResponse> {
     const data = MsgDrainTransaction.encode(request).finish();
     const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
+      "KimaFinance.kima.Msg",
       "DrainTransaction",
       data
     );
@@ -5403,7 +5750,7 @@ export class MsgClientImpl implements Msg {
   ): Promise<MsgCancelTransactionResponse> {
     const data = MsgCancelTransaction.encode(request).finish();
     const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
+      "KimaFinance.kima.Msg",
       "CancelTransaction",
       data
     );
@@ -5417,7 +5764,7 @@ export class MsgClientImpl implements Msg {
   ): Promise<MsgAddWhitelistedResponse> {
     const data = MsgAddWhitelisted.encode(request).finish();
     const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
+      "KimaFinance.kima.Msg",
       "AddWhitelisted",
       data
     );
@@ -5428,23 +5775,27 @@ export class MsgClientImpl implements Msg {
 
   SetAdmin(request: MsgSetAdmin): Promise<MsgSetAdminResponse> {
     const data = MsgSetAdmin.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
-      "SetAdmin",
-      data
-    );
+    const promise = this.rpc.request("KimaFinance.kima.Msg", "SetAdmin", data);
     return promise.then((data) => MsgSetAdminResponse.decode(new Reader(data)));
   }
 
   AddPubkey(request: MsgAddPubkey): Promise<MsgAddPubkeyResponse> {
     const data = MsgAddPubkey.encode(request).finish();
+    const promise = this.rpc.request("KimaFinance.kima.Msg", "AddPubkey", data);
+    return promise.then((data) =>
+      MsgAddPubkeyResponse.decode(new Reader(data))
+    );
+  }
+
+  UpdatePubkeys(request: MsgUpdatePubkeys): Promise<MsgUpdatePubkeysResponse> {
+    const data = MsgUpdatePubkeys.encode(request).finish();
     const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
-      "AddPubkey",
+      "KimaFinance.kima.Msg",
+      "UpdatePubkeys",
       data
     );
     return promise.then((data) =>
-      MsgAddPubkeyResponse.decode(new Reader(data))
+      MsgUpdatePubkeysResponse.decode(new Reader(data))
     );
   }
 
@@ -5453,7 +5804,7 @@ export class MsgClientImpl implements Msg {
   ): Promise<MsgUpdateTssPubkeyResponse> {
     const data = MsgUpdateTssPubkey.encode(request).finish();
     const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
+      "KimaFinance.kima.Msg",
       "UpdateTssPubkey",
       data
     );
@@ -5467,7 +5818,7 @@ export class MsgClientImpl implements Msg {
   ): Promise<MsgRemoveWhitelistedResponse> {
     const data = MsgRemoveWhitelisted.encode(request).finish();
     const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
+      "KimaFinance.kima.Msg",
       "RemoveWhitelisted",
       data
     );
@@ -5479,7 +5830,7 @@ export class MsgClientImpl implements Msg {
   ClearTssInfo(request: MsgClearTssInfo): Promise<MsgClearTssInfoResponse> {
     const data = MsgClearTssInfo.encode(request).finish();
     const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
+      "KimaFinance.kima.Msg",
       "ClearTssInfo",
       data
     );
@@ -5490,18 +5841,14 @@ export class MsgClientImpl implements Msg {
 
   AddChain(request: MsgAddChain): Promise<MsgAddChainResponse> {
     const data = MsgAddChain.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
-      "AddChain",
-      data
-    );
+    const promise = this.rpc.request("KimaFinance.kima.Msg", "AddChain", data);
     return promise.then((data) => MsgAddChainResponse.decode(new Reader(data)));
   }
 
   UpdateTssHash(request: MsgUpdateTssHash): Promise<MsgUpdateTssHashResponse> {
     const data = MsgUpdateTssHash.encode(request).finish();
     const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
+      "KimaFinance.kima.Msg",
       "UpdateTssHash",
       data
     );
@@ -5515,7 +5862,7 @@ export class MsgClientImpl implements Msg {
   ): Promise<MsgUpdateChainStatusResponse> {
     const data = MsgUpdateChainStatus.encode(request).finish();
     const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
+      "KimaFinance.kima.Msg",
       "UpdateChainStatus",
       data
     );
@@ -5526,11 +5873,7 @@ export class MsgClientImpl implements Msg {
 
   AddToken(request: MsgAddToken): Promise<MsgAddTokenResponse> {
     const data = MsgAddToken.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
-      "AddToken",
-      data
-    );
+    const promise = this.rpc.request("KimaFinance.kima.Msg", "AddToken", data);
     return promise.then((data) => MsgAddTokenResponse.decode(new Reader(data)));
   }
 
@@ -5539,7 +5882,7 @@ export class MsgClientImpl implements Msg {
   ): Promise<MsgUpdateTssStatusResponse> {
     const data = MsgUpdateTssStatus.encode(request).finish();
     const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
+      "KimaFinance.kima.Msg",
       "UpdateTssStatus",
       data
     );
@@ -5550,11 +5893,7 @@ export class MsgClientImpl implements Msg {
 
   SetTxHash(request: MsgSetTxHash): Promise<MsgSetTxHashResponse> {
     const data = MsgSetTxHash.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
-      "SetTxHash",
-      data
-    );
+    const promise = this.rpc.request("KimaFinance.kima.Msg", "SetTxHash", data);
     return promise.then((data) =>
       MsgSetTxHashResponse.decode(new Reader(data))
     );
@@ -5563,7 +5902,7 @@ export class MsgClientImpl implements Msg {
   SetTxProcess(request: MsgSetTxProcess): Promise<MsgSetTxProcessResponse> {
     const data = MsgSetTxProcess.encode(request).finish();
     const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
+      "KimaFinance.kima.Msg",
       "SetTxProcess",
       data
     );
@@ -5577,7 +5916,7 @@ export class MsgClientImpl implements Msg {
   ): Promise<MsgFinalizeTransactionResponse> {
     const data = MsgFinalizeTransaction.encode(request).finish();
     const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
+      "KimaFinance.kima.Msg",
       "FinalizeTransaction",
       data
     );
@@ -5589,7 +5928,7 @@ export class MsgClientImpl implements Msg {
   WithdrawPool(request: MsgWithdrawPool): Promise<MsgWithdrawPoolResponse> {
     const data = MsgWithdrawPool.encode(request).finish();
     const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
+      "KimaFinance.kima.Msg",
       "WithdrawPool",
       data
     );
@@ -5601,7 +5940,7 @@ export class MsgClientImpl implements Msg {
   UpdateToken(request: MsgUpdateToken): Promise<MsgUpdateTokenResponse> {
     const data = MsgUpdateToken.encode(request).finish();
     const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
+      "KimaFinance.kima.Msg",
       "UpdateToken",
       data
     );
@@ -5615,7 +5954,7 @@ export class MsgClientImpl implements Msg {
   ): Promise<MsgUpdatePoolRequestResponse> {
     const data = MsgUpdatePoolRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
+      "KimaFinance.kima.Msg",
       "UpdatePoolRequest",
       data
     );
@@ -5627,12 +5966,26 @@ export class MsgClientImpl implements Msg {
   LeaderReady(request: MsgLeaderReady): Promise<MsgLeaderReadyResponse> {
     const data = MsgLeaderReady.encode(request).finish();
     const promise = this.rpc.request(
-      "KimaFinance.kima.kima.Msg",
+      "KimaFinance.kima.Msg",
       "LeaderReady",
       data
     );
     return promise.then((data) =>
       MsgLeaderReadyResponse.decode(new Reader(data))
+    );
+  }
+
+  AddPubkeyEddsa(
+    request: MsgAddPubkeyEddsa
+  ): Promise<MsgAddPubkeyEddsaResponse> {
+    const data = MsgAddPubkeyEddsa.encode(request).finish();
+    const promise = this.rpc.request(
+      "KimaFinance.kima.Msg",
+      "AddPubkeyEddsa",
+      data
+    );
+    return promise.then((data) =>
+      MsgAddPubkeyEddsaResponse.decode(new Reader(data))
     );
   }
 }
