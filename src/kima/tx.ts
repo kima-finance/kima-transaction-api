@@ -1,8 +1,8 @@
 /* eslint-disable */
-import { Reader, util, configure, Writer } from "protobufjs/minimal";
-import * as Long from "long";
+import Long from "long";
+import _m0 from "protobufjs/minimal";
 
-export const protobufPackage = "KimaFinance.kima";
+export const protobufPackage = "kimablockchain.kima";
 
 export interface MsgRequestTransaction {
   creator: string;
@@ -246,7 +246,10 @@ export interface MsgUpdateTssStatus {
   status: string;
 }
 
-export interface MsgUpdateTssStatusResponse {}
+export interface MsgUpdateTssStatusResponse {
+  code: string;
+  msg: string;
+}
 
 export interface MsgSetTxHash {
   creator: string;
@@ -266,7 +269,8 @@ export interface MsgSetTxProcess {
   msgId: string;
 }
 
-export interface MsgSetTxProcessResponse {}
+export interface MsgSetTxProcessResponse {
+}
 
 export interface MsgFinalizeTransaction {
   creator: string;
@@ -288,7 +292,8 @@ export interface MsgWithdrawPool {
   amount: string;
 }
 
-export interface MsgWithdrawPoolResponse {}
+export interface MsgWithdrawPoolResponse {
+}
 
 export interface MsgUpdateToken {
   creator: string;
@@ -296,7 +301,8 @@ export interface MsgUpdateToken {
   address: string;
 }
 
-export interface MsgUpdateTokenResponse {}
+export interface MsgUpdateTokenResponse {
+}
 
 export interface MsgUpdatePoolRequest {
   creator: string;
@@ -304,15 +310,17 @@ export interface MsgUpdatePoolRequest {
   processed: string;
 }
 
-export interface MsgUpdatePoolRequestResponse {}
+export interface MsgUpdatePoolRequestResponse {
+}
 
-export interface MsgLeaderReady {
+export interface MsgLeaderIsReady {
   creator: string;
   msgId: string;
   peerId: string;
 }
 
-export interface MsgLeaderReadyResponse {}
+export interface MsgLeaderIsReadyResponse {
+}
 
 export interface MsgAddPubkeyEddsa {
   creator: string;
@@ -324,22 +332,21 @@ export interface MsgAddPubkeyEddsaResponse {
   msg: string;
 }
 
-const baseMsgRequestTransaction: object = {
-  creator: "",
-  originChain: "",
-  originAddress: "",
-  targetChain: "",
-  targetAddress: "",
-  symbol: "",
-  amount: "",
-  fee: "",
-};
+function createBaseMsgRequestTransaction(): MsgRequestTransaction {
+  return {
+    creator: "",
+    originChain: "",
+    originAddress: "",
+    targetChain: "",
+    targetAddress: "",
+    symbol: "",
+    amount: "",
+    fee: "",
+  };
+}
 
 export const MsgRequestTransaction = {
-  encode(
-    message: MsgRequestTransaction,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgRequestTransaction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -367,10 +374,10 @@ export const MsgRequestTransaction = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgRequestTransaction {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRequestTransaction {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgRequestTransaction } as MsgRequestTransaction;
+    const message = createBaseMsgRequestTransaction();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -407,126 +414,51 @@ export const MsgRequestTransaction = {
   },
 
   fromJSON(object: any): MsgRequestTransaction {
-    const message = { ...baseMsgRequestTransaction } as MsgRequestTransaction;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.originChain !== undefined && object.originChain !== null) {
-      message.originChain = String(object.originChain);
-    } else {
-      message.originChain = "";
-    }
-    if (object.originAddress !== undefined && object.originAddress !== null) {
-      message.originAddress = String(object.originAddress);
-    } else {
-      message.originAddress = "";
-    }
-    if (object.targetChain !== undefined && object.targetChain !== null) {
-      message.targetChain = String(object.targetChain);
-    } else {
-      message.targetChain = "";
-    }
-    if (object.targetAddress !== undefined && object.targetAddress !== null) {
-      message.targetAddress = String(object.targetAddress);
-    } else {
-      message.targetAddress = "";
-    }
-    if (object.symbol !== undefined && object.symbol !== null) {
-      message.symbol = String(object.symbol);
-    } else {
-      message.symbol = "";
-    }
-    if (object.amount !== undefined && object.amount !== null) {
-      message.amount = String(object.amount);
-    } else {
-      message.amount = "";
-    }
-    if (object.fee !== undefined && object.fee !== null) {
-      message.fee = String(object.fee);
-    } else {
-      message.fee = "";
-    }
-    return message;
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      originChain: isSet(object.originChain) ? String(object.originChain) : "",
+      originAddress: isSet(object.originAddress) ? String(object.originAddress) : "",
+      targetChain: isSet(object.targetChain) ? String(object.targetChain) : "",
+      targetAddress: isSet(object.targetAddress) ? String(object.targetAddress) : "",
+      symbol: isSet(object.symbol) ? String(object.symbol) : "",
+      amount: isSet(object.amount) ? String(object.amount) : "",
+      fee: isSet(object.fee) ? String(object.fee) : "",
+    };
   },
 
   toJSON(message: MsgRequestTransaction): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.originChain !== undefined &&
-      (obj.originChain = message.originChain);
-    message.originAddress !== undefined &&
-      (obj.originAddress = message.originAddress);
-    message.targetChain !== undefined &&
-      (obj.targetChain = message.targetChain);
-    message.targetAddress !== undefined &&
-      (obj.targetAddress = message.targetAddress);
+    message.originChain !== undefined && (obj.originChain = message.originChain);
+    message.originAddress !== undefined && (obj.originAddress = message.originAddress);
+    message.targetChain !== undefined && (obj.targetChain = message.targetChain);
+    message.targetAddress !== undefined && (obj.targetAddress = message.targetAddress);
     message.symbol !== undefined && (obj.symbol = message.symbol);
     message.amount !== undefined && (obj.amount = message.amount);
     message.fee !== undefined && (obj.fee = message.fee);
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<MsgRequestTransaction>
-  ): MsgRequestTransaction {
-    const message = { ...baseMsgRequestTransaction } as MsgRequestTransaction;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.originChain !== undefined && object.originChain !== null) {
-      message.originChain = object.originChain;
-    } else {
-      message.originChain = "";
-    }
-    if (object.originAddress !== undefined && object.originAddress !== null) {
-      message.originAddress = object.originAddress;
-    } else {
-      message.originAddress = "";
-    }
-    if (object.targetChain !== undefined && object.targetChain !== null) {
-      message.targetChain = object.targetChain;
-    } else {
-      message.targetChain = "";
-    }
-    if (object.targetAddress !== undefined && object.targetAddress !== null) {
-      message.targetAddress = object.targetAddress;
-    } else {
-      message.targetAddress = "";
-    }
-    if (object.symbol !== undefined && object.symbol !== null) {
-      message.symbol = object.symbol;
-    } else {
-      message.symbol = "";
-    }
-    if (object.amount !== undefined && object.amount !== null) {
-      message.amount = object.amount;
-    } else {
-      message.amount = "";
-    }
-    if (object.fee !== undefined && object.fee !== null) {
-      message.fee = object.fee;
-    } else {
-      message.fee = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgRequestTransaction>, I>>(object: I): MsgRequestTransaction {
+    const message = createBaseMsgRequestTransaction();
+    message.creator = object.creator ?? "";
+    message.originChain = object.originChain ?? "";
+    message.originAddress = object.originAddress ?? "";
+    message.targetChain = object.targetChain ?? "";
+    message.targetAddress = object.targetAddress ?? "";
+    message.symbol = object.symbol ?? "";
+    message.amount = object.amount ?? "";
+    message.fee = object.fee ?? "";
     return message;
   },
 };
 
-const baseMsgRequestTransactionResponse: object = {
-  code: "",
-  msg: "",
-  txId: 0,
-};
+function createBaseMsgRequestTransactionResponse(): MsgRequestTransactionResponse {
+  return { code: "", msg: "", txId: 0 };
+}
 
 export const MsgRequestTransactionResponse = {
-  encode(
-    message: MsgRequestTransactionResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgRequestTransactionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -539,15 +471,10 @@ export const MsgRequestTransactionResponse = {
     return writer;
   },
 
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): MsgRequestTransactionResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRequestTransactionResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgRequestTransactionResponse,
-    } as MsgRequestTransactionResponse;
+    const message = createBaseMsgRequestTransactionResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -569,73 +496,38 @@ export const MsgRequestTransactionResponse = {
   },
 
   fromJSON(object: any): MsgRequestTransactionResponse {
-    const message = {
-      ...baseMsgRequestTransactionResponse,
-    } as MsgRequestTransactionResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = String(object.code);
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = String(object.msg);
-    } else {
-      message.msg = "";
-    }
-    if (object.txId !== undefined && object.txId !== null) {
-      message.txId = Number(object.txId);
-    } else {
-      message.txId = 0;
-    }
-    return message;
+    return {
+      code: isSet(object.code) ? String(object.code) : "",
+      msg: isSet(object.msg) ? String(object.msg) : "",
+      txId: isSet(object.txId) ? Number(object.txId) : 0,
+    };
   },
 
   toJSON(message: MsgRequestTransactionResponse): unknown {
     const obj: any = {};
     message.code !== undefined && (obj.code = message.code);
     message.msg !== undefined && (obj.msg = message.msg);
-    message.txId !== undefined && (obj.txId = message.txId);
+    message.txId !== undefined && (obj.txId = Math.round(message.txId));
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<MsgRequestTransactionResponse>
+  fromPartial<I extends Exact<DeepPartial<MsgRequestTransactionResponse>, I>>(
+    object: I,
   ): MsgRequestTransactionResponse {
-    const message = {
-      ...baseMsgRequestTransactionResponse,
-    } as MsgRequestTransactionResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = object.code;
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = object.msg;
-    } else {
-      message.msg = "";
-    }
-    if (object.txId !== undefined && object.txId !== null) {
-      message.txId = object.txId;
-    } else {
-      message.txId = 0;
-    }
+    const message = createBaseMsgRequestTransactionResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
+    message.txId = object.txId ?? 0;
     return message;
   },
 };
 
-const baseMsgApproveTransaction: object = {
-  creator: "",
-  txId: 0,
-  txTHash: "",
-  success: "",
-  signedKey: "",
-};
+function createBaseMsgApproveTransaction(): MsgApproveTransaction {
+  return { creator: "", txId: 0, txTHash: "", success: "", signedKey: "" };
+}
 
 export const MsgApproveTransaction = {
-  encode(
-    message: MsgApproveTransaction,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgApproveTransaction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -654,10 +546,10 @@ export const MsgApproveTransaction = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgApproveTransaction {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgApproveTransaction {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgApproveTransaction } as MsgApproveTransaction;
+    const message = createBaseMsgApproveTransaction();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -685,85 +577,42 @@ export const MsgApproveTransaction = {
   },
 
   fromJSON(object: any): MsgApproveTransaction {
-    const message = { ...baseMsgApproveTransaction } as MsgApproveTransaction;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.txId !== undefined && object.txId !== null) {
-      message.txId = Number(object.txId);
-    } else {
-      message.txId = 0;
-    }
-    if (object.txTHash !== undefined && object.txTHash !== null) {
-      message.txTHash = String(object.txTHash);
-    } else {
-      message.txTHash = "";
-    }
-    if (object.success !== undefined && object.success !== null) {
-      message.success = String(object.success);
-    } else {
-      message.success = "";
-    }
-    if (object.signedKey !== undefined && object.signedKey !== null) {
-      message.signedKey = String(object.signedKey);
-    } else {
-      message.signedKey = "";
-    }
-    return message;
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      txId: isSet(object.txId) ? Number(object.txId) : 0,
+      txTHash: isSet(object.txTHash) ? String(object.txTHash) : "",
+      success: isSet(object.success) ? String(object.success) : "",
+      signedKey: isSet(object.signedKey) ? String(object.signedKey) : "",
+    };
   },
 
   toJSON(message: MsgApproveTransaction): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.txId !== undefined && (obj.txId = message.txId);
+    message.txId !== undefined && (obj.txId = Math.round(message.txId));
     message.txTHash !== undefined && (obj.txTHash = message.txTHash);
     message.success !== undefined && (obj.success = message.success);
     message.signedKey !== undefined && (obj.signedKey = message.signedKey);
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<MsgApproveTransaction>
-  ): MsgApproveTransaction {
-    const message = { ...baseMsgApproveTransaction } as MsgApproveTransaction;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.txId !== undefined && object.txId !== null) {
-      message.txId = object.txId;
-    } else {
-      message.txId = 0;
-    }
-    if (object.txTHash !== undefined && object.txTHash !== null) {
-      message.txTHash = object.txTHash;
-    } else {
-      message.txTHash = "";
-    }
-    if (object.success !== undefined && object.success !== null) {
-      message.success = object.success;
-    } else {
-      message.success = "";
-    }
-    if (object.signedKey !== undefined && object.signedKey !== null) {
-      message.signedKey = object.signedKey;
-    } else {
-      message.signedKey = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgApproveTransaction>, I>>(object: I): MsgApproveTransaction {
+    const message = createBaseMsgApproveTransaction();
+    message.creator = object.creator ?? "";
+    message.txId = object.txId ?? 0;
+    message.txTHash = object.txTHash ?? "";
+    message.success = object.success ?? "";
+    message.signedKey = object.signedKey ?? "";
     return message;
   },
 };
 
-const baseMsgApproveTransactionResponse: object = { code: "", msg: "" };
+function createBaseMsgApproveTransactionResponse(): MsgApproveTransactionResponse {
+  return { code: "", msg: "" };
+}
 
 export const MsgApproveTransactionResponse = {
-  encode(
-    message: MsgApproveTransactionResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgApproveTransactionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -773,15 +622,10 @@ export const MsgApproveTransactionResponse = {
     return writer;
   },
 
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): MsgApproveTransactionResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgApproveTransactionResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgApproveTransactionResponse,
-    } as MsgApproveTransactionResponse;
+    const message = createBaseMsgApproveTransactionResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -800,20 +644,7 @@ export const MsgApproveTransactionResponse = {
   },
 
   fromJSON(object: any): MsgApproveTransactionResponse {
-    const message = {
-      ...baseMsgApproveTransactionResponse,
-    } as MsgApproveTransactionResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = String(object.code);
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = String(object.msg);
-    } else {
-      message.msg = "";
-    }
-    return message;
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgApproveTransactionResponse): unknown {
@@ -823,43 +654,22 @@ export const MsgApproveTransactionResponse = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<MsgApproveTransactionResponse>
+  fromPartial<I extends Exact<DeepPartial<MsgApproveTransactionResponse>, I>>(
+    object: I,
   ): MsgApproveTransactionResponse {
-    const message = {
-      ...baseMsgApproveTransactionResponse,
-    } as MsgApproveTransactionResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = object.code;
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = object.msg;
-    } else {
-      message.msg = "";
-    }
+    const message = createBaseMsgApproveTransactionResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
     return message;
   },
 };
 
-const baseMsgObservationVote: object = {
-  creator: "",
-  txHash: "",
-  chainId: "",
-  from: "",
-  to: "",
-  amount: "",
-  payType: "",
-  kimaTxID: 0,
-  succeed: "",
-};
+function createBaseMsgObservationVote(): MsgObservationVote {
+  return { creator: "", txHash: "", chainId: "", from: "", to: "", amount: "", payType: "", kimaTxID: 0, succeed: "" };
+}
 
 export const MsgObservationVote = {
-  encode(
-    message: MsgObservationVote,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgObservationVote, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -890,10 +700,10 @@ export const MsgObservationVote = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgObservationVote {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgObservationVote {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgObservationVote } as MsgObservationVote;
+    const message = createBaseMsgObservationVote();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -933,53 +743,17 @@ export const MsgObservationVote = {
   },
 
   fromJSON(object: any): MsgObservationVote {
-    const message = { ...baseMsgObservationVote } as MsgObservationVote;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.txHash !== undefined && object.txHash !== null) {
-      message.txHash = String(object.txHash);
-    } else {
-      message.txHash = "";
-    }
-    if (object.chainId !== undefined && object.chainId !== null) {
-      message.chainId = String(object.chainId);
-    } else {
-      message.chainId = "";
-    }
-    if (object.from !== undefined && object.from !== null) {
-      message.from = String(object.from);
-    } else {
-      message.from = "";
-    }
-    if (object.to !== undefined && object.to !== null) {
-      message.to = String(object.to);
-    } else {
-      message.to = "";
-    }
-    if (object.amount !== undefined && object.amount !== null) {
-      message.amount = String(object.amount);
-    } else {
-      message.amount = "";
-    }
-    if (object.payType !== undefined && object.payType !== null) {
-      message.payType = String(object.payType);
-    } else {
-      message.payType = "";
-    }
-    if (object.kimaTxID !== undefined && object.kimaTxID !== null) {
-      message.kimaTxID = Number(object.kimaTxID);
-    } else {
-      message.kimaTxID = 0;
-    }
-    if (object.succeed !== undefined && object.succeed !== null) {
-      message.succeed = String(object.succeed);
-    } else {
-      message.succeed = "";
-    }
-    return message;
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      txHash: isSet(object.txHash) ? String(object.txHash) : "",
+      chainId: isSet(object.chainId) ? String(object.chainId) : "",
+      from: isSet(object.from) ? String(object.from) : "",
+      to: isSet(object.to) ? String(object.to) : "",
+      amount: isSet(object.amount) ? String(object.amount) : "",
+      payType: isSet(object.payType) ? String(object.payType) : "",
+      kimaTxID: isSet(object.kimaTxID) ? Number(object.kimaTxID) : 0,
+      succeed: isSet(object.succeed) ? String(object.succeed) : "",
+    };
   },
 
   toJSON(message: MsgObservationVote): unknown {
@@ -991,69 +765,32 @@ export const MsgObservationVote = {
     message.to !== undefined && (obj.to = message.to);
     message.amount !== undefined && (obj.amount = message.amount);
     message.payType !== undefined && (obj.payType = message.payType);
-    message.kimaTxID !== undefined && (obj.kimaTxID = message.kimaTxID);
+    message.kimaTxID !== undefined && (obj.kimaTxID = Math.round(message.kimaTxID));
     message.succeed !== undefined && (obj.succeed = message.succeed);
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgObservationVote>): MsgObservationVote {
-    const message = { ...baseMsgObservationVote } as MsgObservationVote;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.txHash !== undefined && object.txHash !== null) {
-      message.txHash = object.txHash;
-    } else {
-      message.txHash = "";
-    }
-    if (object.chainId !== undefined && object.chainId !== null) {
-      message.chainId = object.chainId;
-    } else {
-      message.chainId = "";
-    }
-    if (object.from !== undefined && object.from !== null) {
-      message.from = object.from;
-    } else {
-      message.from = "";
-    }
-    if (object.to !== undefined && object.to !== null) {
-      message.to = object.to;
-    } else {
-      message.to = "";
-    }
-    if (object.amount !== undefined && object.amount !== null) {
-      message.amount = object.amount;
-    } else {
-      message.amount = "";
-    }
-    if (object.payType !== undefined && object.payType !== null) {
-      message.payType = object.payType;
-    } else {
-      message.payType = "";
-    }
-    if (object.kimaTxID !== undefined && object.kimaTxID !== null) {
-      message.kimaTxID = object.kimaTxID;
-    } else {
-      message.kimaTxID = 0;
-    }
-    if (object.succeed !== undefined && object.succeed !== null) {
-      message.succeed = object.succeed;
-    } else {
-      message.succeed = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgObservationVote>, I>>(object: I): MsgObservationVote {
+    const message = createBaseMsgObservationVote();
+    message.creator = object.creator ?? "";
+    message.txHash = object.txHash ?? "";
+    message.chainId = object.chainId ?? "";
+    message.from = object.from ?? "";
+    message.to = object.to ?? "";
+    message.amount = object.amount ?? "";
+    message.payType = object.payType ?? "";
+    message.kimaTxID = object.kimaTxID ?? 0;
+    message.succeed = object.succeed ?? "";
     return message;
   },
 };
 
-const baseMsgObservationVoteResponse: object = { code: "", msg: "" };
+function createBaseMsgObservationVoteResponse(): MsgObservationVoteResponse {
+  return { code: "", msg: "" };
+}
 
 export const MsgObservationVoteResponse = {
-  encode(
-    message: MsgObservationVoteResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgObservationVoteResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -1063,15 +800,10 @@ export const MsgObservationVoteResponse = {
     return writer;
   },
 
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): MsgObservationVoteResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgObservationVoteResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgObservationVoteResponse,
-    } as MsgObservationVoteResponse;
+    const message = createBaseMsgObservationVoteResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1090,20 +822,7 @@ export const MsgObservationVoteResponse = {
   },
 
   fromJSON(object: any): MsgObservationVoteResponse {
-    const message = {
-      ...baseMsgObservationVoteResponse,
-    } as MsgObservationVoteResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = String(object.code);
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = String(object.msg);
-    } else {
-      message.msg = "";
-    }
-    return message;
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgObservationVoteResponse): unknown {
@@ -1113,35 +832,20 @@ export const MsgObservationVoteResponse = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<MsgObservationVoteResponse>
-  ): MsgObservationVoteResponse {
-    const message = {
-      ...baseMsgObservationVoteResponse,
-    } as MsgObservationVoteResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = object.code;
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = object.msg;
-    } else {
-      message.msg = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgObservationVoteResponse>, I>>(object: I): MsgObservationVoteResponse {
+    const message = createBaseMsgObservationVoteResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
     return message;
   },
 };
 
-const baseMsgUpdateBalance: object = {
-  creator: "",
-  chainId: "",
-  balance: "",
-  decimal: "",
-};
+function createBaseMsgUpdateBalance(): MsgUpdateBalance {
+  return { creator: "", chainId: "", balance: "", decimal: "" };
+}
 
 export const MsgUpdateBalance = {
-  encode(message: MsgUpdateBalance, writer: Writer = Writer.create()): Writer {
+  encode(message: MsgUpdateBalance, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -1157,10 +861,10 @@ export const MsgUpdateBalance = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgUpdateBalance {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateBalance {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgUpdateBalance } as MsgUpdateBalance;
+    const message = createBaseMsgUpdateBalance();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1185,28 +889,12 @@ export const MsgUpdateBalance = {
   },
 
   fromJSON(object: any): MsgUpdateBalance {
-    const message = { ...baseMsgUpdateBalance } as MsgUpdateBalance;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.chainId !== undefined && object.chainId !== null) {
-      message.chainId = String(object.chainId);
-    } else {
-      message.chainId = "";
-    }
-    if (object.balance !== undefined && object.balance !== null) {
-      message.balance = String(object.balance);
-    } else {
-      message.balance = "";
-    }
-    if (object.decimal !== undefined && object.decimal !== null) {
-      message.decimal = String(object.decimal);
-    } else {
-      message.decimal = "";
-    }
-    return message;
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      chainId: isSet(object.chainId) ? String(object.chainId) : "",
+      balance: isSet(object.balance) ? String(object.balance) : "",
+      decimal: isSet(object.decimal) ? String(object.decimal) : "",
+    };
   },
 
   toJSON(message: MsgUpdateBalance): unknown {
@@ -1218,39 +906,22 @@ export const MsgUpdateBalance = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgUpdateBalance>): MsgUpdateBalance {
-    const message = { ...baseMsgUpdateBalance } as MsgUpdateBalance;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.chainId !== undefined && object.chainId !== null) {
-      message.chainId = object.chainId;
-    } else {
-      message.chainId = "";
-    }
-    if (object.balance !== undefined && object.balance !== null) {
-      message.balance = object.balance;
-    } else {
-      message.balance = "";
-    }
-    if (object.decimal !== undefined && object.decimal !== null) {
-      message.decimal = object.decimal;
-    } else {
-      message.decimal = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateBalance>, I>>(object: I): MsgUpdateBalance {
+    const message = createBaseMsgUpdateBalance();
+    message.creator = object.creator ?? "";
+    message.chainId = object.chainId ?? "";
+    message.balance = object.balance ?? "";
+    message.decimal = object.decimal ?? "";
     return message;
   },
 };
 
-const baseMsgUpdateBalanceResponse: object = { code: "", msg: "" };
+function createBaseMsgUpdateBalanceResponse(): MsgUpdateBalanceResponse {
+  return { code: "", msg: "" };
+}
 
 export const MsgUpdateBalanceResponse = {
-  encode(
-    message: MsgUpdateBalanceResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgUpdateBalanceResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -1260,15 +931,10 @@ export const MsgUpdateBalanceResponse = {
     return writer;
   },
 
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): MsgUpdateBalanceResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateBalanceResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgUpdateBalanceResponse,
-    } as MsgUpdateBalanceResponse;
+    const message = createBaseMsgUpdateBalanceResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1287,20 +953,7 @@ export const MsgUpdateBalanceResponse = {
   },
 
   fromJSON(object: any): MsgUpdateBalanceResponse {
-    const message = {
-      ...baseMsgUpdateBalanceResponse,
-    } as MsgUpdateBalanceResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = String(object.code);
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = String(object.msg);
-    } else {
-      message.msg = "";
-    }
-    return message;
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgUpdateBalanceResponse): unknown {
@@ -1310,30 +963,20 @@ export const MsgUpdateBalanceResponse = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<MsgUpdateBalanceResponse>
-  ): MsgUpdateBalanceResponse {
-    const message = {
-      ...baseMsgUpdateBalanceResponse,
-    } as MsgUpdateBalanceResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = object.code;
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = object.msg;
-    } else {
-      message.msg = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateBalanceResponse>, I>>(object: I): MsgUpdateBalanceResponse {
+    const message = createBaseMsgUpdateBalanceResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
     return message;
   },
 };
 
-const baseMsgKeysignVote: object = { creator: "", txHash: "", pubKey: "" };
+function createBaseMsgKeysignVote(): MsgKeysignVote {
+  return { creator: "", txHash: "", pubKey: "" };
+}
 
 export const MsgKeysignVote = {
-  encode(message: MsgKeysignVote, writer: Writer = Writer.create()): Writer {
+  encode(message: MsgKeysignVote, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -1346,10 +989,10 @@ export const MsgKeysignVote = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgKeysignVote {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgKeysignVote {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgKeysignVote } as MsgKeysignVote;
+    const message = createBaseMsgKeysignVote();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1371,23 +1014,11 @@ export const MsgKeysignVote = {
   },
 
   fromJSON(object: any): MsgKeysignVote {
-    const message = { ...baseMsgKeysignVote } as MsgKeysignVote;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.txHash !== undefined && object.txHash !== null) {
-      message.txHash = String(object.txHash);
-    } else {
-      message.txHash = "";
-    }
-    if (object.pubKey !== undefined && object.pubKey !== null) {
-      message.pubKey = String(object.pubKey);
-    } else {
-      message.pubKey = "";
-    }
-    return message;
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      txHash: isSet(object.txHash) ? String(object.txHash) : "",
+      pubKey: isSet(object.pubKey) ? String(object.pubKey) : "",
+    };
   },
 
   toJSON(message: MsgKeysignVote): unknown {
@@ -1398,34 +1029,21 @@ export const MsgKeysignVote = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgKeysignVote>): MsgKeysignVote {
-    const message = { ...baseMsgKeysignVote } as MsgKeysignVote;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.txHash !== undefined && object.txHash !== null) {
-      message.txHash = object.txHash;
-    } else {
-      message.txHash = "";
-    }
-    if (object.pubKey !== undefined && object.pubKey !== null) {
-      message.pubKey = object.pubKey;
-    } else {
-      message.pubKey = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgKeysignVote>, I>>(object: I): MsgKeysignVote {
+    const message = createBaseMsgKeysignVote();
+    message.creator = object.creator ?? "";
+    message.txHash = object.txHash ?? "";
+    message.pubKey = object.pubKey ?? "";
     return message;
   },
 };
 
-const baseMsgKeysignVoteResponse: object = { code: "", msg: "" };
+function createBaseMsgKeysignVoteResponse(): MsgKeysignVoteResponse {
+  return { code: "", msg: "" };
+}
 
 export const MsgKeysignVoteResponse = {
-  encode(
-    message: MsgKeysignVoteResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgKeysignVoteResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -1435,10 +1053,10 @@ export const MsgKeysignVoteResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgKeysignVoteResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgKeysignVoteResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgKeysignVoteResponse } as MsgKeysignVoteResponse;
+    const message = createBaseMsgKeysignVoteResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1457,18 +1075,7 @@ export const MsgKeysignVoteResponse = {
   },
 
   fromJSON(object: any): MsgKeysignVoteResponse {
-    const message = { ...baseMsgKeysignVoteResponse } as MsgKeysignVoteResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = String(object.code);
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = String(object.msg);
-    } else {
-      message.msg = "";
-    }
-    return message;
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgKeysignVoteResponse): unknown {
@@ -1478,28 +1085,20 @@ export const MsgKeysignVoteResponse = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<MsgKeysignVoteResponse>
-  ): MsgKeysignVoteResponse {
-    const message = { ...baseMsgKeysignVoteResponse } as MsgKeysignVoteResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = object.code;
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = object.msg;
-    } else {
-      message.msg = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgKeysignVoteResponse>, I>>(object: I): MsgKeysignVoteResponse {
+    const message = createBaseMsgKeysignVoteResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
     return message;
   },
 };
 
-const baseMsgUpdateGasFee: object = { creator: "", chainId: "", fee: "" };
+function createBaseMsgUpdateGasFee(): MsgUpdateGasFee {
+  return { creator: "", chainId: "", fee: "" };
+}
 
 export const MsgUpdateGasFee = {
-  encode(message: MsgUpdateGasFee, writer: Writer = Writer.create()): Writer {
+  encode(message: MsgUpdateGasFee, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -1512,10 +1111,10 @@ export const MsgUpdateGasFee = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgUpdateGasFee {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateGasFee {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgUpdateGasFee } as MsgUpdateGasFee;
+    const message = createBaseMsgUpdateGasFee();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1537,23 +1136,11 @@ export const MsgUpdateGasFee = {
   },
 
   fromJSON(object: any): MsgUpdateGasFee {
-    const message = { ...baseMsgUpdateGasFee } as MsgUpdateGasFee;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.chainId !== undefined && object.chainId !== null) {
-      message.chainId = String(object.chainId);
-    } else {
-      message.chainId = "";
-    }
-    if (object.fee !== undefined && object.fee !== null) {
-      message.fee = String(object.fee);
-    } else {
-      message.fee = "";
-    }
-    return message;
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      chainId: isSet(object.chainId) ? String(object.chainId) : "",
+      fee: isSet(object.fee) ? String(object.fee) : "",
+    };
   },
 
   toJSON(message: MsgUpdateGasFee): unknown {
@@ -1564,34 +1151,21 @@ export const MsgUpdateGasFee = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgUpdateGasFee>): MsgUpdateGasFee {
-    const message = { ...baseMsgUpdateGasFee } as MsgUpdateGasFee;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.chainId !== undefined && object.chainId !== null) {
-      message.chainId = object.chainId;
-    } else {
-      message.chainId = "";
-    }
-    if (object.fee !== undefined && object.fee !== null) {
-      message.fee = object.fee;
-    } else {
-      message.fee = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateGasFee>, I>>(object: I): MsgUpdateGasFee {
+    const message = createBaseMsgUpdateGasFee();
+    message.creator = object.creator ?? "";
+    message.chainId = object.chainId ?? "";
+    message.fee = object.fee ?? "";
     return message;
   },
 };
 
-const baseMsgUpdateGasFeeResponse: object = { code: "", msg: "" };
+function createBaseMsgUpdateGasFeeResponse(): MsgUpdateGasFeeResponse {
+  return { code: "", msg: "" };
+}
 
 export const MsgUpdateGasFeeResponse = {
-  encode(
-    message: MsgUpdateGasFeeResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgUpdateGasFeeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -1601,12 +1175,10 @@ export const MsgUpdateGasFeeResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgUpdateGasFeeResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateGasFeeResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgUpdateGasFeeResponse,
-    } as MsgUpdateGasFeeResponse;
+    const message = createBaseMsgUpdateGasFeeResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1625,20 +1197,7 @@ export const MsgUpdateGasFeeResponse = {
   },
 
   fromJSON(object: any): MsgUpdateGasFeeResponse {
-    const message = {
-      ...baseMsgUpdateGasFeeResponse,
-    } as MsgUpdateGasFeeResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = String(object.code);
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = String(object.msg);
-    } else {
-      message.msg = "";
-    }
-    return message;
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgUpdateGasFeeResponse): unknown {
@@ -1648,41 +1207,20 @@ export const MsgUpdateGasFeeResponse = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<MsgUpdateGasFeeResponse>
-  ): MsgUpdateGasFeeResponse {
-    const message = {
-      ...baseMsgUpdateGasFeeResponse,
-    } as MsgUpdateGasFeeResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = object.code;
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = object.msg;
-    } else {
-      message.msg = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateGasFeeResponse>, I>>(object: I): MsgUpdateGasFeeResponse {
+    const message = createBaseMsgUpdateGasFeeResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
     return message;
   },
 };
 
-const baseMsgProvisionTransaction: object = {
-  creator: "",
-  fromChain: "",
-  fromAddress: "",
-  symbol: "",
-  tokenAddr: "",
-  amount: "",
-  options: "",
-};
+function createBaseMsgProvisionTransaction(): MsgProvisionTransaction {
+  return { creator: "", fromChain: "", fromAddress: "", symbol: "", tokenAddr: "", amount: "", options: "" };
+}
 
 export const MsgProvisionTransaction = {
-  encode(
-    message: MsgProvisionTransaction,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgProvisionTransaction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -1707,12 +1245,10 @@ export const MsgProvisionTransaction = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgProvisionTransaction {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgProvisionTransaction {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgProvisionTransaction,
-    } as MsgProvisionTransaction;
+    const message = createBaseMsgProvisionTransaction();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1746,53 +1282,22 @@ export const MsgProvisionTransaction = {
   },
 
   fromJSON(object: any): MsgProvisionTransaction {
-    const message = {
-      ...baseMsgProvisionTransaction,
-    } as MsgProvisionTransaction;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.fromChain !== undefined && object.fromChain !== null) {
-      message.fromChain = String(object.fromChain);
-    } else {
-      message.fromChain = "";
-    }
-    if (object.fromAddress !== undefined && object.fromAddress !== null) {
-      message.fromAddress = String(object.fromAddress);
-    } else {
-      message.fromAddress = "";
-    }
-    if (object.symbol !== undefined && object.symbol !== null) {
-      message.symbol = String(object.symbol);
-    } else {
-      message.symbol = "";
-    }
-    if (object.tokenAddr !== undefined && object.tokenAddr !== null) {
-      message.tokenAddr = String(object.tokenAddr);
-    } else {
-      message.tokenAddr = "";
-    }
-    if (object.amount !== undefined && object.amount !== null) {
-      message.amount = String(object.amount);
-    } else {
-      message.amount = "";
-    }
-    if (object.options !== undefined && object.options !== null) {
-      message.options = String(object.options);
-    } else {
-      message.options = "";
-    }
-    return message;
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      fromChain: isSet(object.fromChain) ? String(object.fromChain) : "",
+      fromAddress: isSet(object.fromAddress) ? String(object.fromAddress) : "",
+      symbol: isSet(object.symbol) ? String(object.symbol) : "",
+      tokenAddr: isSet(object.tokenAddr) ? String(object.tokenAddr) : "",
+      amount: isSet(object.amount) ? String(object.amount) : "",
+      options: isSet(object.options) ? String(object.options) : "",
+    };
   },
 
   toJSON(message: MsgProvisionTransaction): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
     message.fromChain !== undefined && (obj.fromChain = message.fromChain);
-    message.fromAddress !== undefined &&
-      (obj.fromAddress = message.fromAddress);
+    message.fromAddress !== undefined && (obj.fromAddress = message.fromAddress);
     message.symbol !== undefined && (obj.symbol = message.symbol);
     message.tokenAddr !== undefined && (obj.tokenAddr = message.tokenAddr);
     message.amount !== undefined && (obj.amount = message.amount);
@@ -1800,58 +1305,25 @@ export const MsgProvisionTransaction = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<MsgProvisionTransaction>
-  ): MsgProvisionTransaction {
-    const message = {
-      ...baseMsgProvisionTransaction,
-    } as MsgProvisionTransaction;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.fromChain !== undefined && object.fromChain !== null) {
-      message.fromChain = object.fromChain;
-    } else {
-      message.fromChain = "";
-    }
-    if (object.fromAddress !== undefined && object.fromAddress !== null) {
-      message.fromAddress = object.fromAddress;
-    } else {
-      message.fromAddress = "";
-    }
-    if (object.symbol !== undefined && object.symbol !== null) {
-      message.symbol = object.symbol;
-    } else {
-      message.symbol = "";
-    }
-    if (object.tokenAddr !== undefined && object.tokenAddr !== null) {
-      message.tokenAddr = object.tokenAddr;
-    } else {
-      message.tokenAddr = "";
-    }
-    if (object.amount !== undefined && object.amount !== null) {
-      message.amount = object.amount;
-    } else {
-      message.amount = "";
-    }
-    if (object.options !== undefined && object.options !== null) {
-      message.options = object.options;
-    } else {
-      message.options = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgProvisionTransaction>, I>>(object: I): MsgProvisionTransaction {
+    const message = createBaseMsgProvisionTransaction();
+    message.creator = object.creator ?? "";
+    message.fromChain = object.fromChain ?? "";
+    message.fromAddress = object.fromAddress ?? "";
+    message.symbol = object.symbol ?? "";
+    message.tokenAddr = object.tokenAddr ?? "";
+    message.amount = object.amount ?? "";
+    message.options = object.options ?? "";
     return message;
   },
 };
 
-const baseMsgProvisionTransactionResponse: object = { code: "", msg: "" };
+function createBaseMsgProvisionTransactionResponse(): MsgProvisionTransactionResponse {
+  return { code: "", msg: "" };
+}
 
 export const MsgProvisionTransactionResponse = {
-  encode(
-    message: MsgProvisionTransactionResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgProvisionTransactionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -1861,15 +1333,10 @@ export const MsgProvisionTransactionResponse = {
     return writer;
   },
 
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): MsgProvisionTransactionResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgProvisionTransactionResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgProvisionTransactionResponse,
-    } as MsgProvisionTransactionResponse;
+    const message = createBaseMsgProvisionTransactionResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1888,20 +1355,7 @@ export const MsgProvisionTransactionResponse = {
   },
 
   fromJSON(object: any): MsgProvisionTransactionResponse {
-    const message = {
-      ...baseMsgProvisionTransactionResponse,
-    } as MsgProvisionTransactionResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = String(object.code);
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = String(object.msg);
-    } else {
-      message.msg = "";
-    }
-    return message;
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgProvisionTransactionResponse): unknown {
@@ -1911,41 +1365,22 @@ export const MsgProvisionTransactionResponse = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<MsgProvisionTransactionResponse>
+  fromPartial<I extends Exact<DeepPartial<MsgProvisionTransactionResponse>, I>>(
+    object: I,
   ): MsgProvisionTransactionResponse {
-    const message = {
-      ...baseMsgProvisionTransactionResponse,
-    } as MsgProvisionTransactionResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = object.code;
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = object.msg;
-    } else {
-      message.msg = "";
-    }
+    const message = createBaseMsgProvisionTransactionResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
     return message;
   },
 };
 
-const baseMsgDrainTransaction: object = {
-  creator: "",
-  fromChain: "",
-  toChain: "",
-  toAddress: "",
-  nftAddr: "",
-  amount: "",
-  options: "",
-};
+function createBaseMsgDrainTransaction(): MsgDrainTransaction {
+  return { creator: "", fromChain: "", toChain: "", toAddress: "", nftAddr: "", amount: "", options: "" };
+}
 
 export const MsgDrainTransaction = {
-  encode(
-    message: MsgDrainTransaction,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgDrainTransaction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -1970,10 +1405,10 @@ export const MsgDrainTransaction = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgDrainTransaction {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgDrainTransaction {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgDrainTransaction } as MsgDrainTransaction;
+    const message = createBaseMsgDrainTransaction();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2007,43 +1442,15 @@ export const MsgDrainTransaction = {
   },
 
   fromJSON(object: any): MsgDrainTransaction {
-    const message = { ...baseMsgDrainTransaction } as MsgDrainTransaction;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.fromChain !== undefined && object.fromChain !== null) {
-      message.fromChain = String(object.fromChain);
-    } else {
-      message.fromChain = "";
-    }
-    if (object.toChain !== undefined && object.toChain !== null) {
-      message.toChain = String(object.toChain);
-    } else {
-      message.toChain = "";
-    }
-    if (object.toAddress !== undefined && object.toAddress !== null) {
-      message.toAddress = String(object.toAddress);
-    } else {
-      message.toAddress = "";
-    }
-    if (object.nftAddr !== undefined && object.nftAddr !== null) {
-      message.nftAddr = String(object.nftAddr);
-    } else {
-      message.nftAddr = "";
-    }
-    if (object.amount !== undefined && object.amount !== null) {
-      message.amount = String(object.amount);
-    } else {
-      message.amount = "";
-    }
-    if (object.options !== undefined && object.options !== null) {
-      message.options = String(object.options);
-    } else {
-      message.options = "";
-    }
-    return message;
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      fromChain: isSet(object.fromChain) ? String(object.fromChain) : "",
+      toChain: isSet(object.toChain) ? String(object.toChain) : "",
+      toAddress: isSet(object.toAddress) ? String(object.toAddress) : "",
+      nftAddr: isSet(object.nftAddr) ? String(object.nftAddr) : "",
+      amount: isSet(object.amount) ? String(object.amount) : "",
+      options: isSet(object.options) ? String(object.options) : "",
+    };
   },
 
   toJSON(message: MsgDrainTransaction): unknown {
@@ -2058,54 +1465,25 @@ export const MsgDrainTransaction = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgDrainTransaction>): MsgDrainTransaction {
-    const message = { ...baseMsgDrainTransaction } as MsgDrainTransaction;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.fromChain !== undefined && object.fromChain !== null) {
-      message.fromChain = object.fromChain;
-    } else {
-      message.fromChain = "";
-    }
-    if (object.toChain !== undefined && object.toChain !== null) {
-      message.toChain = object.toChain;
-    } else {
-      message.toChain = "";
-    }
-    if (object.toAddress !== undefined && object.toAddress !== null) {
-      message.toAddress = object.toAddress;
-    } else {
-      message.toAddress = "";
-    }
-    if (object.nftAddr !== undefined && object.nftAddr !== null) {
-      message.nftAddr = object.nftAddr;
-    } else {
-      message.nftAddr = "";
-    }
-    if (object.amount !== undefined && object.amount !== null) {
-      message.amount = object.amount;
-    } else {
-      message.amount = "";
-    }
-    if (object.options !== undefined && object.options !== null) {
-      message.options = object.options;
-    } else {
-      message.options = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgDrainTransaction>, I>>(object: I): MsgDrainTransaction {
+    const message = createBaseMsgDrainTransaction();
+    message.creator = object.creator ?? "";
+    message.fromChain = object.fromChain ?? "";
+    message.toChain = object.toChain ?? "";
+    message.toAddress = object.toAddress ?? "";
+    message.nftAddr = object.nftAddr ?? "";
+    message.amount = object.amount ?? "";
+    message.options = object.options ?? "";
     return message;
   },
 };
 
-const baseMsgDrainTransactionResponse: object = { code: "", msg: "" };
+function createBaseMsgDrainTransactionResponse(): MsgDrainTransactionResponse {
+  return { code: "", msg: "" };
+}
 
 export const MsgDrainTransactionResponse = {
-  encode(
-    message: MsgDrainTransactionResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgDrainTransactionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -2115,15 +1493,10 @@ export const MsgDrainTransactionResponse = {
     return writer;
   },
 
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): MsgDrainTransactionResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgDrainTransactionResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgDrainTransactionResponse,
-    } as MsgDrainTransactionResponse;
+    const message = createBaseMsgDrainTransactionResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2142,20 +1515,7 @@ export const MsgDrainTransactionResponse = {
   },
 
   fromJSON(object: any): MsgDrainTransactionResponse {
-    const message = {
-      ...baseMsgDrainTransactionResponse,
-    } as MsgDrainTransactionResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = String(object.code);
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = String(object.msg);
-    } else {
-      message.msg = "";
-    }
-    return message;
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgDrainTransactionResponse): unknown {
@@ -2165,33 +1525,20 @@ export const MsgDrainTransactionResponse = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<MsgDrainTransactionResponse>
-  ): MsgDrainTransactionResponse {
-    const message = {
-      ...baseMsgDrainTransactionResponse,
-    } as MsgDrainTransactionResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = object.code;
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = object.msg;
-    } else {
-      message.msg = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgDrainTransactionResponse>, I>>(object: I): MsgDrainTransactionResponse {
+    const message = createBaseMsgDrainTransactionResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
     return message;
   },
 };
 
-const baseMsgCancelTransaction: object = { creator: "", transactionId: "" };
+function createBaseMsgCancelTransaction(): MsgCancelTransaction {
+  return { creator: "", transactionId: "" };
+}
 
 export const MsgCancelTransaction = {
-  encode(
-    message: MsgCancelTransaction,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgCancelTransaction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -2201,10 +1548,10 @@ export const MsgCancelTransaction = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgCancelTransaction {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCancelTransaction {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgCancelTransaction } as MsgCancelTransaction;
+    const message = createBaseMsgCancelTransaction();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2223,51 +1570,33 @@ export const MsgCancelTransaction = {
   },
 
   fromJSON(object: any): MsgCancelTransaction {
-    const message = { ...baseMsgCancelTransaction } as MsgCancelTransaction;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.transactionId !== undefined && object.transactionId !== null) {
-      message.transactionId = String(object.transactionId);
-    } else {
-      message.transactionId = "";
-    }
-    return message;
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      transactionId: isSet(object.transactionId) ? String(object.transactionId) : "",
+    };
   },
 
   toJSON(message: MsgCancelTransaction): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.transactionId !== undefined &&
-      (obj.transactionId = message.transactionId);
+    message.transactionId !== undefined && (obj.transactionId = message.transactionId);
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgCancelTransaction>): MsgCancelTransaction {
-    const message = { ...baseMsgCancelTransaction } as MsgCancelTransaction;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.transactionId !== undefined && object.transactionId !== null) {
-      message.transactionId = object.transactionId;
-    } else {
-      message.transactionId = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgCancelTransaction>, I>>(object: I): MsgCancelTransaction {
+    const message = createBaseMsgCancelTransaction();
+    message.creator = object.creator ?? "";
+    message.transactionId = object.transactionId ?? "";
     return message;
   },
 };
 
-const baseMsgCancelTransactionResponse: object = { code: "", msg: "" };
+function createBaseMsgCancelTransactionResponse(): MsgCancelTransactionResponse {
+  return { code: "", msg: "" };
+}
 
 export const MsgCancelTransactionResponse = {
-  encode(
-    message: MsgCancelTransactionResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgCancelTransactionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -2277,15 +1606,10 @@ export const MsgCancelTransactionResponse = {
     return writer;
   },
 
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): MsgCancelTransactionResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCancelTransactionResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgCancelTransactionResponse,
-    } as MsgCancelTransactionResponse;
+    const message = createBaseMsgCancelTransactionResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2304,20 +1628,7 @@ export const MsgCancelTransactionResponse = {
   },
 
   fromJSON(object: any): MsgCancelTransactionResponse {
-    const message = {
-      ...baseMsgCancelTransactionResponse,
-    } as MsgCancelTransactionResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = String(object.code);
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = String(object.msg);
-    } else {
-      message.msg = "";
-    }
-    return message;
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgCancelTransactionResponse): unknown {
@@ -2327,30 +1638,20 @@ export const MsgCancelTransactionResponse = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<MsgCancelTransactionResponse>
-  ): MsgCancelTransactionResponse {
-    const message = {
-      ...baseMsgCancelTransactionResponse,
-    } as MsgCancelTransactionResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = object.code;
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = object.msg;
-    } else {
-      message.msg = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgCancelTransactionResponse>, I>>(object: I): MsgCancelTransactionResponse {
+    const message = createBaseMsgCancelTransactionResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
     return message;
   },
 };
 
-const baseMsgAddWhitelisted: object = { creator: "", address: "" };
+function createBaseMsgAddWhitelisted(): MsgAddWhitelisted {
+  return { creator: "", address: "" };
+}
 
 export const MsgAddWhitelisted = {
-  encode(message: MsgAddWhitelisted, writer: Writer = Writer.create()): Writer {
+  encode(message: MsgAddWhitelisted, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -2360,10 +1661,10 @@ export const MsgAddWhitelisted = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgAddWhitelisted {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgAddWhitelisted {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgAddWhitelisted } as MsgAddWhitelisted;
+    const message = createBaseMsgAddWhitelisted();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2382,18 +1683,10 @@ export const MsgAddWhitelisted = {
   },
 
   fromJSON(object: any): MsgAddWhitelisted {
-    const message = { ...baseMsgAddWhitelisted } as MsgAddWhitelisted;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.address !== undefined && object.address !== null) {
-      message.address = String(object.address);
-    } else {
-      message.address = "";
-    }
-    return message;
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      address: isSet(object.address) ? String(object.address) : "",
+    };
   },
 
   toJSON(message: MsgAddWhitelisted): unknown {
@@ -2403,29 +1696,20 @@ export const MsgAddWhitelisted = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgAddWhitelisted>): MsgAddWhitelisted {
-    const message = { ...baseMsgAddWhitelisted } as MsgAddWhitelisted;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.address !== undefined && object.address !== null) {
-      message.address = object.address;
-    } else {
-      message.address = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgAddWhitelisted>, I>>(object: I): MsgAddWhitelisted {
+    const message = createBaseMsgAddWhitelisted();
+    message.creator = object.creator ?? "";
+    message.address = object.address ?? "";
     return message;
   },
 };
 
-const baseMsgAddWhitelistedResponse: object = { code: "", msg: "" };
+function createBaseMsgAddWhitelistedResponse(): MsgAddWhitelistedResponse {
+  return { code: "", msg: "" };
+}
 
 export const MsgAddWhitelistedResponse = {
-  encode(
-    message: MsgAddWhitelistedResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgAddWhitelistedResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -2435,15 +1719,10 @@ export const MsgAddWhitelistedResponse = {
     return writer;
   },
 
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): MsgAddWhitelistedResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgAddWhitelistedResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgAddWhitelistedResponse,
-    } as MsgAddWhitelistedResponse;
+    const message = createBaseMsgAddWhitelistedResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2462,20 +1741,7 @@ export const MsgAddWhitelistedResponse = {
   },
 
   fromJSON(object: any): MsgAddWhitelistedResponse {
-    const message = {
-      ...baseMsgAddWhitelistedResponse,
-    } as MsgAddWhitelistedResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = String(object.code);
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = String(object.msg);
-    } else {
-      message.msg = "";
-    }
-    return message;
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgAddWhitelistedResponse): unknown {
@@ -2485,40 +1751,30 @@ export const MsgAddWhitelistedResponse = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<MsgAddWhitelistedResponse>
-  ): MsgAddWhitelistedResponse {
-    const message = {
-      ...baseMsgAddWhitelistedResponse,
-    } as MsgAddWhitelistedResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = object.code;
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = object.msg;
-    } else {
-      message.msg = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgAddWhitelistedResponse>, I>>(object: I): MsgAddWhitelistedResponse {
+    const message = createBaseMsgAddWhitelistedResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
     return message;
   },
 };
 
-const baseMsgSetAdmin: object = { creator: "" };
+function createBaseMsgSetAdmin(): MsgSetAdmin {
+  return { creator: "" };
+}
 
 export const MsgSetAdmin = {
-  encode(message: MsgSetAdmin, writer: Writer = Writer.create()): Writer {
+  encode(message: MsgSetAdmin, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgSetAdmin {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetAdmin {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgSetAdmin } as MsgSetAdmin;
+    const message = createBaseMsgSetAdmin();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2534,13 +1790,7 @@ export const MsgSetAdmin = {
   },
 
   fromJSON(object: any): MsgSetAdmin {
-    const message = { ...baseMsgSetAdmin } as MsgSetAdmin;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    return message;
+    return { creator: isSet(object.creator) ? String(object.creator) : "" };
   },
 
   toJSON(message: MsgSetAdmin): unknown {
@@ -2549,24 +1799,19 @@ export const MsgSetAdmin = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgSetAdmin>): MsgSetAdmin {
-    const message = { ...baseMsgSetAdmin } as MsgSetAdmin;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgSetAdmin>, I>>(object: I): MsgSetAdmin {
+    const message = createBaseMsgSetAdmin();
+    message.creator = object.creator ?? "";
     return message;
   },
 };
 
-const baseMsgSetAdminResponse: object = { code: "", msg: "" };
+function createBaseMsgSetAdminResponse(): MsgSetAdminResponse {
+  return { code: "", msg: "" };
+}
 
 export const MsgSetAdminResponse = {
-  encode(
-    message: MsgSetAdminResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgSetAdminResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -2576,10 +1821,10 @@ export const MsgSetAdminResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgSetAdminResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetAdminResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgSetAdminResponse } as MsgSetAdminResponse;
+    const message = createBaseMsgSetAdminResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2598,18 +1843,7 @@ export const MsgSetAdminResponse = {
   },
 
   fromJSON(object: any): MsgSetAdminResponse {
-    const message = { ...baseMsgSetAdminResponse } as MsgSetAdminResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = String(object.code);
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = String(object.msg);
-    } else {
-      message.msg = "";
-    }
-    return message;
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgSetAdminResponse): unknown {
@@ -2619,26 +1853,20 @@ export const MsgSetAdminResponse = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgSetAdminResponse>): MsgSetAdminResponse {
-    const message = { ...baseMsgSetAdminResponse } as MsgSetAdminResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = object.code;
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = object.msg;
-    } else {
-      message.msg = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgSetAdminResponse>, I>>(object: I): MsgSetAdminResponse {
+    const message = createBaseMsgSetAdminResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
     return message;
   },
 };
 
-const baseMsgAddPubkey: object = { creator: "", pubkey: "" };
+function createBaseMsgAddPubkey(): MsgAddPubkey {
+  return { creator: "", pubkey: "" };
+}
 
 export const MsgAddPubkey = {
-  encode(message: MsgAddPubkey, writer: Writer = Writer.create()): Writer {
+  encode(message: MsgAddPubkey, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -2648,10 +1876,10 @@ export const MsgAddPubkey = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgAddPubkey {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgAddPubkey {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgAddPubkey } as MsgAddPubkey;
+    const message = createBaseMsgAddPubkey();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2670,18 +1898,10 @@ export const MsgAddPubkey = {
   },
 
   fromJSON(object: any): MsgAddPubkey {
-    const message = { ...baseMsgAddPubkey } as MsgAddPubkey;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.pubkey !== undefined && object.pubkey !== null) {
-      message.pubkey = String(object.pubkey);
-    } else {
-      message.pubkey = "";
-    }
-    return message;
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      pubkey: isSet(object.pubkey) ? String(object.pubkey) : "",
+    };
   },
 
   toJSON(message: MsgAddPubkey): unknown {
@@ -2691,29 +1911,20 @@ export const MsgAddPubkey = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgAddPubkey>): MsgAddPubkey {
-    const message = { ...baseMsgAddPubkey } as MsgAddPubkey;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.pubkey !== undefined && object.pubkey !== null) {
-      message.pubkey = object.pubkey;
-    } else {
-      message.pubkey = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgAddPubkey>, I>>(object: I): MsgAddPubkey {
+    const message = createBaseMsgAddPubkey();
+    message.creator = object.creator ?? "";
+    message.pubkey = object.pubkey ?? "";
     return message;
   },
 };
 
-const baseMsgAddPubkeyResponse: object = { code: "", msg: "" };
+function createBaseMsgAddPubkeyResponse(): MsgAddPubkeyResponse {
+  return { code: "", msg: "" };
+}
 
 export const MsgAddPubkeyResponse = {
-  encode(
-    message: MsgAddPubkeyResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgAddPubkeyResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -2723,10 +1934,10 @@ export const MsgAddPubkeyResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgAddPubkeyResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgAddPubkeyResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgAddPubkeyResponse } as MsgAddPubkeyResponse;
+    const message = createBaseMsgAddPubkeyResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2745,18 +1956,7 @@ export const MsgAddPubkeyResponse = {
   },
 
   fromJSON(object: any): MsgAddPubkeyResponse {
-    const message = { ...baseMsgAddPubkeyResponse } as MsgAddPubkeyResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = String(object.code);
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = String(object.msg);
-    } else {
-      message.msg = "";
-    }
-    return message;
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgAddPubkeyResponse): unknown {
@@ -2766,26 +1966,20 @@ export const MsgAddPubkeyResponse = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgAddPubkeyResponse>): MsgAddPubkeyResponse {
-    const message = { ...baseMsgAddPubkeyResponse } as MsgAddPubkeyResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = object.code;
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = object.msg;
-    } else {
-      message.msg = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgAddPubkeyResponse>, I>>(object: I): MsgAddPubkeyResponse {
+    const message = createBaseMsgAddPubkeyResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
     return message;
   },
 };
 
-const baseMsgUpdatePubkeys: object = { creator: "", pubkeys: "" };
+function createBaseMsgUpdatePubkeys(): MsgUpdatePubkeys {
+  return { creator: "", pubkeys: [] };
+}
 
 export const MsgUpdatePubkeys = {
-  encode(message: MsgUpdatePubkeys, writer: Writer = Writer.create()): Writer {
+  encode(message: MsgUpdatePubkeys, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -2795,11 +1989,10 @@ export const MsgUpdatePubkeys = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgUpdatePubkeys {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdatePubkeys {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgUpdatePubkeys } as MsgUpdatePubkeys;
-    message.pubkeys = [];
+    const message = createBaseMsgUpdatePubkeys();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2818,19 +2011,10 @@ export const MsgUpdatePubkeys = {
   },
 
   fromJSON(object: any): MsgUpdatePubkeys {
-    const message = { ...baseMsgUpdatePubkeys } as MsgUpdatePubkeys;
-    message.pubkeys = [];
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.pubkeys !== undefined && object.pubkeys !== null) {
-      for (const e of object.pubkeys) {
-        message.pubkeys.push(String(e));
-      }
-    }
-    return message;
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      pubkeys: Array.isArray(object?.pubkeys) ? object.pubkeys.map((e: any) => String(e)) : [],
+    };
   },
 
   toJSON(message: MsgUpdatePubkeys): unknown {
@@ -2844,30 +2028,20 @@ export const MsgUpdatePubkeys = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgUpdatePubkeys>): MsgUpdatePubkeys {
-    const message = { ...baseMsgUpdatePubkeys } as MsgUpdatePubkeys;
-    message.pubkeys = [];
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.pubkeys !== undefined && object.pubkeys !== null) {
-      for (const e of object.pubkeys) {
-        message.pubkeys.push(e);
-      }
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgUpdatePubkeys>, I>>(object: I): MsgUpdatePubkeys {
+    const message = createBaseMsgUpdatePubkeys();
+    message.creator = object.creator ?? "";
+    message.pubkeys = object.pubkeys?.map((e) => e) || [];
     return message;
   },
 };
 
-const baseMsgUpdatePubkeysResponse: object = { code: "", msg: "" };
+function createBaseMsgUpdatePubkeysResponse(): MsgUpdatePubkeysResponse {
+  return { code: "", msg: "" };
+}
 
 export const MsgUpdatePubkeysResponse = {
-  encode(
-    message: MsgUpdatePubkeysResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgUpdatePubkeysResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -2877,15 +2051,10 @@ export const MsgUpdatePubkeysResponse = {
     return writer;
   },
 
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): MsgUpdatePubkeysResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdatePubkeysResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgUpdatePubkeysResponse,
-    } as MsgUpdatePubkeysResponse;
+    const message = createBaseMsgUpdatePubkeysResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2904,20 +2073,7 @@ export const MsgUpdatePubkeysResponse = {
   },
 
   fromJSON(object: any): MsgUpdatePubkeysResponse {
-    const message = {
-      ...baseMsgUpdatePubkeysResponse,
-    } as MsgUpdatePubkeysResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = String(object.code);
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = String(object.msg);
-    } else {
-      message.msg = "";
-    }
-    return message;
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgUpdatePubkeysResponse): unknown {
@@ -2927,39 +2083,20 @@ export const MsgUpdatePubkeysResponse = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<MsgUpdatePubkeysResponse>
-  ): MsgUpdatePubkeysResponse {
-    const message = {
-      ...baseMsgUpdatePubkeysResponse,
-    } as MsgUpdatePubkeysResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = object.code;
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = object.msg;
-    } else {
-      message.msg = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgUpdatePubkeysResponse>, I>>(object: I): MsgUpdatePubkeysResponse {
+    const message = createBaseMsgUpdatePubkeysResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
     return message;
   },
 };
 
-const baseMsgUpdateTssPubkey: object = {
-  creator: "",
-  tssPubkey: "",
-  ecdsa: "",
-  eddsa: "",
-  reserved: "",
-};
+function createBaseMsgUpdateTssPubkey(): MsgUpdateTssPubkey {
+  return { creator: "", tssPubkey: "", ecdsa: "", eddsa: "", reserved: "" };
+}
 
 export const MsgUpdateTssPubkey = {
-  encode(
-    message: MsgUpdateTssPubkey,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgUpdateTssPubkey, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -2978,10 +2115,10 @@ export const MsgUpdateTssPubkey = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgUpdateTssPubkey {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateTssPubkey {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgUpdateTssPubkey } as MsgUpdateTssPubkey;
+    const message = createBaseMsgUpdateTssPubkey();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -3009,33 +2146,13 @@ export const MsgUpdateTssPubkey = {
   },
 
   fromJSON(object: any): MsgUpdateTssPubkey {
-    const message = { ...baseMsgUpdateTssPubkey } as MsgUpdateTssPubkey;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.tssPubkey !== undefined && object.tssPubkey !== null) {
-      message.tssPubkey = String(object.tssPubkey);
-    } else {
-      message.tssPubkey = "";
-    }
-    if (object.ecdsa !== undefined && object.ecdsa !== null) {
-      message.ecdsa = String(object.ecdsa);
-    } else {
-      message.ecdsa = "";
-    }
-    if (object.eddsa !== undefined && object.eddsa !== null) {
-      message.eddsa = String(object.eddsa);
-    } else {
-      message.eddsa = "";
-    }
-    if (object.reserved !== undefined && object.reserved !== null) {
-      message.reserved = String(object.reserved);
-    } else {
-      message.reserved = "";
-    }
-    return message;
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      tssPubkey: isSet(object.tssPubkey) ? String(object.tssPubkey) : "",
+      ecdsa: isSet(object.ecdsa) ? String(object.ecdsa) : "",
+      eddsa: isSet(object.eddsa) ? String(object.eddsa) : "",
+      reserved: isSet(object.reserved) ? String(object.reserved) : "",
+    };
   },
 
   toJSON(message: MsgUpdateTssPubkey): unknown {
@@ -3048,44 +2165,23 @@ export const MsgUpdateTssPubkey = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgUpdateTssPubkey>): MsgUpdateTssPubkey {
-    const message = { ...baseMsgUpdateTssPubkey } as MsgUpdateTssPubkey;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.tssPubkey !== undefined && object.tssPubkey !== null) {
-      message.tssPubkey = object.tssPubkey;
-    } else {
-      message.tssPubkey = "";
-    }
-    if (object.ecdsa !== undefined && object.ecdsa !== null) {
-      message.ecdsa = object.ecdsa;
-    } else {
-      message.ecdsa = "";
-    }
-    if (object.eddsa !== undefined && object.eddsa !== null) {
-      message.eddsa = object.eddsa;
-    } else {
-      message.eddsa = "";
-    }
-    if (object.reserved !== undefined && object.reserved !== null) {
-      message.reserved = object.reserved;
-    } else {
-      message.reserved = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateTssPubkey>, I>>(object: I): MsgUpdateTssPubkey {
+    const message = createBaseMsgUpdateTssPubkey();
+    message.creator = object.creator ?? "";
+    message.tssPubkey = object.tssPubkey ?? "";
+    message.ecdsa = object.ecdsa ?? "";
+    message.eddsa = object.eddsa ?? "";
+    message.reserved = object.reserved ?? "";
     return message;
   },
 };
 
-const baseMsgUpdateTssPubkeyResponse: object = { code: "", msg: "" };
+function createBaseMsgUpdateTssPubkeyResponse(): MsgUpdateTssPubkeyResponse {
+  return { code: "", msg: "" };
+}
 
 export const MsgUpdateTssPubkeyResponse = {
-  encode(
-    message: MsgUpdateTssPubkeyResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgUpdateTssPubkeyResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -3095,15 +2191,10 @@ export const MsgUpdateTssPubkeyResponse = {
     return writer;
   },
 
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): MsgUpdateTssPubkeyResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateTssPubkeyResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgUpdateTssPubkeyResponse,
-    } as MsgUpdateTssPubkeyResponse;
+    const message = createBaseMsgUpdateTssPubkeyResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -3122,20 +2213,7 @@ export const MsgUpdateTssPubkeyResponse = {
   },
 
   fromJSON(object: any): MsgUpdateTssPubkeyResponse {
-    const message = {
-      ...baseMsgUpdateTssPubkeyResponse,
-    } as MsgUpdateTssPubkeyResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = String(object.code);
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = String(object.msg);
-    } else {
-      message.msg = "";
-    }
-    return message;
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgUpdateTssPubkeyResponse): unknown {
@@ -3145,33 +2223,20 @@ export const MsgUpdateTssPubkeyResponse = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<MsgUpdateTssPubkeyResponse>
-  ): MsgUpdateTssPubkeyResponse {
-    const message = {
-      ...baseMsgUpdateTssPubkeyResponse,
-    } as MsgUpdateTssPubkeyResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = object.code;
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = object.msg;
-    } else {
-      message.msg = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateTssPubkeyResponse>, I>>(object: I): MsgUpdateTssPubkeyResponse {
+    const message = createBaseMsgUpdateTssPubkeyResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
     return message;
   },
 };
 
-const baseMsgRemoveWhitelisted: object = { creator: "", address: "" };
+function createBaseMsgRemoveWhitelisted(): MsgRemoveWhitelisted {
+  return { creator: "", address: "" };
+}
 
 export const MsgRemoveWhitelisted = {
-  encode(
-    message: MsgRemoveWhitelisted,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgRemoveWhitelisted, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -3181,10 +2246,10 @@ export const MsgRemoveWhitelisted = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgRemoveWhitelisted {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRemoveWhitelisted {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgRemoveWhitelisted } as MsgRemoveWhitelisted;
+    const message = createBaseMsgRemoveWhitelisted();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -3203,18 +2268,10 @@ export const MsgRemoveWhitelisted = {
   },
 
   fromJSON(object: any): MsgRemoveWhitelisted {
-    const message = { ...baseMsgRemoveWhitelisted } as MsgRemoveWhitelisted;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.address !== undefined && object.address !== null) {
-      message.address = String(object.address);
-    } else {
-      message.address = "";
-    }
-    return message;
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      address: isSet(object.address) ? String(object.address) : "",
+    };
   },
 
   toJSON(message: MsgRemoveWhitelisted): unknown {
@@ -3224,29 +2281,20 @@ export const MsgRemoveWhitelisted = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgRemoveWhitelisted>): MsgRemoveWhitelisted {
-    const message = { ...baseMsgRemoveWhitelisted } as MsgRemoveWhitelisted;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.address !== undefined && object.address !== null) {
-      message.address = object.address;
-    } else {
-      message.address = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgRemoveWhitelisted>, I>>(object: I): MsgRemoveWhitelisted {
+    const message = createBaseMsgRemoveWhitelisted();
+    message.creator = object.creator ?? "";
+    message.address = object.address ?? "";
     return message;
   },
 };
 
-const baseMsgRemoveWhitelistedResponse: object = { code: "", msg: "" };
+function createBaseMsgRemoveWhitelistedResponse(): MsgRemoveWhitelistedResponse {
+  return { code: "", msg: "" };
+}
 
 export const MsgRemoveWhitelistedResponse = {
-  encode(
-    message: MsgRemoveWhitelistedResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgRemoveWhitelistedResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -3256,15 +2304,10 @@ export const MsgRemoveWhitelistedResponse = {
     return writer;
   },
 
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): MsgRemoveWhitelistedResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRemoveWhitelistedResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgRemoveWhitelistedResponse,
-    } as MsgRemoveWhitelistedResponse;
+    const message = createBaseMsgRemoveWhitelistedResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -3283,20 +2326,7 @@ export const MsgRemoveWhitelistedResponse = {
   },
 
   fromJSON(object: any): MsgRemoveWhitelistedResponse {
-    const message = {
-      ...baseMsgRemoveWhitelistedResponse,
-    } as MsgRemoveWhitelistedResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = String(object.code);
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = String(object.msg);
-    } else {
-      message.msg = "";
-    }
-    return message;
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgRemoveWhitelistedResponse): unknown {
@@ -3306,40 +2336,30 @@ export const MsgRemoveWhitelistedResponse = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<MsgRemoveWhitelistedResponse>
-  ): MsgRemoveWhitelistedResponse {
-    const message = {
-      ...baseMsgRemoveWhitelistedResponse,
-    } as MsgRemoveWhitelistedResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = object.code;
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = object.msg;
-    } else {
-      message.msg = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgRemoveWhitelistedResponse>, I>>(object: I): MsgRemoveWhitelistedResponse {
+    const message = createBaseMsgRemoveWhitelistedResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
     return message;
   },
 };
 
-const baseMsgClearTssInfo: object = { creator: "" };
+function createBaseMsgClearTssInfo(): MsgClearTssInfo {
+  return { creator: "" };
+}
 
 export const MsgClearTssInfo = {
-  encode(message: MsgClearTssInfo, writer: Writer = Writer.create()): Writer {
+  encode(message: MsgClearTssInfo, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgClearTssInfo {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgClearTssInfo {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgClearTssInfo } as MsgClearTssInfo;
+    const message = createBaseMsgClearTssInfo();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -3355,13 +2375,7 @@ export const MsgClearTssInfo = {
   },
 
   fromJSON(object: any): MsgClearTssInfo {
-    const message = { ...baseMsgClearTssInfo } as MsgClearTssInfo;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    return message;
+    return { creator: isSet(object.creator) ? String(object.creator) : "" };
   },
 
   toJSON(message: MsgClearTssInfo): unknown {
@@ -3370,24 +2384,19 @@ export const MsgClearTssInfo = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgClearTssInfo>): MsgClearTssInfo {
-    const message = { ...baseMsgClearTssInfo } as MsgClearTssInfo;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgClearTssInfo>, I>>(object: I): MsgClearTssInfo {
+    const message = createBaseMsgClearTssInfo();
+    message.creator = object.creator ?? "";
     return message;
   },
 };
 
-const baseMsgClearTssInfoResponse: object = { code: "", msg: "" };
+function createBaseMsgClearTssInfoResponse(): MsgClearTssInfoResponse {
+  return { code: "", msg: "" };
+}
 
 export const MsgClearTssInfoResponse = {
-  encode(
-    message: MsgClearTssInfoResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgClearTssInfoResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -3397,12 +2406,10 @@ export const MsgClearTssInfoResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgClearTssInfoResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgClearTssInfoResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgClearTssInfoResponse,
-    } as MsgClearTssInfoResponse;
+    const message = createBaseMsgClearTssInfoResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -3421,20 +2428,7 @@ export const MsgClearTssInfoResponse = {
   },
 
   fromJSON(object: any): MsgClearTssInfoResponse {
-    const message = {
-      ...baseMsgClearTssInfoResponse,
-    } as MsgClearTssInfoResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = String(object.code);
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = String(object.msg);
-    } else {
-      message.msg = "";
-    }
-    return message;
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgClearTssInfoResponse): unknown {
@@ -3444,35 +2438,20 @@ export const MsgClearTssInfoResponse = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<MsgClearTssInfoResponse>
-  ): MsgClearTssInfoResponse {
-    const message = {
-      ...baseMsgClearTssInfoResponse,
-    } as MsgClearTssInfoResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = object.code;
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = object.msg;
-    } else {
-      message.msg = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgClearTssInfoResponse>, I>>(object: I): MsgClearTssInfoResponse {
+    const message = createBaseMsgClearTssInfoResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
     return message;
   },
 };
 
-const baseMsgAddChain: object = {
-  creator: "",
-  name: "",
-  symbol: "",
-  tokens: "",
-};
+function createBaseMsgAddChain(): MsgAddChain {
+  return { creator: "", name: "", symbol: "", tokens: [] };
+}
 
 export const MsgAddChain = {
-  encode(message: MsgAddChain, writer: Writer = Writer.create()): Writer {
+  encode(message: MsgAddChain, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -3488,11 +2467,10 @@ export const MsgAddChain = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgAddChain {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgAddChain {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgAddChain } as MsgAddChain;
-    message.tokens = [];
+    const message = createBaseMsgAddChain();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -3517,29 +2495,12 @@ export const MsgAddChain = {
   },
 
   fromJSON(object: any): MsgAddChain {
-    const message = { ...baseMsgAddChain } as MsgAddChain;
-    message.tokens = [];
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.name !== undefined && object.name !== null) {
-      message.name = String(object.name);
-    } else {
-      message.name = "";
-    }
-    if (object.symbol !== undefined && object.symbol !== null) {
-      message.symbol = String(object.symbol);
-    } else {
-      message.symbol = "";
-    }
-    if (object.tokens !== undefined && object.tokens !== null) {
-      for (const e of object.tokens) {
-        message.tokens.push(String(e));
-      }
-    }
-    return message;
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      name: isSet(object.name) ? String(object.name) : "",
+      symbol: isSet(object.symbol) ? String(object.symbol) : "",
+      tokens: Array.isArray(object?.tokens) ? object.tokens.map((e: any) => String(e)) : [],
+    };
   },
 
   toJSON(message: MsgAddChain): unknown {
@@ -3555,40 +2516,22 @@ export const MsgAddChain = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgAddChain>): MsgAddChain {
-    const message = { ...baseMsgAddChain } as MsgAddChain;
-    message.tokens = [];
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.name !== undefined && object.name !== null) {
-      message.name = object.name;
-    } else {
-      message.name = "";
-    }
-    if (object.symbol !== undefined && object.symbol !== null) {
-      message.symbol = object.symbol;
-    } else {
-      message.symbol = "";
-    }
-    if (object.tokens !== undefined && object.tokens !== null) {
-      for (const e of object.tokens) {
-        message.tokens.push(e);
-      }
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgAddChain>, I>>(object: I): MsgAddChain {
+    const message = createBaseMsgAddChain();
+    message.creator = object.creator ?? "";
+    message.name = object.name ?? "";
+    message.symbol = object.symbol ?? "";
+    message.tokens = object.tokens?.map((e) => e) || [];
     return message;
   },
 };
 
-const baseMsgAddChainResponse: object = { code: "", msg: "" };
+function createBaseMsgAddChainResponse(): MsgAddChainResponse {
+  return { code: "", msg: "" };
+}
 
 export const MsgAddChainResponse = {
-  encode(
-    message: MsgAddChainResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgAddChainResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -3598,10 +2541,10 @@ export const MsgAddChainResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgAddChainResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgAddChainResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgAddChainResponse } as MsgAddChainResponse;
+    const message = createBaseMsgAddChainResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -3620,18 +2563,7 @@ export const MsgAddChainResponse = {
   },
 
   fromJSON(object: any): MsgAddChainResponse {
-    const message = { ...baseMsgAddChainResponse } as MsgAddChainResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = String(object.code);
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = String(object.msg);
-    } else {
-      message.msg = "";
-    }
-    return message;
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgAddChainResponse): unknown {
@@ -3641,26 +2573,20 @@ export const MsgAddChainResponse = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgAddChainResponse>): MsgAddChainResponse {
-    const message = { ...baseMsgAddChainResponse } as MsgAddChainResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = object.code;
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = object.msg;
-    } else {
-      message.msg = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgAddChainResponse>, I>>(object: I): MsgAddChainResponse {
+    const message = createBaseMsgAddChainResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
     return message;
   },
 };
 
-const baseMsgUpdateTssHash: object = { creator: "", txId: 0, tssPullHash: "" };
+function createBaseMsgUpdateTssHash(): MsgUpdateTssHash {
+  return { creator: "", txId: 0, tssPullHash: "" };
+}
 
 export const MsgUpdateTssHash = {
-  encode(message: MsgUpdateTssHash, writer: Writer = Writer.create()): Writer {
+  encode(message: MsgUpdateTssHash, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -3673,10 +2599,10 @@ export const MsgUpdateTssHash = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgUpdateTssHash {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateTssHash {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgUpdateTssHash } as MsgUpdateTssHash;
+    const message = createBaseMsgUpdateTssHash();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -3698,62 +2624,36 @@ export const MsgUpdateTssHash = {
   },
 
   fromJSON(object: any): MsgUpdateTssHash {
-    const message = { ...baseMsgUpdateTssHash } as MsgUpdateTssHash;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.txId !== undefined && object.txId !== null) {
-      message.txId = Number(object.txId);
-    } else {
-      message.txId = 0;
-    }
-    if (object.tssPullHash !== undefined && object.tssPullHash !== null) {
-      message.tssPullHash = String(object.tssPullHash);
-    } else {
-      message.tssPullHash = "";
-    }
-    return message;
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      txId: isSet(object.txId) ? Number(object.txId) : 0,
+      tssPullHash: isSet(object.tssPullHash) ? String(object.tssPullHash) : "",
+    };
   },
 
   toJSON(message: MsgUpdateTssHash): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.txId !== undefined && (obj.txId = message.txId);
-    message.tssPullHash !== undefined &&
-      (obj.tssPullHash = message.tssPullHash);
+    message.txId !== undefined && (obj.txId = Math.round(message.txId));
+    message.tssPullHash !== undefined && (obj.tssPullHash = message.tssPullHash);
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgUpdateTssHash>): MsgUpdateTssHash {
-    const message = { ...baseMsgUpdateTssHash } as MsgUpdateTssHash;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.txId !== undefined && object.txId !== null) {
-      message.txId = object.txId;
-    } else {
-      message.txId = 0;
-    }
-    if (object.tssPullHash !== undefined && object.tssPullHash !== null) {
-      message.tssPullHash = object.tssPullHash;
-    } else {
-      message.tssPullHash = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateTssHash>, I>>(object: I): MsgUpdateTssHash {
+    const message = createBaseMsgUpdateTssHash();
+    message.creator = object.creator ?? "";
+    message.txId = object.txId ?? 0;
+    message.tssPullHash = object.tssPullHash ?? "";
     return message;
   },
 };
 
-const baseMsgUpdateTssHashResponse: object = { code: "", msg: "" };
+function createBaseMsgUpdateTssHashResponse(): MsgUpdateTssHashResponse {
+  return { code: "", msg: "" };
+}
 
 export const MsgUpdateTssHashResponse = {
-  encode(
-    message: MsgUpdateTssHashResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgUpdateTssHashResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -3763,15 +2663,10 @@ export const MsgUpdateTssHashResponse = {
     return writer;
   },
 
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): MsgUpdateTssHashResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateTssHashResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgUpdateTssHashResponse,
-    } as MsgUpdateTssHashResponse;
+    const message = createBaseMsgUpdateTssHashResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -3790,20 +2685,7 @@ export const MsgUpdateTssHashResponse = {
   },
 
   fromJSON(object: any): MsgUpdateTssHashResponse {
-    const message = {
-      ...baseMsgUpdateTssHashResponse,
-    } as MsgUpdateTssHashResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = String(object.code);
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = String(object.msg);
-    } else {
-      message.msg = "";
-    }
-    return message;
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgUpdateTssHashResponse): unknown {
@@ -3813,37 +2695,20 @@ export const MsgUpdateTssHashResponse = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<MsgUpdateTssHashResponse>
-  ): MsgUpdateTssHashResponse {
-    const message = {
-      ...baseMsgUpdateTssHashResponse,
-    } as MsgUpdateTssHashResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = object.code;
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = object.msg;
-    } else {
-      message.msg = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateTssHashResponse>, I>>(object: I): MsgUpdateTssHashResponse {
+    const message = createBaseMsgUpdateTssHashResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
     return message;
   },
 };
 
-const baseMsgUpdateChainStatus: object = {
-  creator: "",
-  chainSymbol: "",
-  disabled: false,
-};
+function createBaseMsgUpdateChainStatus(): MsgUpdateChainStatus {
+  return { creator: "", chainSymbol: "", disabled: false };
+}
 
 export const MsgUpdateChainStatus = {
-  encode(
-    message: MsgUpdateChainStatus,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgUpdateChainStatus, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -3856,10 +2721,10 @@ export const MsgUpdateChainStatus = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgUpdateChainStatus {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateChainStatus {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgUpdateChainStatus } as MsgUpdateChainStatus;
+    const message = createBaseMsgUpdateChainStatus();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -3881,62 +2746,36 @@ export const MsgUpdateChainStatus = {
   },
 
   fromJSON(object: any): MsgUpdateChainStatus {
-    const message = { ...baseMsgUpdateChainStatus } as MsgUpdateChainStatus;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.chainSymbol !== undefined && object.chainSymbol !== null) {
-      message.chainSymbol = String(object.chainSymbol);
-    } else {
-      message.chainSymbol = "";
-    }
-    if (object.disabled !== undefined && object.disabled !== null) {
-      message.disabled = Boolean(object.disabled);
-    } else {
-      message.disabled = false;
-    }
-    return message;
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      chainSymbol: isSet(object.chainSymbol) ? String(object.chainSymbol) : "",
+      disabled: isSet(object.disabled) ? Boolean(object.disabled) : false,
+    };
   },
 
   toJSON(message: MsgUpdateChainStatus): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.chainSymbol !== undefined &&
-      (obj.chainSymbol = message.chainSymbol);
+    message.chainSymbol !== undefined && (obj.chainSymbol = message.chainSymbol);
     message.disabled !== undefined && (obj.disabled = message.disabled);
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgUpdateChainStatus>): MsgUpdateChainStatus {
-    const message = { ...baseMsgUpdateChainStatus } as MsgUpdateChainStatus;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.chainSymbol !== undefined && object.chainSymbol !== null) {
-      message.chainSymbol = object.chainSymbol;
-    } else {
-      message.chainSymbol = "";
-    }
-    if (object.disabled !== undefined && object.disabled !== null) {
-      message.disabled = object.disabled;
-    } else {
-      message.disabled = false;
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateChainStatus>, I>>(object: I): MsgUpdateChainStatus {
+    const message = createBaseMsgUpdateChainStatus();
+    message.creator = object.creator ?? "";
+    message.chainSymbol = object.chainSymbol ?? "";
+    message.disabled = object.disabled ?? false;
     return message;
   },
 };
 
-const baseMsgUpdateChainStatusResponse: object = { code: "", msg: "" };
+function createBaseMsgUpdateChainStatusResponse(): MsgUpdateChainStatusResponse {
+  return { code: "", msg: "" };
+}
 
 export const MsgUpdateChainStatusResponse = {
-  encode(
-    message: MsgUpdateChainStatusResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgUpdateChainStatusResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -3946,15 +2785,10 @@ export const MsgUpdateChainStatusResponse = {
     return writer;
   },
 
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): MsgUpdateChainStatusResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateChainStatusResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgUpdateChainStatusResponse,
-    } as MsgUpdateChainStatusResponse;
+    const message = createBaseMsgUpdateChainStatusResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -3973,20 +2807,7 @@ export const MsgUpdateChainStatusResponse = {
   },
 
   fromJSON(object: any): MsgUpdateChainStatusResponse {
-    const message = {
-      ...baseMsgUpdateChainStatusResponse,
-    } as MsgUpdateChainStatusResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = String(object.code);
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = String(object.msg);
-    } else {
-      message.msg = "";
-    }
-    return message;
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgUpdateChainStatusResponse): unknown {
@@ -3996,34 +2817,20 @@ export const MsgUpdateChainStatusResponse = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<MsgUpdateChainStatusResponse>
-  ): MsgUpdateChainStatusResponse {
-    const message = {
-      ...baseMsgUpdateChainStatusResponse,
-    } as MsgUpdateChainStatusResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = object.code;
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = object.msg;
-    } else {
-      message.msg = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateChainStatusResponse>, I>>(object: I): MsgUpdateChainStatusResponse {
+    const message = createBaseMsgUpdateChainStatusResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
     return message;
   },
 };
 
-const baseMsgAddToken: object = {
-  creator: "",
-  chainSymbol: "",
-  tokenSymbol: "",
-};
+function createBaseMsgAddToken(): MsgAddToken {
+  return { creator: "", chainSymbol: "", tokenSymbol: "" };
+}
 
 export const MsgAddToken = {
-  encode(message: MsgAddToken, writer: Writer = Writer.create()): Writer {
+  encode(message: MsgAddToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -4036,10 +2843,10 @@ export const MsgAddToken = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgAddToken {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgAddToken {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgAddToken } as MsgAddToken;
+    const message = createBaseMsgAddToken();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -4061,63 +2868,36 @@ export const MsgAddToken = {
   },
 
   fromJSON(object: any): MsgAddToken {
-    const message = { ...baseMsgAddToken } as MsgAddToken;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.chainSymbol !== undefined && object.chainSymbol !== null) {
-      message.chainSymbol = String(object.chainSymbol);
-    } else {
-      message.chainSymbol = "";
-    }
-    if (object.tokenSymbol !== undefined && object.tokenSymbol !== null) {
-      message.tokenSymbol = String(object.tokenSymbol);
-    } else {
-      message.tokenSymbol = "";
-    }
-    return message;
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      chainSymbol: isSet(object.chainSymbol) ? String(object.chainSymbol) : "",
+      tokenSymbol: isSet(object.tokenSymbol) ? String(object.tokenSymbol) : "",
+    };
   },
 
   toJSON(message: MsgAddToken): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.chainSymbol !== undefined &&
-      (obj.chainSymbol = message.chainSymbol);
-    message.tokenSymbol !== undefined &&
-      (obj.tokenSymbol = message.tokenSymbol);
+    message.chainSymbol !== undefined && (obj.chainSymbol = message.chainSymbol);
+    message.tokenSymbol !== undefined && (obj.tokenSymbol = message.tokenSymbol);
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgAddToken>): MsgAddToken {
-    const message = { ...baseMsgAddToken } as MsgAddToken;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.chainSymbol !== undefined && object.chainSymbol !== null) {
-      message.chainSymbol = object.chainSymbol;
-    } else {
-      message.chainSymbol = "";
-    }
-    if (object.tokenSymbol !== undefined && object.tokenSymbol !== null) {
-      message.tokenSymbol = object.tokenSymbol;
-    } else {
-      message.tokenSymbol = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgAddToken>, I>>(object: I): MsgAddToken {
+    const message = createBaseMsgAddToken();
+    message.creator = object.creator ?? "";
+    message.chainSymbol = object.chainSymbol ?? "";
+    message.tokenSymbol = object.tokenSymbol ?? "";
     return message;
   },
 };
 
-const baseMsgAddTokenResponse: object = { code: "", msg: "" };
+function createBaseMsgAddTokenResponse(): MsgAddTokenResponse {
+  return { code: "", msg: "" };
+}
 
 export const MsgAddTokenResponse = {
-  encode(
-    message: MsgAddTokenResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgAddTokenResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -4127,10 +2907,10 @@ export const MsgAddTokenResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgAddTokenResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgAddTokenResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgAddTokenResponse } as MsgAddTokenResponse;
+    const message = createBaseMsgAddTokenResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -4149,18 +2929,7 @@ export const MsgAddTokenResponse = {
   },
 
   fromJSON(object: any): MsgAddTokenResponse {
-    const message = { ...baseMsgAddTokenResponse } as MsgAddTokenResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = String(object.code);
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = String(object.msg);
-    } else {
-      message.msg = "";
-    }
-    return message;
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgAddTokenResponse): unknown {
@@ -4170,29 +2939,20 @@ export const MsgAddTokenResponse = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgAddTokenResponse>): MsgAddTokenResponse {
-    const message = { ...baseMsgAddTokenResponse } as MsgAddTokenResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = object.code;
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = object.msg;
-    } else {
-      message.msg = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgAddTokenResponse>, I>>(object: I): MsgAddTokenResponse {
+    const message = createBaseMsgAddTokenResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
     return message;
   },
 };
 
-const baseMsgUpdateTssStatus: object = { creator: "", status: "" };
+function createBaseMsgUpdateTssStatus(): MsgUpdateTssStatus {
+  return { creator: "", status: "" };
+}
 
 export const MsgUpdateTssStatus = {
-  encode(
-    message: MsgUpdateTssStatus,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgUpdateTssStatus, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -4202,10 +2962,10 @@ export const MsgUpdateTssStatus = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgUpdateTssStatus {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateTssStatus {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgUpdateTssStatus } as MsgUpdateTssStatus;
+    const message = createBaseMsgUpdateTssStatus();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -4224,18 +2984,10 @@ export const MsgUpdateTssStatus = {
   },
 
   fromJSON(object: any): MsgUpdateTssStatus {
-    const message = { ...baseMsgUpdateTssStatus } as MsgUpdateTssStatus;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = String(object.status);
-    } else {
-      message.status = "";
-    }
-    return message;
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      status: isSet(object.status) ? String(object.status) : "",
+    };
   },
 
   toJSON(message: MsgUpdateTssStatus): unknown {
@@ -4245,44 +2997,42 @@ export const MsgUpdateTssStatus = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgUpdateTssStatus>): MsgUpdateTssStatus {
-    const message = { ...baseMsgUpdateTssStatus } as MsgUpdateTssStatus;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = object.status;
-    } else {
-      message.status = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateTssStatus>, I>>(object: I): MsgUpdateTssStatus {
+    const message = createBaseMsgUpdateTssStatus();
+    message.creator = object.creator ?? "";
+    message.status = object.status ?? "";
     return message;
   },
 };
 
-const baseMsgUpdateTssStatusResponse: object = {};
+function createBaseMsgUpdateTssStatusResponse(): MsgUpdateTssStatusResponse {
+  return { code: "", msg: "" };
+}
 
 export const MsgUpdateTssStatusResponse = {
-  encode(
-    _: MsgUpdateTssStatusResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgUpdateTssStatusResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.code !== "") {
+      writer.uint32(10).string(message.code);
+    }
+    if (message.msg !== "") {
+      writer.uint32(18).string(message.msg);
+    }
     return writer;
   },
 
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): MsgUpdateTssStatusResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateTssStatusResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgUpdateTssStatusResponse,
-    } as MsgUpdateTssStatusResponse;
+    const message = createBaseMsgUpdateTssStatusResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1:
+          message.code = reader.string();
+          break;
+        case 2:
+          message.msg = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -4291,32 +3041,31 @@ export const MsgUpdateTssStatusResponse = {
     return message;
   },
 
-  fromJSON(_: any): MsgUpdateTssStatusResponse {
-    const message = {
-      ...baseMsgUpdateTssStatusResponse,
-    } as MsgUpdateTssStatusResponse;
-    return message;
+  fromJSON(object: any): MsgUpdateTssStatusResponse {
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
-  toJSON(_: MsgUpdateTssStatusResponse): unknown {
+  toJSON(message: MsgUpdateTssStatusResponse): unknown {
     const obj: any = {};
+    message.code !== undefined && (obj.code = message.code);
+    message.msg !== undefined && (obj.msg = message.msg);
     return obj;
   },
 
-  fromPartial(
-    _: DeepPartial<MsgUpdateTssStatusResponse>
-  ): MsgUpdateTssStatusResponse {
-    const message = {
-      ...baseMsgUpdateTssStatusResponse,
-    } as MsgUpdateTssStatusResponse;
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateTssStatusResponse>, I>>(object: I): MsgUpdateTssStatusResponse {
+    const message = createBaseMsgUpdateTssStatusResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
     return message;
   },
 };
 
-const baseMsgSetTxHash: object = { creator: "", txId: 0, txHash: "" };
+function createBaseMsgSetTxHash(): MsgSetTxHash {
+  return { creator: "", txId: 0, txHash: "" };
+}
 
 export const MsgSetTxHash = {
-  encode(message: MsgSetTxHash, writer: Writer = Writer.create()): Writer {
+  encode(message: MsgSetTxHash, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -4329,10 +3078,10 @@ export const MsgSetTxHash = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgSetTxHash {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetTxHash {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgSetTxHash } as MsgSetTxHash;
+    const message = createBaseMsgSetTxHash();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -4354,61 +3103,36 @@ export const MsgSetTxHash = {
   },
 
   fromJSON(object: any): MsgSetTxHash {
-    const message = { ...baseMsgSetTxHash } as MsgSetTxHash;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.txId !== undefined && object.txId !== null) {
-      message.txId = Number(object.txId);
-    } else {
-      message.txId = 0;
-    }
-    if (object.txHash !== undefined && object.txHash !== null) {
-      message.txHash = String(object.txHash);
-    } else {
-      message.txHash = "";
-    }
-    return message;
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      txId: isSet(object.txId) ? Number(object.txId) : 0,
+      txHash: isSet(object.txHash) ? String(object.txHash) : "",
+    };
   },
 
   toJSON(message: MsgSetTxHash): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.txId !== undefined && (obj.txId = message.txId);
+    message.txId !== undefined && (obj.txId = Math.round(message.txId));
     message.txHash !== undefined && (obj.txHash = message.txHash);
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgSetTxHash>): MsgSetTxHash {
-    const message = { ...baseMsgSetTxHash } as MsgSetTxHash;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.txId !== undefined && object.txId !== null) {
-      message.txId = object.txId;
-    } else {
-      message.txId = 0;
-    }
-    if (object.txHash !== undefined && object.txHash !== null) {
-      message.txHash = object.txHash;
-    } else {
-      message.txHash = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgSetTxHash>, I>>(object: I): MsgSetTxHash {
+    const message = createBaseMsgSetTxHash();
+    message.creator = object.creator ?? "";
+    message.txId = object.txId ?? 0;
+    message.txHash = object.txHash ?? "";
     return message;
   },
 };
 
-const baseMsgSetTxHashResponse: object = { code: "", msg: "" };
+function createBaseMsgSetTxHashResponse(): MsgSetTxHashResponse {
+  return { code: "", msg: "" };
+}
 
 export const MsgSetTxHashResponse = {
-  encode(
-    message: MsgSetTxHashResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgSetTxHashResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -4418,10 +3142,10 @@ export const MsgSetTxHashResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgSetTxHashResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetTxHashResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgSetTxHashResponse } as MsgSetTxHashResponse;
+    const message = createBaseMsgSetTxHashResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -4440,18 +3164,7 @@ export const MsgSetTxHashResponse = {
   },
 
   fromJSON(object: any): MsgSetTxHashResponse {
-    const message = { ...baseMsgSetTxHashResponse } as MsgSetTxHashResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = String(object.code);
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = String(object.msg);
-    } else {
-      message.msg = "";
-    }
-    return message;
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgSetTxHashResponse): unknown {
@@ -4461,31 +3174,20 @@ export const MsgSetTxHashResponse = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgSetTxHashResponse>): MsgSetTxHashResponse {
-    const message = { ...baseMsgSetTxHashResponse } as MsgSetTxHashResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = object.code;
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = object.msg;
-    } else {
-      message.msg = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgSetTxHashResponse>, I>>(object: I): MsgSetTxHashResponse {
+    const message = createBaseMsgSetTxHashResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
     return message;
   },
 };
 
-const baseMsgSetTxProcess: object = {
-  creator: "",
-  txId: 0,
-  timestamp: "",
-  msgId: "",
-};
+function createBaseMsgSetTxProcess(): MsgSetTxProcess {
+  return { creator: "", txId: 0, timestamp: "", msgId: "" };
+}
 
 export const MsgSetTxProcess = {
-  encode(message: MsgSetTxProcess, writer: Writer = Writer.create()): Writer {
+  encode(message: MsgSetTxProcess, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -4501,10 +3203,10 @@ export const MsgSetTxProcess = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgSetTxProcess {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetTxProcess {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgSetTxProcess } as MsgSetTxProcess;
+    const message = createBaseMsgSetTxProcess();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -4529,78 +3231,46 @@ export const MsgSetTxProcess = {
   },
 
   fromJSON(object: any): MsgSetTxProcess {
-    const message = { ...baseMsgSetTxProcess } as MsgSetTxProcess;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.txId !== undefined && object.txId !== null) {
-      message.txId = Number(object.txId);
-    } else {
-      message.txId = 0;
-    }
-    if (object.timestamp !== undefined && object.timestamp !== null) {
-      message.timestamp = String(object.timestamp);
-    } else {
-      message.timestamp = "";
-    }
-    if (object.msgId !== undefined && object.msgId !== null) {
-      message.msgId = String(object.msgId);
-    } else {
-      message.msgId = "";
-    }
-    return message;
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      txId: isSet(object.txId) ? Number(object.txId) : 0,
+      timestamp: isSet(object.timestamp) ? String(object.timestamp) : "",
+      msgId: isSet(object.msgId) ? String(object.msgId) : "",
+    };
   },
 
   toJSON(message: MsgSetTxProcess): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.txId !== undefined && (obj.txId = message.txId);
+    message.txId !== undefined && (obj.txId = Math.round(message.txId));
     message.timestamp !== undefined && (obj.timestamp = message.timestamp);
     message.msgId !== undefined && (obj.msgId = message.msgId);
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgSetTxProcess>): MsgSetTxProcess {
-    const message = { ...baseMsgSetTxProcess } as MsgSetTxProcess;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.txId !== undefined && object.txId !== null) {
-      message.txId = object.txId;
-    } else {
-      message.txId = 0;
-    }
-    if (object.timestamp !== undefined && object.timestamp !== null) {
-      message.timestamp = object.timestamp;
-    } else {
-      message.timestamp = "";
-    }
-    if (object.msgId !== undefined && object.msgId !== null) {
-      message.msgId = object.msgId;
-    } else {
-      message.msgId = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgSetTxProcess>, I>>(object: I): MsgSetTxProcess {
+    const message = createBaseMsgSetTxProcess();
+    message.creator = object.creator ?? "";
+    message.txId = object.txId ?? 0;
+    message.timestamp = object.timestamp ?? "";
+    message.msgId = object.msgId ?? "";
     return message;
   },
 };
 
-const baseMsgSetTxProcessResponse: object = {};
+function createBaseMsgSetTxProcessResponse(): MsgSetTxProcessResponse {
+  return {};
+}
 
 export const MsgSetTxProcessResponse = {
-  encode(_: MsgSetTxProcessResponse, writer: Writer = Writer.create()): Writer {
+  encode(_: MsgSetTxProcessResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgSetTxProcessResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetTxProcessResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgSetTxProcessResponse,
-    } as MsgSetTxProcessResponse;
+    const message = createBaseMsgSetTxProcessResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -4613,10 +3283,7 @@ export const MsgSetTxProcessResponse = {
   },
 
   fromJSON(_: any): MsgSetTxProcessResponse {
-    const message = {
-      ...baseMsgSetTxProcessResponse,
-    } as MsgSetTxProcessResponse;
-    return message;
+    return {};
   },
 
   toJSON(_: MsgSetTxProcessResponse): unknown {
@@ -4624,29 +3291,18 @@ export const MsgSetTxProcessResponse = {
     return obj;
   },
 
-  fromPartial(
-    _: DeepPartial<MsgSetTxProcessResponse>
-  ): MsgSetTxProcessResponse {
-    const message = {
-      ...baseMsgSetTxProcessResponse,
-    } as MsgSetTxProcessResponse;
+  fromPartial<I extends Exact<DeepPartial<MsgSetTxProcessResponse>, I>>(_: I): MsgSetTxProcessResponse {
+    const message = createBaseMsgSetTxProcessResponse();
     return message;
   },
 };
 
-const baseMsgFinalizeTransaction: object = {
-  creator: "",
-  txId: 0,
-  txHash: "",
-  success: "",
-  signedKey: "",
-};
+function createBaseMsgFinalizeTransaction(): MsgFinalizeTransaction {
+  return { creator: "", txId: 0, txHash: "", success: "", signedKey: "" };
+}
 
 export const MsgFinalizeTransaction = {
-  encode(
-    message: MsgFinalizeTransaction,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgFinalizeTransaction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -4665,10 +3321,10 @@ export const MsgFinalizeTransaction = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgFinalizeTransaction {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgFinalizeTransaction {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgFinalizeTransaction } as MsgFinalizeTransaction;
+    const message = createBaseMsgFinalizeTransaction();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -4696,85 +3352,42 @@ export const MsgFinalizeTransaction = {
   },
 
   fromJSON(object: any): MsgFinalizeTransaction {
-    const message = { ...baseMsgFinalizeTransaction } as MsgFinalizeTransaction;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.txId !== undefined && object.txId !== null) {
-      message.txId = Number(object.txId);
-    } else {
-      message.txId = 0;
-    }
-    if (object.txHash !== undefined && object.txHash !== null) {
-      message.txHash = String(object.txHash);
-    } else {
-      message.txHash = "";
-    }
-    if (object.success !== undefined && object.success !== null) {
-      message.success = String(object.success);
-    } else {
-      message.success = "";
-    }
-    if (object.signedKey !== undefined && object.signedKey !== null) {
-      message.signedKey = String(object.signedKey);
-    } else {
-      message.signedKey = "";
-    }
-    return message;
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      txId: isSet(object.txId) ? Number(object.txId) : 0,
+      txHash: isSet(object.txHash) ? String(object.txHash) : "",
+      success: isSet(object.success) ? String(object.success) : "",
+      signedKey: isSet(object.signedKey) ? String(object.signedKey) : "",
+    };
   },
 
   toJSON(message: MsgFinalizeTransaction): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.txId !== undefined && (obj.txId = message.txId);
+    message.txId !== undefined && (obj.txId = Math.round(message.txId));
     message.txHash !== undefined && (obj.txHash = message.txHash);
     message.success !== undefined && (obj.success = message.success);
     message.signedKey !== undefined && (obj.signedKey = message.signedKey);
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<MsgFinalizeTransaction>
-  ): MsgFinalizeTransaction {
-    const message = { ...baseMsgFinalizeTransaction } as MsgFinalizeTransaction;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.txId !== undefined && object.txId !== null) {
-      message.txId = object.txId;
-    } else {
-      message.txId = 0;
-    }
-    if (object.txHash !== undefined && object.txHash !== null) {
-      message.txHash = object.txHash;
-    } else {
-      message.txHash = "";
-    }
-    if (object.success !== undefined && object.success !== null) {
-      message.success = object.success;
-    } else {
-      message.success = "";
-    }
-    if (object.signedKey !== undefined && object.signedKey !== null) {
-      message.signedKey = object.signedKey;
-    } else {
-      message.signedKey = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgFinalizeTransaction>, I>>(object: I): MsgFinalizeTransaction {
+    const message = createBaseMsgFinalizeTransaction();
+    message.creator = object.creator ?? "";
+    message.txId = object.txId ?? 0;
+    message.txHash = object.txHash ?? "";
+    message.success = object.success ?? "";
+    message.signedKey = object.signedKey ?? "";
     return message;
   },
 };
 
-const baseMsgFinalizeTransactionResponse: object = { code: "", msg: "" };
+function createBaseMsgFinalizeTransactionResponse(): MsgFinalizeTransactionResponse {
+  return { code: "", msg: "" };
+}
 
 export const MsgFinalizeTransactionResponse = {
-  encode(
-    message: MsgFinalizeTransactionResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgFinalizeTransactionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -4784,15 +3397,10 @@ export const MsgFinalizeTransactionResponse = {
     return writer;
   },
 
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): MsgFinalizeTransactionResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgFinalizeTransactionResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgFinalizeTransactionResponse,
-    } as MsgFinalizeTransactionResponse;
+    const message = createBaseMsgFinalizeTransactionResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -4811,20 +3419,7 @@ export const MsgFinalizeTransactionResponse = {
   },
 
   fromJSON(object: any): MsgFinalizeTransactionResponse {
-    const message = {
-      ...baseMsgFinalizeTransactionResponse,
-    } as MsgFinalizeTransactionResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = String(object.code);
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = String(object.msg);
-    } else {
-      message.msg = "";
-    }
-    return message;
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgFinalizeTransactionResponse): unknown {
@@ -4834,35 +3429,22 @@ export const MsgFinalizeTransactionResponse = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<MsgFinalizeTransactionResponse>
+  fromPartial<I extends Exact<DeepPartial<MsgFinalizeTransactionResponse>, I>>(
+    object: I,
   ): MsgFinalizeTransactionResponse {
-    const message = {
-      ...baseMsgFinalizeTransactionResponse,
-    } as MsgFinalizeTransactionResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = object.code;
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = object.msg;
-    } else {
-      message.msg = "";
-    }
+    const message = createBaseMsgFinalizeTransactionResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
     return message;
   },
 };
 
-const baseMsgWithdrawPool: object = {
-  creator: "",
-  chain: "",
-  targetAddress: "",
-  amount: "",
-};
+function createBaseMsgWithdrawPool(): MsgWithdrawPool {
+  return { creator: "", chain: "", targetAddress: "", amount: "" };
+}
 
 export const MsgWithdrawPool = {
-  encode(message: MsgWithdrawPool, writer: Writer = Writer.create()): Writer {
+  encode(message: MsgWithdrawPool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -4878,10 +3460,10 @@ export const MsgWithdrawPool = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgWithdrawPool {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgWithdrawPool {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgWithdrawPool } as MsgWithdrawPool;
+    const message = createBaseMsgWithdrawPool();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -4906,79 +3488,46 @@ export const MsgWithdrawPool = {
   },
 
   fromJSON(object: any): MsgWithdrawPool {
-    const message = { ...baseMsgWithdrawPool } as MsgWithdrawPool;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.chain !== undefined && object.chain !== null) {
-      message.chain = String(object.chain);
-    } else {
-      message.chain = "";
-    }
-    if (object.targetAddress !== undefined && object.targetAddress !== null) {
-      message.targetAddress = String(object.targetAddress);
-    } else {
-      message.targetAddress = "";
-    }
-    if (object.amount !== undefined && object.amount !== null) {
-      message.amount = String(object.amount);
-    } else {
-      message.amount = "";
-    }
-    return message;
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      chain: isSet(object.chain) ? String(object.chain) : "",
+      targetAddress: isSet(object.targetAddress) ? String(object.targetAddress) : "",
+      amount: isSet(object.amount) ? String(object.amount) : "",
+    };
   },
 
   toJSON(message: MsgWithdrawPool): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
     message.chain !== undefined && (obj.chain = message.chain);
-    message.targetAddress !== undefined &&
-      (obj.targetAddress = message.targetAddress);
+    message.targetAddress !== undefined && (obj.targetAddress = message.targetAddress);
     message.amount !== undefined && (obj.amount = message.amount);
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgWithdrawPool>): MsgWithdrawPool {
-    const message = { ...baseMsgWithdrawPool } as MsgWithdrawPool;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.chain !== undefined && object.chain !== null) {
-      message.chain = object.chain;
-    } else {
-      message.chain = "";
-    }
-    if (object.targetAddress !== undefined && object.targetAddress !== null) {
-      message.targetAddress = object.targetAddress;
-    } else {
-      message.targetAddress = "";
-    }
-    if (object.amount !== undefined && object.amount !== null) {
-      message.amount = object.amount;
-    } else {
-      message.amount = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgWithdrawPool>, I>>(object: I): MsgWithdrawPool {
+    const message = createBaseMsgWithdrawPool();
+    message.creator = object.creator ?? "";
+    message.chain = object.chain ?? "";
+    message.targetAddress = object.targetAddress ?? "";
+    message.amount = object.amount ?? "";
     return message;
   },
 };
 
-const baseMsgWithdrawPoolResponse: object = {};
+function createBaseMsgWithdrawPoolResponse(): MsgWithdrawPoolResponse {
+  return {};
+}
 
 export const MsgWithdrawPoolResponse = {
-  encode(_: MsgWithdrawPoolResponse, writer: Writer = Writer.create()): Writer {
+  encode(_: MsgWithdrawPoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgWithdrawPoolResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgWithdrawPoolResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgWithdrawPoolResponse,
-    } as MsgWithdrawPoolResponse;
+    const message = createBaseMsgWithdrawPoolResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -4991,10 +3540,7 @@ export const MsgWithdrawPoolResponse = {
   },
 
   fromJSON(_: any): MsgWithdrawPoolResponse {
-    const message = {
-      ...baseMsgWithdrawPoolResponse,
-    } as MsgWithdrawPoolResponse;
-    return message;
+    return {};
   },
 
   toJSON(_: MsgWithdrawPoolResponse): unknown {
@@ -5002,20 +3548,18 @@ export const MsgWithdrawPoolResponse = {
     return obj;
   },
 
-  fromPartial(
-    _: DeepPartial<MsgWithdrawPoolResponse>
-  ): MsgWithdrawPoolResponse {
-    const message = {
-      ...baseMsgWithdrawPoolResponse,
-    } as MsgWithdrawPoolResponse;
+  fromPartial<I extends Exact<DeepPartial<MsgWithdrawPoolResponse>, I>>(_: I): MsgWithdrawPoolResponse {
+    const message = createBaseMsgWithdrawPoolResponse();
     return message;
   },
 };
 
-const baseMsgUpdateToken: object = { creator: "", chain: "", address: "" };
+function createBaseMsgUpdateToken(): MsgUpdateToken {
+  return { creator: "", chain: "", address: "" };
+}
 
 export const MsgUpdateToken = {
-  encode(message: MsgUpdateToken, writer: Writer = Writer.create()): Writer {
+  encode(message: MsgUpdateToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -5028,10 +3572,10 @@ export const MsgUpdateToken = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgUpdateToken {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateToken {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgUpdateToken } as MsgUpdateToken;
+    const message = createBaseMsgUpdateToken();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -5053,23 +3597,11 @@ export const MsgUpdateToken = {
   },
 
   fromJSON(object: any): MsgUpdateToken {
-    const message = { ...baseMsgUpdateToken } as MsgUpdateToken;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.chain !== undefined && object.chain !== null) {
-      message.chain = String(object.chain);
-    } else {
-      message.chain = "";
-    }
-    if (object.address !== undefined && object.address !== null) {
-      message.address = String(object.address);
-    } else {
-      message.address = "";
-    }
-    return message;
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      chain: isSet(object.chain) ? String(object.chain) : "",
+      address: isSet(object.address) ? String(object.address) : "",
+    };
   },
 
   toJSON(message: MsgUpdateToken): unknown {
@@ -5080,38 +3612,28 @@ export const MsgUpdateToken = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgUpdateToken>): MsgUpdateToken {
-    const message = { ...baseMsgUpdateToken } as MsgUpdateToken;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.chain !== undefined && object.chain !== null) {
-      message.chain = object.chain;
-    } else {
-      message.chain = "";
-    }
-    if (object.address !== undefined && object.address !== null) {
-      message.address = object.address;
-    } else {
-      message.address = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateToken>, I>>(object: I): MsgUpdateToken {
+    const message = createBaseMsgUpdateToken();
+    message.creator = object.creator ?? "";
+    message.chain = object.chain ?? "";
+    message.address = object.address ?? "";
     return message;
   },
 };
 
-const baseMsgUpdateTokenResponse: object = {};
+function createBaseMsgUpdateTokenResponse(): MsgUpdateTokenResponse {
+  return {};
+}
 
 export const MsgUpdateTokenResponse = {
-  encode(_: MsgUpdateTokenResponse, writer: Writer = Writer.create()): Writer {
+  encode(_: MsgUpdateTokenResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgUpdateTokenResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateTokenResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgUpdateTokenResponse } as MsgUpdateTokenResponse;
+    const message = createBaseMsgUpdateTokenResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -5124,8 +3646,7 @@ export const MsgUpdateTokenResponse = {
   },
 
   fromJSON(_: any): MsgUpdateTokenResponse {
-    const message = { ...baseMsgUpdateTokenResponse } as MsgUpdateTokenResponse;
-    return message;
+    return {};
   },
 
   toJSON(_: MsgUpdateTokenResponse): unknown {
@@ -5133,23 +3654,18 @@ export const MsgUpdateTokenResponse = {
     return obj;
   },
 
-  fromPartial(_: DeepPartial<MsgUpdateTokenResponse>): MsgUpdateTokenResponse {
-    const message = { ...baseMsgUpdateTokenResponse } as MsgUpdateTokenResponse;
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateTokenResponse>, I>>(_: I): MsgUpdateTokenResponse {
+    const message = createBaseMsgUpdateTokenResponse();
     return message;
   },
 };
 
-const baseMsgUpdatePoolRequest: object = {
-  creator: "",
-  reqId: 0,
-  processed: "",
-};
+function createBaseMsgUpdatePoolRequest(): MsgUpdatePoolRequest {
+  return { creator: "", reqId: 0, processed: "" };
+}
 
 export const MsgUpdatePoolRequest = {
-  encode(
-    message: MsgUpdatePoolRequest,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgUpdatePoolRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -5162,10 +3678,10 @@ export const MsgUpdatePoolRequest = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgUpdatePoolRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdatePoolRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgUpdatePoolRequest } as MsgUpdatePoolRequest;
+    const message = createBaseMsgUpdatePoolRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -5187,73 +3703,43 @@ export const MsgUpdatePoolRequest = {
   },
 
   fromJSON(object: any): MsgUpdatePoolRequest {
-    const message = { ...baseMsgUpdatePoolRequest } as MsgUpdatePoolRequest;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.reqId !== undefined && object.reqId !== null) {
-      message.reqId = Number(object.reqId);
-    } else {
-      message.reqId = 0;
-    }
-    if (object.processed !== undefined && object.processed !== null) {
-      message.processed = String(object.processed);
-    } else {
-      message.processed = "";
-    }
-    return message;
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      reqId: isSet(object.reqId) ? Number(object.reqId) : 0,
+      processed: isSet(object.processed) ? String(object.processed) : "",
+    };
   },
 
   toJSON(message: MsgUpdatePoolRequest): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.reqId !== undefined && (obj.reqId = message.reqId);
+    message.reqId !== undefined && (obj.reqId = Math.round(message.reqId));
     message.processed !== undefined && (obj.processed = message.processed);
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgUpdatePoolRequest>): MsgUpdatePoolRequest {
-    const message = { ...baseMsgUpdatePoolRequest } as MsgUpdatePoolRequest;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.reqId !== undefined && object.reqId !== null) {
-      message.reqId = object.reqId;
-    } else {
-      message.reqId = 0;
-    }
-    if (object.processed !== undefined && object.processed !== null) {
-      message.processed = object.processed;
-    } else {
-      message.processed = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgUpdatePoolRequest>, I>>(object: I): MsgUpdatePoolRequest {
+    const message = createBaseMsgUpdatePoolRequest();
+    message.creator = object.creator ?? "";
+    message.reqId = object.reqId ?? 0;
+    message.processed = object.processed ?? "";
     return message;
   },
 };
 
-const baseMsgUpdatePoolRequestResponse: object = {};
+function createBaseMsgUpdatePoolRequestResponse(): MsgUpdatePoolRequestResponse {
+  return {};
+}
 
 export const MsgUpdatePoolRequestResponse = {
-  encode(
-    _: MsgUpdatePoolRequestResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(_: MsgUpdatePoolRequestResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): MsgUpdatePoolRequestResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdatePoolRequestResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgUpdatePoolRequestResponse,
-    } as MsgUpdatePoolRequestResponse;
+    const message = createBaseMsgUpdatePoolRequestResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -5266,10 +3752,7 @@ export const MsgUpdatePoolRequestResponse = {
   },
 
   fromJSON(_: any): MsgUpdatePoolRequestResponse {
-    const message = {
-      ...baseMsgUpdatePoolRequestResponse,
-    } as MsgUpdatePoolRequestResponse;
-    return message;
+    return {};
   },
 
   toJSON(_: MsgUpdatePoolRequestResponse): unknown {
@@ -5277,20 +3760,18 @@ export const MsgUpdatePoolRequestResponse = {
     return obj;
   },
 
-  fromPartial(
-    _: DeepPartial<MsgUpdatePoolRequestResponse>
-  ): MsgUpdatePoolRequestResponse {
-    const message = {
-      ...baseMsgUpdatePoolRequestResponse,
-    } as MsgUpdatePoolRequestResponse;
+  fromPartial<I extends Exact<DeepPartial<MsgUpdatePoolRequestResponse>, I>>(_: I): MsgUpdatePoolRequestResponse {
+    const message = createBaseMsgUpdatePoolRequestResponse();
     return message;
   },
 };
 
-const baseMsgLeaderReady: object = { creator: "", msgId: "", peerId: "" };
+function createBaseMsgLeaderIsReady(): MsgLeaderIsReady {
+  return { creator: "", msgId: "", peerId: "" };
+}
 
-export const MsgLeaderReady = {
-  encode(message: MsgLeaderReady, writer: Writer = Writer.create()): Writer {
+export const MsgLeaderIsReady = {
+  encode(message: MsgLeaderIsReady, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -5303,10 +3784,10 @@ export const MsgLeaderReady = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgLeaderReady {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgLeaderIsReady {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgLeaderReady } as MsgLeaderReady;
+    const message = createBaseMsgLeaderIsReady();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -5327,27 +3808,15 @@ export const MsgLeaderReady = {
     return message;
   },
 
-  fromJSON(object: any): MsgLeaderReady {
-    const message = { ...baseMsgLeaderReady } as MsgLeaderReady;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.msgId !== undefined && object.msgId !== null) {
-      message.msgId = String(object.msgId);
-    } else {
-      message.msgId = "";
-    }
-    if (object.peerId !== undefined && object.peerId !== null) {
-      message.peerId = String(object.peerId);
-    } else {
-      message.peerId = "";
-    }
-    return message;
+  fromJSON(object: any): MsgLeaderIsReady {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      msgId: isSet(object.msgId) ? String(object.msgId) : "",
+      peerId: isSet(object.peerId) ? String(object.peerId) : "",
+    };
   },
 
-  toJSON(message: MsgLeaderReady): unknown {
+  toJSON(message: MsgLeaderIsReady): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
     message.msgId !== undefined && (obj.msgId = message.msgId);
@@ -5355,38 +3824,28 @@ export const MsgLeaderReady = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgLeaderReady>): MsgLeaderReady {
-    const message = { ...baseMsgLeaderReady } as MsgLeaderReady;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.msgId !== undefined && object.msgId !== null) {
-      message.msgId = object.msgId;
-    } else {
-      message.msgId = "";
-    }
-    if (object.peerId !== undefined && object.peerId !== null) {
-      message.peerId = object.peerId;
-    } else {
-      message.peerId = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgLeaderIsReady>, I>>(object: I): MsgLeaderIsReady {
+    const message = createBaseMsgLeaderIsReady();
+    message.creator = object.creator ?? "";
+    message.msgId = object.msgId ?? "";
+    message.peerId = object.peerId ?? "";
     return message;
   },
 };
 
-const baseMsgLeaderReadyResponse: object = {};
+function createBaseMsgLeaderIsReadyResponse(): MsgLeaderIsReadyResponse {
+  return {};
+}
 
-export const MsgLeaderReadyResponse = {
-  encode(_: MsgLeaderReadyResponse, writer: Writer = Writer.create()): Writer {
+export const MsgLeaderIsReadyResponse = {
+  encode(_: MsgLeaderIsReadyResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgLeaderReadyResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgLeaderIsReadyResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgLeaderReadyResponse } as MsgLeaderReadyResponse;
+    const message = createBaseMsgLeaderIsReadyResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -5398,26 +3857,27 @@ export const MsgLeaderReadyResponse = {
     return message;
   },
 
-  fromJSON(_: any): MsgLeaderReadyResponse {
-    const message = { ...baseMsgLeaderReadyResponse } as MsgLeaderReadyResponse;
-    return message;
+  fromJSON(_: any): MsgLeaderIsReadyResponse {
+    return {};
   },
 
-  toJSON(_: MsgLeaderReadyResponse): unknown {
+  toJSON(_: MsgLeaderIsReadyResponse): unknown {
     const obj: any = {};
     return obj;
   },
 
-  fromPartial(_: DeepPartial<MsgLeaderReadyResponse>): MsgLeaderReadyResponse {
-    const message = { ...baseMsgLeaderReadyResponse } as MsgLeaderReadyResponse;
+  fromPartial<I extends Exact<DeepPartial<MsgLeaderIsReadyResponse>, I>>(_: I): MsgLeaderIsReadyResponse {
+    const message = createBaseMsgLeaderIsReadyResponse();
     return message;
   },
 };
 
-const baseMsgAddPubkeyEddsa: object = { creator: "", pubkey: "" };
+function createBaseMsgAddPubkeyEddsa(): MsgAddPubkeyEddsa {
+  return { creator: "", pubkey: "" };
+}
 
 export const MsgAddPubkeyEddsa = {
-  encode(message: MsgAddPubkeyEddsa, writer: Writer = Writer.create()): Writer {
+  encode(message: MsgAddPubkeyEddsa, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -5427,10 +3887,10 @@ export const MsgAddPubkeyEddsa = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgAddPubkeyEddsa {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgAddPubkeyEddsa {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgAddPubkeyEddsa } as MsgAddPubkeyEddsa;
+    const message = createBaseMsgAddPubkeyEddsa();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -5449,18 +3909,10 @@ export const MsgAddPubkeyEddsa = {
   },
 
   fromJSON(object: any): MsgAddPubkeyEddsa {
-    const message = { ...baseMsgAddPubkeyEddsa } as MsgAddPubkeyEddsa;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.pubkey !== undefined && object.pubkey !== null) {
-      message.pubkey = String(object.pubkey);
-    } else {
-      message.pubkey = "";
-    }
-    return message;
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      pubkey: isSet(object.pubkey) ? String(object.pubkey) : "",
+    };
   },
 
   toJSON(message: MsgAddPubkeyEddsa): unknown {
@@ -5470,29 +3922,20 @@ export const MsgAddPubkeyEddsa = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgAddPubkeyEddsa>): MsgAddPubkeyEddsa {
-    const message = { ...baseMsgAddPubkeyEddsa } as MsgAddPubkeyEddsa;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.pubkey !== undefined && object.pubkey !== null) {
-      message.pubkey = object.pubkey;
-    } else {
-      message.pubkey = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgAddPubkeyEddsa>, I>>(object: I): MsgAddPubkeyEddsa {
+    const message = createBaseMsgAddPubkeyEddsa();
+    message.creator = object.creator ?? "";
+    message.pubkey = object.pubkey ?? "";
     return message;
   },
 };
 
-const baseMsgAddPubkeyEddsaResponse: object = { code: "", msg: "" };
+function createBaseMsgAddPubkeyEddsaResponse(): MsgAddPubkeyEddsaResponse {
+  return { code: "", msg: "" };
+}
 
 export const MsgAddPubkeyEddsaResponse = {
-  encode(
-    message: MsgAddPubkeyEddsaResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+  encode(message: MsgAddPubkeyEddsaResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -5502,15 +3945,10 @@ export const MsgAddPubkeyEddsaResponse = {
     return writer;
   },
 
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): MsgAddPubkeyEddsaResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgAddPubkeyEddsaResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgAddPubkeyEddsaResponse,
-    } as MsgAddPubkeyEddsaResponse;
+    const message = createBaseMsgAddPubkeyEddsaResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -5529,20 +3967,7 @@ export const MsgAddPubkeyEddsaResponse = {
   },
 
   fromJSON(object: any): MsgAddPubkeyEddsaResponse {
-    const message = {
-      ...baseMsgAddPubkeyEddsaResponse,
-    } as MsgAddPubkeyEddsaResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = String(object.code);
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = String(object.msg);
-    } else {
-      message.msg = "";
-    }
-    return message;
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgAddPubkeyEddsaResponse): unknown {
@@ -5552,476 +3977,302 @@ export const MsgAddPubkeyEddsaResponse = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<MsgAddPubkeyEddsaResponse>
-  ): MsgAddPubkeyEddsaResponse {
-    const message = {
-      ...baseMsgAddPubkeyEddsaResponse,
-    } as MsgAddPubkeyEddsaResponse;
-    if (object.code !== undefined && object.code !== null) {
-      message.code = object.code;
-    } else {
-      message.code = "";
-    }
-    if (object.msg !== undefined && object.msg !== null) {
-      message.msg = object.msg;
-    } else {
-      message.msg = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgAddPubkeyEddsaResponse>, I>>(object: I): MsgAddPubkeyEddsaResponse {
+    const message = createBaseMsgAddPubkeyEddsaResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
     return message;
   },
 };
 
 /** Msg defines the Msg service. */
 export interface Msg {
-  RequestTransaction(
-    request: MsgRequestTransaction
-  ): Promise<MsgRequestTransactionResponse>;
-  ApproveTransaction(
-    request: MsgApproveTransaction
-  ): Promise<MsgApproveTransactionResponse>;
-  ObservationVote(
-    request: MsgObservationVote
-  ): Promise<MsgObservationVoteResponse>;
+  RequestTransaction(request: MsgRequestTransaction): Promise<MsgRequestTransactionResponse>;
+  ApproveTransaction(request: MsgApproveTransaction): Promise<MsgApproveTransactionResponse>;
+  ObservationVote(request: MsgObservationVote): Promise<MsgObservationVoteResponse>;
   UpdateBalance(request: MsgUpdateBalance): Promise<MsgUpdateBalanceResponse>;
   KeysignVote(request: MsgKeysignVote): Promise<MsgKeysignVoteResponse>;
   UpdateGasFee(request: MsgUpdateGasFee): Promise<MsgUpdateGasFeeResponse>;
-  ProvisionTransaction(
-    request: MsgProvisionTransaction
-  ): Promise<MsgProvisionTransactionResponse>;
-  DrainTransaction(
-    request: MsgDrainTransaction
-  ): Promise<MsgDrainTransactionResponse>;
-  CancelTransaction(
-    request: MsgCancelTransaction
-  ): Promise<MsgCancelTransactionResponse>;
-  AddWhitelisted(
-    request: MsgAddWhitelisted
-  ): Promise<MsgAddWhitelistedResponse>;
+  ProvisionTransaction(request: MsgProvisionTransaction): Promise<MsgProvisionTransactionResponse>;
+  DrainTransaction(request: MsgDrainTransaction): Promise<MsgDrainTransactionResponse>;
+  CancelTransaction(request: MsgCancelTransaction): Promise<MsgCancelTransactionResponse>;
+  AddWhitelisted(request: MsgAddWhitelisted): Promise<MsgAddWhitelistedResponse>;
   SetAdmin(request: MsgSetAdmin): Promise<MsgSetAdminResponse>;
   AddPubkey(request: MsgAddPubkey): Promise<MsgAddPubkeyResponse>;
   UpdatePubkeys(request: MsgUpdatePubkeys): Promise<MsgUpdatePubkeysResponse>;
-  UpdateTssPubkey(
-    request: MsgUpdateTssPubkey
-  ): Promise<MsgUpdateTssPubkeyResponse>;
-  RemoveWhitelisted(
-    request: MsgRemoveWhitelisted
-  ): Promise<MsgRemoveWhitelistedResponse>;
+  UpdateTssPubkey(request: MsgUpdateTssPubkey): Promise<MsgUpdateTssPubkeyResponse>;
+  RemoveWhitelisted(request: MsgRemoveWhitelisted): Promise<MsgRemoveWhitelistedResponse>;
   ClearTssInfo(request: MsgClearTssInfo): Promise<MsgClearTssInfoResponse>;
   AddChain(request: MsgAddChain): Promise<MsgAddChainResponse>;
   UpdateTssHash(request: MsgUpdateTssHash): Promise<MsgUpdateTssHashResponse>;
-  UpdateChainStatus(
-    request: MsgUpdateChainStatus
-  ): Promise<MsgUpdateChainStatusResponse>;
+  UpdateChainStatus(request: MsgUpdateChainStatus): Promise<MsgUpdateChainStatusResponse>;
   AddToken(request: MsgAddToken): Promise<MsgAddTokenResponse>;
-  UpdateTssStatus(
-    request: MsgUpdateTssStatus
-  ): Promise<MsgUpdateTssStatusResponse>;
+  UpdateTssStatus(request: MsgUpdateTssStatus): Promise<MsgUpdateTssStatusResponse>;
   SetTxHash(request: MsgSetTxHash): Promise<MsgSetTxHashResponse>;
   SetTxProcess(request: MsgSetTxProcess): Promise<MsgSetTxProcessResponse>;
-  FinalizeTransaction(
-    request: MsgFinalizeTransaction
-  ): Promise<MsgFinalizeTransactionResponse>;
+  FinalizeTransaction(request: MsgFinalizeTransaction): Promise<MsgFinalizeTransactionResponse>;
   WithdrawPool(request: MsgWithdrawPool): Promise<MsgWithdrawPoolResponse>;
   UpdateToken(request: MsgUpdateToken): Promise<MsgUpdateTokenResponse>;
-  UpdatePoolRequest(
-    request: MsgUpdatePoolRequest
-  ): Promise<MsgUpdatePoolRequestResponse>;
-  LeaderReady(request: MsgLeaderReady): Promise<MsgLeaderReadyResponse>;
-  /** this line is used by starport scaffolding # proto/tx/rpc */
-  AddPubkeyEddsa(
-    request: MsgAddPubkeyEddsa
-  ): Promise<MsgAddPubkeyEddsaResponse>;
+  UpdatePoolRequest(request: MsgUpdatePoolRequest): Promise<MsgUpdatePoolRequestResponse>;
+  LeaderIsReady(request: MsgLeaderIsReady): Promise<MsgLeaderIsReadyResponse>;
+  AddPubkeyEddsa(request: MsgAddPubkeyEddsa): Promise<MsgAddPubkeyEddsaResponse>;
 }
 
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
   constructor(rpc: Rpc) {
     this.rpc = rpc;
+    this.RequestTransaction = this.RequestTransaction.bind(this);
+    this.ApproveTransaction = this.ApproveTransaction.bind(this);
+    this.ObservationVote = this.ObservationVote.bind(this);
+    this.UpdateBalance = this.UpdateBalance.bind(this);
+    this.KeysignVote = this.KeysignVote.bind(this);
+    this.UpdateGasFee = this.UpdateGasFee.bind(this);
+    this.ProvisionTransaction = this.ProvisionTransaction.bind(this);
+    this.DrainTransaction = this.DrainTransaction.bind(this);
+    this.CancelTransaction = this.CancelTransaction.bind(this);
+    this.AddWhitelisted = this.AddWhitelisted.bind(this);
+    this.SetAdmin = this.SetAdmin.bind(this);
+    this.AddPubkey = this.AddPubkey.bind(this);
+    this.UpdatePubkeys = this.UpdatePubkeys.bind(this);
+    this.UpdateTssPubkey = this.UpdateTssPubkey.bind(this);
+    this.RemoveWhitelisted = this.RemoveWhitelisted.bind(this);
+    this.ClearTssInfo = this.ClearTssInfo.bind(this);
+    this.AddChain = this.AddChain.bind(this);
+    this.UpdateTssHash = this.UpdateTssHash.bind(this);
+    this.UpdateChainStatus = this.UpdateChainStatus.bind(this);
+    this.AddToken = this.AddToken.bind(this);
+    this.UpdateTssStatus = this.UpdateTssStatus.bind(this);
+    this.SetTxHash = this.SetTxHash.bind(this);
+    this.SetTxProcess = this.SetTxProcess.bind(this);
+    this.FinalizeTransaction = this.FinalizeTransaction.bind(this);
+    this.WithdrawPool = this.WithdrawPool.bind(this);
+    this.UpdateToken = this.UpdateToken.bind(this);
+    this.UpdatePoolRequest = this.UpdatePoolRequest.bind(this);
+    this.LeaderIsReady = this.LeaderIsReady.bind(this);
+    this.AddPubkeyEddsa = this.AddPubkeyEddsa.bind(this);
   }
-  RequestTransaction(
-    request: MsgRequestTransaction
-  ): Promise<MsgRequestTransactionResponse> {
+  RequestTransaction(request: MsgRequestTransaction): Promise<MsgRequestTransactionResponse> {
     const data = MsgRequestTransaction.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.Msg",
-      "RequestTransaction",
-      data
-    );
-    return promise.then((data) =>
-      MsgRequestTransactionResponse.decode(new Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "RequestTransaction", data);
+    return promise.then((data) => MsgRequestTransactionResponse.decode(new _m0.Reader(data)));
   }
 
-  ApproveTransaction(
-    request: MsgApproveTransaction
-  ): Promise<MsgApproveTransactionResponse> {
+  ApproveTransaction(request: MsgApproveTransaction): Promise<MsgApproveTransactionResponse> {
     const data = MsgApproveTransaction.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.Msg",
-      "ApproveTransaction",
-      data
-    );
-    return promise.then((data) =>
-      MsgApproveTransactionResponse.decode(new Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "ApproveTransaction", data);
+    return promise.then((data) => MsgApproveTransactionResponse.decode(new _m0.Reader(data)));
   }
 
-  ObservationVote(
-    request: MsgObservationVote
-  ): Promise<MsgObservationVoteResponse> {
+  ObservationVote(request: MsgObservationVote): Promise<MsgObservationVoteResponse> {
     const data = MsgObservationVote.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.Msg",
-      "ObservationVote",
-      data
-    );
-    return promise.then((data) =>
-      MsgObservationVoteResponse.decode(new Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "ObservationVote", data);
+    return promise.then((data) => MsgObservationVoteResponse.decode(new _m0.Reader(data)));
   }
 
   UpdateBalance(request: MsgUpdateBalance): Promise<MsgUpdateBalanceResponse> {
     const data = MsgUpdateBalance.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.Msg",
-      "UpdateBalance",
-      data
-    );
-    return promise.then((data) =>
-      MsgUpdateBalanceResponse.decode(new Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "UpdateBalance", data);
+    return promise.then((data) => MsgUpdateBalanceResponse.decode(new _m0.Reader(data)));
   }
 
   KeysignVote(request: MsgKeysignVote): Promise<MsgKeysignVoteResponse> {
     const data = MsgKeysignVote.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.Msg",
-      "KeysignVote",
-      data
-    );
-    return promise.then((data) =>
-      MsgKeysignVoteResponse.decode(new Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "KeysignVote", data);
+    return promise.then((data) => MsgKeysignVoteResponse.decode(new _m0.Reader(data)));
   }
 
   UpdateGasFee(request: MsgUpdateGasFee): Promise<MsgUpdateGasFeeResponse> {
     const data = MsgUpdateGasFee.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.Msg",
-      "UpdateGasFee",
-      data
-    );
-    return promise.then((data) =>
-      MsgUpdateGasFeeResponse.decode(new Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "UpdateGasFee", data);
+    return promise.then((data) => MsgUpdateGasFeeResponse.decode(new _m0.Reader(data)));
   }
 
-  ProvisionTransaction(
-    request: MsgProvisionTransaction
-  ): Promise<MsgProvisionTransactionResponse> {
+  ProvisionTransaction(request: MsgProvisionTransaction): Promise<MsgProvisionTransactionResponse> {
     const data = MsgProvisionTransaction.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.Msg",
-      "ProvisionTransaction",
-      data
-    );
-    return promise.then((data) =>
-      MsgProvisionTransactionResponse.decode(new Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "ProvisionTransaction", data);
+    return promise.then((data) => MsgProvisionTransactionResponse.decode(new _m0.Reader(data)));
   }
 
-  DrainTransaction(
-    request: MsgDrainTransaction
-  ): Promise<MsgDrainTransactionResponse> {
+  DrainTransaction(request: MsgDrainTransaction): Promise<MsgDrainTransactionResponse> {
     const data = MsgDrainTransaction.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.Msg",
-      "DrainTransaction",
-      data
-    );
-    return promise.then((data) =>
-      MsgDrainTransactionResponse.decode(new Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "DrainTransaction", data);
+    return promise.then((data) => MsgDrainTransactionResponse.decode(new _m0.Reader(data)));
   }
 
-  CancelTransaction(
-    request: MsgCancelTransaction
-  ): Promise<MsgCancelTransactionResponse> {
+  CancelTransaction(request: MsgCancelTransaction): Promise<MsgCancelTransactionResponse> {
     const data = MsgCancelTransaction.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.Msg",
-      "CancelTransaction",
-      data
-    );
-    return promise.then((data) =>
-      MsgCancelTransactionResponse.decode(new Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "CancelTransaction", data);
+    return promise.then((data) => MsgCancelTransactionResponse.decode(new _m0.Reader(data)));
   }
 
-  AddWhitelisted(
-    request: MsgAddWhitelisted
-  ): Promise<MsgAddWhitelistedResponse> {
+  AddWhitelisted(request: MsgAddWhitelisted): Promise<MsgAddWhitelistedResponse> {
     const data = MsgAddWhitelisted.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.Msg",
-      "AddWhitelisted",
-      data
-    );
-    return promise.then((data) =>
-      MsgAddWhitelistedResponse.decode(new Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "AddWhitelisted", data);
+    return promise.then((data) => MsgAddWhitelistedResponse.decode(new _m0.Reader(data)));
   }
 
   SetAdmin(request: MsgSetAdmin): Promise<MsgSetAdminResponse> {
     const data = MsgSetAdmin.encode(request).finish();
-    const promise = this.rpc.request("KimaFinance.kima.Msg", "SetAdmin", data);
-    return promise.then((data) => MsgSetAdminResponse.decode(new Reader(data)));
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "SetAdmin", data);
+    return promise.then((data) => MsgSetAdminResponse.decode(new _m0.Reader(data)));
   }
 
   AddPubkey(request: MsgAddPubkey): Promise<MsgAddPubkeyResponse> {
     const data = MsgAddPubkey.encode(request).finish();
-    const promise = this.rpc.request("KimaFinance.kima.Msg", "AddPubkey", data);
-    return promise.then((data) =>
-      MsgAddPubkeyResponse.decode(new Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "AddPubkey", data);
+    return promise.then((data) => MsgAddPubkeyResponse.decode(new _m0.Reader(data)));
   }
 
   UpdatePubkeys(request: MsgUpdatePubkeys): Promise<MsgUpdatePubkeysResponse> {
     const data = MsgUpdatePubkeys.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.Msg",
-      "UpdatePubkeys",
-      data
-    );
-    return promise.then((data) =>
-      MsgUpdatePubkeysResponse.decode(new Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "UpdatePubkeys", data);
+    return promise.then((data) => MsgUpdatePubkeysResponse.decode(new _m0.Reader(data)));
   }
 
-  UpdateTssPubkey(
-    request: MsgUpdateTssPubkey
-  ): Promise<MsgUpdateTssPubkeyResponse> {
+  UpdateTssPubkey(request: MsgUpdateTssPubkey): Promise<MsgUpdateTssPubkeyResponse> {
     const data = MsgUpdateTssPubkey.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.Msg",
-      "UpdateTssPubkey",
-      data
-    );
-    return promise.then((data) =>
-      MsgUpdateTssPubkeyResponse.decode(new Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "UpdateTssPubkey", data);
+    return promise.then((data) => MsgUpdateTssPubkeyResponse.decode(new _m0.Reader(data)));
   }
 
-  RemoveWhitelisted(
-    request: MsgRemoveWhitelisted
-  ): Promise<MsgRemoveWhitelistedResponse> {
+  RemoveWhitelisted(request: MsgRemoveWhitelisted): Promise<MsgRemoveWhitelistedResponse> {
     const data = MsgRemoveWhitelisted.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.Msg",
-      "RemoveWhitelisted",
-      data
-    );
-    return promise.then((data) =>
-      MsgRemoveWhitelistedResponse.decode(new Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "RemoveWhitelisted", data);
+    return promise.then((data) => MsgRemoveWhitelistedResponse.decode(new _m0.Reader(data)));
   }
 
   ClearTssInfo(request: MsgClearTssInfo): Promise<MsgClearTssInfoResponse> {
     const data = MsgClearTssInfo.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.Msg",
-      "ClearTssInfo",
-      data
-    );
-    return promise.then((data) =>
-      MsgClearTssInfoResponse.decode(new Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "ClearTssInfo", data);
+    return promise.then((data) => MsgClearTssInfoResponse.decode(new _m0.Reader(data)));
   }
 
   AddChain(request: MsgAddChain): Promise<MsgAddChainResponse> {
     const data = MsgAddChain.encode(request).finish();
-    const promise = this.rpc.request("KimaFinance.kima.Msg", "AddChain", data);
-    return promise.then((data) => MsgAddChainResponse.decode(new Reader(data)));
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "AddChain", data);
+    return promise.then((data) => MsgAddChainResponse.decode(new _m0.Reader(data)));
   }
 
   UpdateTssHash(request: MsgUpdateTssHash): Promise<MsgUpdateTssHashResponse> {
     const data = MsgUpdateTssHash.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.Msg",
-      "UpdateTssHash",
-      data
-    );
-    return promise.then((data) =>
-      MsgUpdateTssHashResponse.decode(new Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "UpdateTssHash", data);
+    return promise.then((data) => MsgUpdateTssHashResponse.decode(new _m0.Reader(data)));
   }
 
-  UpdateChainStatus(
-    request: MsgUpdateChainStatus
-  ): Promise<MsgUpdateChainStatusResponse> {
+  UpdateChainStatus(request: MsgUpdateChainStatus): Promise<MsgUpdateChainStatusResponse> {
     const data = MsgUpdateChainStatus.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.Msg",
-      "UpdateChainStatus",
-      data
-    );
-    return promise.then((data) =>
-      MsgUpdateChainStatusResponse.decode(new Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "UpdateChainStatus", data);
+    return promise.then((data) => MsgUpdateChainStatusResponse.decode(new _m0.Reader(data)));
   }
 
   AddToken(request: MsgAddToken): Promise<MsgAddTokenResponse> {
     const data = MsgAddToken.encode(request).finish();
-    const promise = this.rpc.request("KimaFinance.kima.Msg", "AddToken", data);
-    return promise.then((data) => MsgAddTokenResponse.decode(new Reader(data)));
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "AddToken", data);
+    return promise.then((data) => MsgAddTokenResponse.decode(new _m0.Reader(data)));
   }
 
-  UpdateTssStatus(
-    request: MsgUpdateTssStatus
-  ): Promise<MsgUpdateTssStatusResponse> {
+  UpdateTssStatus(request: MsgUpdateTssStatus): Promise<MsgUpdateTssStatusResponse> {
     const data = MsgUpdateTssStatus.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.Msg",
-      "UpdateTssStatus",
-      data
-    );
-    return promise.then((data) =>
-      MsgUpdateTssStatusResponse.decode(new Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "UpdateTssStatus", data);
+    return promise.then((data) => MsgUpdateTssStatusResponse.decode(new _m0.Reader(data)));
   }
 
   SetTxHash(request: MsgSetTxHash): Promise<MsgSetTxHashResponse> {
     const data = MsgSetTxHash.encode(request).finish();
-    const promise = this.rpc.request("KimaFinance.kima.Msg", "SetTxHash", data);
-    return promise.then((data) =>
-      MsgSetTxHashResponse.decode(new Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "SetTxHash", data);
+    return promise.then((data) => MsgSetTxHashResponse.decode(new _m0.Reader(data)));
   }
 
   SetTxProcess(request: MsgSetTxProcess): Promise<MsgSetTxProcessResponse> {
     const data = MsgSetTxProcess.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.Msg",
-      "SetTxProcess",
-      data
-    );
-    return promise.then((data) =>
-      MsgSetTxProcessResponse.decode(new Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "SetTxProcess", data);
+    return promise.then((data) => MsgSetTxProcessResponse.decode(new _m0.Reader(data)));
   }
 
-  FinalizeTransaction(
-    request: MsgFinalizeTransaction
-  ): Promise<MsgFinalizeTransactionResponse> {
+  FinalizeTransaction(request: MsgFinalizeTransaction): Promise<MsgFinalizeTransactionResponse> {
     const data = MsgFinalizeTransaction.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.Msg",
-      "FinalizeTransaction",
-      data
-    );
-    return promise.then((data) =>
-      MsgFinalizeTransactionResponse.decode(new Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "FinalizeTransaction", data);
+    return promise.then((data) => MsgFinalizeTransactionResponse.decode(new _m0.Reader(data)));
   }
 
   WithdrawPool(request: MsgWithdrawPool): Promise<MsgWithdrawPoolResponse> {
     const data = MsgWithdrawPool.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.Msg",
-      "WithdrawPool",
-      data
-    );
-    return promise.then((data) =>
-      MsgWithdrawPoolResponse.decode(new Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "WithdrawPool", data);
+    return promise.then((data) => MsgWithdrawPoolResponse.decode(new _m0.Reader(data)));
   }
 
   UpdateToken(request: MsgUpdateToken): Promise<MsgUpdateTokenResponse> {
     const data = MsgUpdateToken.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.Msg",
-      "UpdateToken",
-      data
-    );
-    return promise.then((data) =>
-      MsgUpdateTokenResponse.decode(new Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "UpdateToken", data);
+    return promise.then((data) => MsgUpdateTokenResponse.decode(new _m0.Reader(data)));
   }
 
-  UpdatePoolRequest(
-    request: MsgUpdatePoolRequest
-  ): Promise<MsgUpdatePoolRequestResponse> {
+  UpdatePoolRequest(request: MsgUpdatePoolRequest): Promise<MsgUpdatePoolRequestResponse> {
     const data = MsgUpdatePoolRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.Msg",
-      "UpdatePoolRequest",
-      data
-    );
-    return promise.then((data) =>
-      MsgUpdatePoolRequestResponse.decode(new Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "UpdatePoolRequest", data);
+    return promise.then((data) => MsgUpdatePoolRequestResponse.decode(new _m0.Reader(data)));
   }
 
-  LeaderReady(request: MsgLeaderReady): Promise<MsgLeaderReadyResponse> {
-    const data = MsgLeaderReady.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.Msg",
-      "LeaderReady",
-      data
-    );
-    return promise.then((data) =>
-      MsgLeaderReadyResponse.decode(new Reader(data))
-    );
+  LeaderIsReady(request: MsgLeaderIsReady): Promise<MsgLeaderIsReadyResponse> {
+    const data = MsgLeaderIsReady.encode(request).finish();
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "LeaderIsReady", data);
+    return promise.then((data) => MsgLeaderIsReadyResponse.decode(new _m0.Reader(data)));
   }
 
-  AddPubkeyEddsa(
-    request: MsgAddPubkeyEddsa
-  ): Promise<MsgAddPubkeyEddsaResponse> {
+  AddPubkeyEddsa(request: MsgAddPubkeyEddsa): Promise<MsgAddPubkeyEddsaResponse> {
     const data = MsgAddPubkeyEddsa.encode(request).finish();
-    const promise = this.rpc.request(
-      "KimaFinance.kima.Msg",
-      "AddPubkeyEddsa",
-      data
-    );
-    return promise.then((data) =>
-      MsgAddPubkeyEddsaResponse.decode(new Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.kima.Msg", "AddPubkeyEddsa", data);
+    return promise.then((data) => MsgAddPubkeyEddsaResponse.decode(new _m0.Reader(data)));
   }
 }
 
 interface Rpc {
-  request(
-    service: string,
-    method: string,
-    data: Uint8Array
-  ): Promise<Uint8Array>;
+  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
 }
 
 declare var self: any | undefined;
 declare var window: any | undefined;
+declare var global: any | undefined;
 var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
+  if (typeof globalThis !== "undefined") {
+    return globalThis;
+  }
+  if (typeof self !== "undefined") {
+    return self;
+  }
+  if (typeof window !== "undefined") {
+    return window;
+  }
+  if (typeof global !== "undefined") {
+    return global;
+  }
   throw "Unable to locate global object";
 })();
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined;
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToNumber(long: Long): number {
   if (long.gt(Number.MAX_SAFE_INTEGER)) {
     throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
   }
   return long.toNumber();
+}
+
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
 }
