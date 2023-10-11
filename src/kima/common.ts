@@ -16,8 +16,8 @@ interface SignAndBroadcastOptions {
 }
 
 const types = [
-  ["/KimaFinance.kima.MsgRequestTransaction", MsgRequestTransaction],
-  ["/KimaFinance.kima.MsgSetTxHash", MsgSetTxHash],
+  ["/kimablockchain.kima.MsgRequestTransaction", MsgRequestTransaction],
+  ["/kimablockchain.kima.MsgSetTxHash", MsgSetTxHash],
 ];
 
 export const registry = new Registry(<any>types);
@@ -36,11 +36,11 @@ export const TxClient = async (wallet: OfflineSigner) => {
       { fee, memo }: SignAndBroadcastOptions = { fee: defaultFee, memo: "" }
     ) => client.signAndBroadcast(address, msgs, fee, memo),
     msgRequestTransaction: (data: MsgRequestTransaction): EncodeObject => ({
-      typeUrl: "/KimaFinance.kima.MsgRequestTransaction",
+      typeUrl: "/kimablockchain.kima.MsgRequestTransaction",
       value: MsgRequestTransaction.fromPartial(data),
     }),
     msgSetTxHash: (data: MsgSetTxHash): EncodeObject => ({
-      typeUrl: "/KimaFinance.kima.MsgSetTxHash",
+      typeUrl: "/kimablockchain.kima.MsgSetTxHash",
       value: MsgSetTxHash.fromPartial(data),
     }),
   };

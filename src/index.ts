@@ -82,6 +82,8 @@ export async function submitKimaTransaction({
     txHash: result.transactionHash,
   });
 
+  console.log(msg);
+
   let hashResult;
   do {
     hashResult = await client.signAndBroadcast([msg]);
