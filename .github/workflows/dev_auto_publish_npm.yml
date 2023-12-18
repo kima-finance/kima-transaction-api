@@ -25,6 +25,7 @@ jobs:
         run: |
 
           npm install
+          npm start
           npm publish --provenance
 
         env:
