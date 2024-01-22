@@ -76,6 +76,8 @@ export interface MsgSetTxHash {
   creator: string;
   txId: number;
   txHash: string;
+  /** request_transaction, request_provision_transaction, request_drain_transaction */
+  txType: string;
 }
 
 export interface MsgSetTxHashResponse {
@@ -88,6 +90,8 @@ export interface MsgSetTxProcess {
   txId: number;
   timestamp: number;
   msgId: string;
+  /** request_transaction, request_provision_transaction, request_drain_transaction */
+  txType: string;
 }
 
 export interface MsgSetTxProcessResponse {
@@ -876,7 +880,7 @@ export const MsgCancelTransactionResponse = {
 };
 
 function createBaseMsgSetTxHash(): MsgSetTxHash {
-  return { creator: "", txId: 0, txHash: "" };
+  return { creator: "", txId: 0, txHash: "", txType: "" };
 }
 
 export const MsgSetTxHash = {
@@ -889,6 +893,9 @@ export const MsgSetTxHash = {
     }
     if (message.txHash !== "") {
       writer.uint32(26).string(message.txHash);
+    }
+    if (message.txType !== "") {
+      writer.uint32(34).string(message.txType);
     }
     return writer;
   },
@@ -909,6 +916,9 @@ export const MsgSetTxHash = {
         case 3:
           message.txHash = reader.string();
           break;
+        case 4:
+          message.txType = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -922,6 +932,7 @@ export const MsgSetTxHash = {
       creator: isSet(object.creator) ? String(object.creator) : "",
       txId: isSet(object.txId) ? Number(object.txId) : 0,
       txHash: isSet(object.txHash) ? String(object.txHash) : "",
+      txType: isSet(object.txType) ? String(object.txType) : "",
     };
   },
 
@@ -930,6 +941,7 @@ export const MsgSetTxHash = {
     message.creator !== undefined && (obj.creator = message.creator);
     message.txId !== undefined && (obj.txId = Math.round(message.txId));
     message.txHash !== undefined && (obj.txHash = message.txHash);
+    message.txType !== undefined && (obj.txType = message.txType);
     return obj;
   },
 
@@ -938,6 +950,7 @@ export const MsgSetTxHash = {
     message.creator = object.creator ?? "";
     message.txId = object.txId ?? 0;
     message.txHash = object.txHash ?? "";
+    message.txType = object.txType ?? "";
     return message;
   },
 };
@@ -998,7 +1011,7 @@ export const MsgSetTxHashResponse = {
 };
 
 function createBaseMsgSetTxProcess(): MsgSetTxProcess {
-  return { creator: "", txId: 0, timestamp: 0, msgId: "" };
+  return { creator: "", txId: 0, timestamp: 0, msgId: "", txType: "" };
 }
 
 export const MsgSetTxProcess = {
@@ -1014,6 +1027,9 @@ export const MsgSetTxProcess = {
     }
     if (message.msgId !== "") {
       writer.uint32(34).string(message.msgId);
+    }
+    if (message.txType !== "") {
+      writer.uint32(42).string(message.txType);
     }
     return writer;
   },
@@ -1037,6 +1053,9 @@ export const MsgSetTxProcess = {
         case 4:
           message.msgId = reader.string();
           break;
+        case 5:
+          message.txType = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1051,6 +1070,7 @@ export const MsgSetTxProcess = {
       txId: isSet(object.txId) ? Number(object.txId) : 0,
       timestamp: isSet(object.timestamp) ? Number(object.timestamp) : 0,
       msgId: isSet(object.msgId) ? String(object.msgId) : "",
+      txType: isSet(object.txType) ? String(object.txType) : "",
     };
   },
 
@@ -1060,6 +1080,7 @@ export const MsgSetTxProcess = {
     message.txId !== undefined && (obj.txId = Math.round(message.txId));
     message.timestamp !== undefined && (obj.timestamp = Math.round(message.timestamp));
     message.msgId !== undefined && (obj.msgId = message.msgId);
+    message.txType !== undefined && (obj.txType = message.txType);
     return obj;
   },
 
@@ -1069,6 +1090,7 @@ export const MsgSetTxProcess = {
     message.txId = object.txId ?? 0;
     message.timestamp = object.timestamp ?? 0;
     message.msgId = object.msgId ?? "";
+    message.txType = object.txType ?? "";
     return message;
   },
 };

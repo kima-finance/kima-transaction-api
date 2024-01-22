@@ -80,6 +80,7 @@ export async function submitKimaTransaction({
     creator: firstAccount.address,
     txId,
     txHash: result.transactionHash,
+    txType: "request_transaction"
   });
 
   console.log(msg);
