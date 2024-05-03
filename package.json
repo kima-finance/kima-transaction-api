@@ -1,6 +1,6 @@
 {
   "name": "@kimafinance/kima-transaction-api",
-  "version": "1.0.23-beta.1",
+  "version": "1.0.24-beta.1",
   "description": "A wrapper around Kima's API, enabling sending and monitoring transactions (Beta version)",
   "repository": "https://github.com/kima-finance/kima-transaction-api",
   "author": "",
