@@ -29,6 +29,11 @@ interface Props {
   symbol: CurrencyOptions;
   amount: number;
   fee: number;
+  htlcCreationHash: string;
+  htlcCreationVout: number;
+  htlcExpirationTimestamp: string;
+  htlcVersion: string;
+  senderPubKey: Uint8Array;
 }
 
 function sleep(ms: number) {
@@ -43,6 +48,11 @@ export async function submitKimaTransaction({
   symbol,
   amount,
   fee,
+  htlcCreationHash,
+  htlcCreationVout,
+  htlcExpirationTimestamp,
+  htlcVersion,
+  senderPubKey,
 }: Props) {
   const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
     process.env.KIMA_BACKEND_MNEMONIC as string,
@@ -59,11 +69,11 @@ export async function submitKimaTransaction({
     symbol,
     amount: amount.toString(),
     fee: fee.toString(),
-    htlcCreationHash: "",
-    htlcCreationVout: 0,
-    htlcExpirationTimestamp: "",
-    htlcVersion: "",
-    senderPubKey: new Uint8Array(0),
+    htlcCreationHash,
+    htlcCreationVout,
+    htlcExpirationTimestamp,
+    htlcVersion,
+    senderPubKey,
   };
 
   let msg = await client.msgRequestTransaction(params);
