@@ -59,6 +59,11 @@ export async function submitKimaTransaction({
     symbol,
     amount: amount.toString(),
     fee: fee.toString(),
+    htlcCreationHash: "",
+    htlcCreationVout: 0,
+    htlcExpirationTimestamp: "",
+    htlcVersion: "",
+    senderPubKey: new Uint8Array(0),
   };
 
   let msg = await client.msgRequestTransaction(params);
@@ -80,7 +85,7 @@ export async function submitKimaTransaction({
     creator: firstAccount.address,
     txId,
     txHash: result.transactionHash,
-    txType: "request_transaction"
+    txType: "request_transaction",
   });
 
   console.log(msg);
