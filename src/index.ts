@@ -1,6 +1,6 @@
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { TxClient } from "./kima/common";
-import { MsgRequestTransaction } from "./kima/tx";
+import { MsgRequestHtlcLock, MsgRequestTransaction } from "./kima/tx";
 
 export enum SupportedNetworks {
   ETHEREUM = "ETH",
@@ -21,7 +21,46 @@ export enum CurrencyOptions {
   USDK = "USDK",
 }
 
-interface Props {
+interface RequestHtlcProps {
+  fromAddress: string;
+  senderPubkey: string;
+  amount: string;
+  htlcTimeout: string;
+  txHash: string;
+  htlcAddress: string;
+}
+
+export async function submitHtlcLock({
+  fromAddress,
+  senderPubkey,
+  amount,
+  htlcTimeout,
+  txHash,
+  htlcAddress,
+}: RequestHtlcProps) {
+  const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
+    process.env.KIMA_BACKEND_MNEMONIC as string,
+    { prefix: "kima" }
+  );
+  const client = await TxClient(wallet);
+  const [firstAccount] = await wallet.getAccounts();
+  const params: MsgRequestHtlcLock = {
+    creator: firstAccount.address,
+    fromAddress,
+    senderPubkey,
+    amount,
+    htlcTimeout,
+    htlcAddress,
+    txHash,
+  };
+
+  let msg = await client.msgRequestHtlcLock(params);
+  const result = await client.signAndBroadcast([msg]);
+
+  return result;
+}
+
+interface RequestTxProps {
   originChain: SupportedNetworks;
   originAddress: string;
   targetChain: SupportedNetworks;
@@ -53,7 +92,7 @@ export async function submitKimaTransaction({
   htlcExpirationTimestamp,
   htlcVersion,
   senderPubKey,
-}: Props) {
+}: RequestTxProps) {
   const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
     process.env.KIMA_BACKEND_MNEMONIC as string,
     { prefix: "kima" }

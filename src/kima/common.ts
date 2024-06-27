@@ -1,7 +1,7 @@
 import { SigningStargateClient, StdFee } from "@cosmjs/stargate";
 import dotenv from "dotenv";
 import { Registry, OfflineSigner, EncodeObject } from "@cosmjs/proto-signing";
-import { MsgRequestTransaction, MsgSetTxHash } from "./tx";
+import { MsgRequestHtlcLock, MsgRequestTransaction, MsgSetTxHash } from "./tx";
 
 dotenv.config();
 
@@ -17,6 +17,7 @@ interface SignAndBroadcastOptions {
 
 const types = [
   ["/kimablockchain.transaction.MsgRequestTransaction", MsgRequestTransaction],
+  ["/kimablockchain.transaction.MsgRequestHtlcLock", MsgRequestHtlcLock],
   ["/kimablockchain.transaction.MsgSetTxHash", MsgSetTxHash],
 ];
 
@@ -38,6 +39,10 @@ export const TxClient = async (wallet: OfflineSigner) => {
     msgRequestTransaction: (data: MsgRequestTransaction): EncodeObject => ({
       typeUrl: "/kimablockchain.transaction.MsgRequestTransaction",
       value: MsgRequestTransaction.fromPartial(data),
+    }),
+    msgRequestHtlcLock: (data: MsgRequestHtlcLock): EncodeObject => ({
+      typeUrl: "/kimablockchain.transaction.MsgRequestHtlcLock",
+      value: MsgRequestHtlcLock.fromPartial(data),
     }),
     msgSetTxHash: (data: MsgSetTxHash): EncodeObject => ({
       typeUrl: "/kimablockchain.transaction.MsgSetTxHash",
