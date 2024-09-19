@@ -10,7 +10,8 @@ export interface MsgRequestTransaction {
   originAddress: string;
   targetChain: string;
   targetAddress: string;
-  symbol: string;
+  originSymbol: string;
+  targetSymbol: string;
   amount: string;
   fee: string;
   /** the timestamp when the HTLC contract expires and the user can reclaim the funds locked there */
@@ -23,6 +24,8 @@ export interface MsgRequestTransaction {
   htlcVersion: string;
   /** for bitcoin transaction this is the public key of the sender */
   senderPubKey: Uint8Array;
+  /** additional data JSON object */
+  options: string;
 }
 
 export interface MsgRequestTransactionResponse {
@@ -112,7 +115,7 @@ export interface MsgSetTxProcess {
   txId: number;
   timestamp: number;
   msgId: string;
-  /** request_transaction, request_provision_transaction, request_drain_transaction */
+  /** request_transaction, request_provision_transaction, request_drain_transaction, withdraw_pool */
   txType: string;
 }
 
@@ -167,6 +170,36 @@ export interface MsgHtlcReclaim {
 
 export interface MsgHtlcReclaimResponse {}
 
+export interface MsgUpdateLiquidityProvisionParams {
+  authority: string;
+  maxBTC: string;
+  maxUSDT: string;
+}
+
+export interface MsgUpdateLiquidityProvisionParamsResponse {}
+
+export interface MsgUpdateTransferLimitParams {
+  authority: string;
+  maxBTC: string;
+  maxUSDT: string;
+}
+
+export interface MsgUpdateTransferLimitParamsResponse {}
+
+export interface MsgFinalizeWithdrawTransaction {
+  creator: string;
+  txId: number;
+  txHash: string;
+  success: boolean;
+  signedKey: string;
+  errReason: string;
+}
+
+export interface MsgFinalizeWithdrawTransactionResponse {
+  code: string;
+  msg: string;
+}
+
 function createBaseMsgRequestTransaction(): MsgRequestTransaction {
   return {
     creator: "",
@@ -174,7 +207,8 @@ function createBaseMsgRequestTransaction(): MsgRequestTransaction {
     originAddress: "",
     targetChain: "",
     targetAddress: "",
-    symbol: "",
+    originSymbol: "",
+    targetSymbol: "",
     amount: "",
     fee: "",
     htlcExpirationTimestamp: "",
@@ -182,6 +216,7 @@ function createBaseMsgRequestTransaction(): MsgRequestTransaction {
     htlcCreationVout: 0,
     htlcVersion: "",
     senderPubKey: new Uint8Array(),
+    options: "",
   };
 }
 
@@ -205,29 +240,35 @@ export const MsgRequestTransaction = {
     if (message.targetAddress !== "") {
       writer.uint32(42).string(message.targetAddress);
     }
-    if (message.symbol !== "") {
-      writer.uint32(50).string(message.symbol);
+    if (message.originSymbol !== "") {
+      writer.uint32(50).string(message.originSymbol);
+    }
+    if (message.targetSymbol !== "") {
+      writer.uint32(58).string(message.targetSymbol);
     }
     if (message.amount !== "") {
-      writer.uint32(58).string(message.amount);
+      writer.uint32(66).string(message.amount);
     }
     if (message.fee !== "") {
-      writer.uint32(66).string(message.fee);
+      writer.uint32(74).string(message.fee);
     }
     if (message.htlcExpirationTimestamp !== "") {
-      writer.uint32(74).string(message.htlcExpirationTimestamp);
+      writer.uint32(82).string(message.htlcExpirationTimestamp);
     }
     if (message.htlcCreationHash !== "") {
-      writer.uint32(82).string(message.htlcCreationHash);
+      writer.uint32(90).string(message.htlcCreationHash);
     }
     if (message.htlcCreationVout !== 0) {
-      writer.uint32(88).uint32(message.htlcCreationVout);
+      writer.uint32(96).uint32(message.htlcCreationVout);
     }
     if (message.htlcVersion !== "") {
-      writer.uint32(98).string(message.htlcVersion);
+      writer.uint32(106).string(message.htlcVersion);
     }
     if (message.senderPubKey.length !== 0) {
-      writer.uint32(106).bytes(message.senderPubKey);
+      writer.uint32(114).bytes(message.senderPubKey);
+    }
+    if (message.options !== "") {
+      writer.uint32(122).string(message.options);
     }
     return writer;
   },
@@ -258,28 +299,34 @@ export const MsgRequestTransaction = {
           message.targetAddress = reader.string();
           break;
         case 6:
-          message.symbol = reader.string();
+          message.originSymbol = reader.string();
           break;
         case 7:
-          message.amount = reader.string();
+          message.targetSymbol = reader.string();
           break;
         case 8:
-          message.fee = reader.string();
+          message.amount = reader.string();
           break;
         case 9:
-          message.htlcExpirationTimestamp = reader.string();
+          message.fee = reader.string();
           break;
         case 10:
-          message.htlcCreationHash = reader.string();
+          message.htlcExpirationTimestamp = reader.string();
           break;
         case 11:
-          message.htlcCreationVout = reader.uint32();
+          message.htlcCreationHash = reader.string();
           break;
         case 12:
-          message.htlcVersion = reader.string();
+          message.htlcCreationVout = reader.uint32();
           break;
         case 13:
+          message.htlcVersion = reader.string();
+          break;
+        case 14:
           message.senderPubKey = reader.bytes();
+          break;
+        case 15:
+          message.options = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -300,7 +347,12 @@ export const MsgRequestTransaction = {
       targetAddress: isSet(object.targetAddress)
         ? String(object.targetAddress)
         : "",
-      symbol: isSet(object.symbol) ? String(object.symbol) : "",
+      originSymbol: isSet(object.originSymbol)
+        ? String(object.originSymbol)
+        : "",
+      targetSymbol: isSet(object.targetSymbol)
+        ? String(object.targetSymbol)
+        : "",
       amount: isSet(object.amount) ? String(object.amount) : "",
       fee: isSet(object.fee) ? String(object.fee) : "",
       htlcExpirationTimestamp: isSet(object.htlcExpirationTimestamp)
@@ -316,6 +368,7 @@ export const MsgRequestTransaction = {
       senderPubKey: isSet(object.senderPubKey)
         ? bytesFromBase64(object.senderPubKey)
         : new Uint8Array(),
+      options: isSet(object.options) ? String(object.options) : "",
     };
   },
 
@@ -330,7 +383,10 @@ export const MsgRequestTransaction = {
       (obj.targetChain = message.targetChain);
     message.targetAddress !== undefined &&
       (obj.targetAddress = message.targetAddress);
-    message.symbol !== undefined && (obj.symbol = message.symbol);
+    message.originSymbol !== undefined &&
+      (obj.originSymbol = message.originSymbol);
+    message.targetSymbol !== undefined &&
+      (obj.targetSymbol = message.targetSymbol);
     message.amount !== undefined && (obj.amount = message.amount);
     message.fee !== undefined && (obj.fee = message.fee);
     message.htlcExpirationTimestamp !== undefined &&
@@ -347,6 +403,7 @@ export const MsgRequestTransaction = {
           ? message.senderPubKey
           : new Uint8Array()
       ));
+    message.options !== undefined && (obj.options = message.options);
     return obj;
   },
 
@@ -359,7 +416,8 @@ export const MsgRequestTransaction = {
     message.originAddress = object.originAddress ?? "";
     message.targetChain = object.targetChain ?? "";
     message.targetAddress = object.targetAddress ?? "";
-    message.symbol = object.symbol ?? "";
+    message.originSymbol = object.originSymbol ?? "";
+    message.targetSymbol = object.targetSymbol ?? "";
     message.amount = object.amount ?? "";
     message.fee = object.fee ?? "";
     message.htlcExpirationTimestamp = object.htlcExpirationTimestamp ?? "";
@@ -367,6 +425,7 @@ export const MsgRequestTransaction = {
     message.htlcCreationVout = object.htlcCreationVout ?? 0;
     message.htlcVersion = object.htlcVersion ?? "";
     message.senderPubKey = object.senderPubKey ?? new Uint8Array();
+    message.options = object.options ?? "";
     return message;
   },
 };
@@ -2118,6 +2177,425 @@ export const MsgHtlcReclaimResponse = {
   },
 };
 
+function createBaseMsgUpdateLiquidityProvisionParams(): MsgUpdateLiquidityProvisionParams {
+  return { authority: "", maxBTC: "", maxUSDT: "" };
+}
+
+export const MsgUpdateLiquidityProvisionParams = {
+  encode(
+    message: MsgUpdateLiquidityProvisionParams,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.maxBTC !== "") {
+      writer.uint32(18).string(message.maxBTC);
+    }
+    if (message.maxUSDT !== "") {
+      writer.uint32(26).string(message.maxUSDT);
+    }
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgUpdateLiquidityProvisionParams {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateLiquidityProvisionParams();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.maxBTC = reader.string();
+          break;
+        case 3:
+          message.maxUSDT = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdateLiquidityProvisionParams {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      maxBTC: isSet(object.maxBTC) ? String(object.maxBTC) : "",
+      maxUSDT: isSet(object.maxUSDT) ? String(object.maxUSDT) : "",
+    };
+  },
+
+  toJSON(message: MsgUpdateLiquidityProvisionParams): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.maxBTC !== undefined && (obj.maxBTC = message.maxBTC);
+    message.maxUSDT !== undefined && (obj.maxUSDT = message.maxUSDT);
+    return obj;
+  },
+
+  fromPartial<
+    I extends Exact<DeepPartial<MsgUpdateLiquidityProvisionParams>, I>
+  >(object: I): MsgUpdateLiquidityProvisionParams {
+    const message = createBaseMsgUpdateLiquidityProvisionParams();
+    message.authority = object.authority ?? "";
+    message.maxBTC = object.maxBTC ?? "";
+    message.maxUSDT = object.maxUSDT ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgUpdateLiquidityProvisionParamsResponse(): MsgUpdateLiquidityProvisionParamsResponse {
+  return {};
+}
+
+export const MsgUpdateLiquidityProvisionParamsResponse = {
+  encode(
+    _: MsgUpdateLiquidityProvisionParamsResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgUpdateLiquidityProvisionParamsResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateLiquidityProvisionParamsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgUpdateLiquidityProvisionParamsResponse {
+    return {};
+  },
+
+  toJSON(_: MsgUpdateLiquidityProvisionParamsResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<
+    I extends Exact<DeepPartial<MsgUpdateLiquidityProvisionParamsResponse>, I>
+  >(_: I): MsgUpdateLiquidityProvisionParamsResponse {
+    const message = createBaseMsgUpdateLiquidityProvisionParamsResponse();
+    return message;
+  },
+};
+
+function createBaseMsgUpdateTransferLimitParams(): MsgUpdateTransferLimitParams {
+  return { authority: "", maxBTC: "", maxUSDT: "" };
+}
+
+export const MsgUpdateTransferLimitParams = {
+  encode(
+    message: MsgUpdateTransferLimitParams,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.maxBTC !== "") {
+      writer.uint32(18).string(message.maxBTC);
+    }
+    if (message.maxUSDT !== "") {
+      writer.uint32(26).string(message.maxUSDT);
+    }
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgUpdateTransferLimitParams {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateTransferLimitParams();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.maxBTC = reader.string();
+          break;
+        case 3:
+          message.maxUSDT = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdateTransferLimitParams {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      maxBTC: isSet(object.maxBTC) ? String(object.maxBTC) : "",
+      maxUSDT: isSet(object.maxUSDT) ? String(object.maxUSDT) : "",
+    };
+  },
+
+  toJSON(message: MsgUpdateTransferLimitParams): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.maxBTC !== undefined && (obj.maxBTC = message.maxBTC);
+    message.maxUSDT !== undefined && (obj.maxUSDT = message.maxUSDT);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateTransferLimitParams>, I>>(
+    object: I
+  ): MsgUpdateTransferLimitParams {
+    const message = createBaseMsgUpdateTransferLimitParams();
+    message.authority = object.authority ?? "";
+    message.maxBTC = object.maxBTC ?? "";
+    message.maxUSDT = object.maxUSDT ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgUpdateTransferLimitParamsResponse(): MsgUpdateTransferLimitParamsResponse {
+  return {};
+}
+
+export const MsgUpdateTransferLimitParamsResponse = {
+  encode(
+    _: MsgUpdateTransferLimitParamsResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgUpdateTransferLimitParamsResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateTransferLimitParamsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgUpdateTransferLimitParamsResponse {
+    return {};
+  },
+
+  toJSON(_: MsgUpdateTransferLimitParamsResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<
+    I extends Exact<DeepPartial<MsgUpdateTransferLimitParamsResponse>, I>
+  >(_: I): MsgUpdateTransferLimitParamsResponse {
+    const message = createBaseMsgUpdateTransferLimitParamsResponse();
+    return message;
+  },
+};
+
+function createBaseMsgFinalizeWithdrawTransaction(): MsgFinalizeWithdrawTransaction {
+  return {
+    creator: "",
+    txId: 0,
+    txHash: "",
+    success: false,
+    signedKey: "",
+    errReason: "",
+  };
+}
+
+export const MsgFinalizeWithdrawTransaction = {
+  encode(
+    message: MsgFinalizeWithdrawTransaction,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.txId !== 0) {
+      writer.uint32(16).uint64(message.txId);
+    }
+    if (message.txHash !== "") {
+      writer.uint32(26).string(message.txHash);
+    }
+    if (message.success === true) {
+      writer.uint32(32).bool(message.success);
+    }
+    if (message.signedKey !== "") {
+      writer.uint32(42).string(message.signedKey);
+    }
+    if (message.errReason !== "") {
+      writer.uint32(50).string(message.errReason);
+    }
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgFinalizeWithdrawTransaction {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgFinalizeWithdrawTransaction();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.txId = longToNumber(reader.uint64() as Long);
+          break;
+        case 3:
+          message.txHash = reader.string();
+          break;
+        case 4:
+          message.success = reader.bool();
+          break;
+        case 5:
+          message.signedKey = reader.string();
+          break;
+        case 6:
+          message.errReason = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgFinalizeWithdrawTransaction {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      txId: isSet(object.txId) ? Number(object.txId) : 0,
+      txHash: isSet(object.txHash) ? String(object.txHash) : "",
+      success: isSet(object.success) ? Boolean(object.success) : false,
+      signedKey: isSet(object.signedKey) ? String(object.signedKey) : "",
+      errReason: isSet(object.errReason) ? String(object.errReason) : "",
+    };
+  },
+
+  toJSON(message: MsgFinalizeWithdrawTransaction): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.txId !== undefined && (obj.txId = Math.round(message.txId));
+    message.txHash !== undefined && (obj.txHash = message.txHash);
+    message.success !== undefined && (obj.success = message.success);
+    message.signedKey !== undefined && (obj.signedKey = message.signedKey);
+    message.errReason !== undefined && (obj.errReason = message.errReason);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgFinalizeWithdrawTransaction>, I>>(
+    object: I
+  ): MsgFinalizeWithdrawTransaction {
+    const message = createBaseMsgFinalizeWithdrawTransaction();
+    message.creator = object.creator ?? "";
+    message.txId = object.txId ?? 0;
+    message.txHash = object.txHash ?? "";
+    message.success = object.success ?? false;
+    message.signedKey = object.signedKey ?? "";
+    message.errReason = object.errReason ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgFinalizeWithdrawTransactionResponse(): MsgFinalizeWithdrawTransactionResponse {
+  return { code: "", msg: "" };
+}
+
+export const MsgFinalizeWithdrawTransactionResponse = {
+  encode(
+    message: MsgFinalizeWithdrawTransactionResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.code !== "") {
+      writer.uint32(10).string(message.code);
+    }
+    if (message.msg !== "") {
+      writer.uint32(18).string(message.msg);
+    }
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgFinalizeWithdrawTransactionResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgFinalizeWithdrawTransactionResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.code = reader.string();
+          break;
+        case 2:
+          message.msg = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgFinalizeWithdrawTransactionResponse {
+    return {
+      code: isSet(object.code) ? String(object.code) : "",
+      msg: isSet(object.msg) ? String(object.msg) : "",
+    };
+  },
+
+  toJSON(message: MsgFinalizeWithdrawTransactionResponse): unknown {
+    const obj: any = {};
+    message.code !== undefined && (obj.code = message.code);
+    message.msg !== undefined && (obj.msg = message.msg);
+    return obj;
+  },
+
+  fromPartial<
+    I extends Exact<DeepPartial<MsgFinalizeWithdrawTransactionResponse>, I>
+  >(object: I): MsgFinalizeWithdrawTransactionResponse {
+    const message = createBaseMsgFinalizeWithdrawTransactionResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
   RequestTransaction(
@@ -2147,6 +2625,15 @@ export interface Msg {
     request: MsgRequestHtlcLock
   ): Promise<MsgRequestHtlcLockResponse>;
   HtlcReclaim(request: MsgHtlcReclaim): Promise<MsgHtlcReclaimResponse>;
+  UpdateLiquidityProvisionParams(
+    request: MsgUpdateLiquidityProvisionParams
+  ): Promise<MsgUpdateLiquidityProvisionParamsResponse>;
+  UpdateTransferLimitParams(
+    request: MsgUpdateTransferLimitParams
+  ): Promise<MsgUpdateTransferLimitParamsResponse>;
+  FinalizeWithdrawTransaction(
+    request: MsgFinalizeWithdrawTransaction
+  ): Promise<MsgFinalizeWithdrawTransactionResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -2166,6 +2653,11 @@ export class MsgClientImpl implements Msg {
     this.FinalizeDrainTransaction = this.FinalizeDrainTransaction.bind(this);
     this.RequestHtlcLock = this.RequestHtlcLock.bind(this);
     this.HtlcReclaim = this.HtlcReclaim.bind(this);
+    this.UpdateLiquidityProvisionParams =
+      this.UpdateLiquidityProvisionParams.bind(this);
+    this.UpdateTransferLimitParams = this.UpdateTransferLimitParams.bind(this);
+    this.FinalizeWithdrawTransaction =
+      this.FinalizeWithdrawTransaction.bind(this);
   }
   RequestTransaction(
     request: MsgRequestTransaction
@@ -2312,6 +2804,48 @@ export class MsgClientImpl implements Msg {
     );
     return promise.then((data) =>
       MsgHtlcReclaimResponse.decode(new _m0.Reader(data))
+    );
+  }
+
+  UpdateLiquidityProvisionParams(
+    request: MsgUpdateLiquidityProvisionParams
+  ): Promise<MsgUpdateLiquidityProvisionParamsResponse> {
+    const data = MsgUpdateLiquidityProvisionParams.encode(request).finish();
+    const promise = this.rpc.request(
+      "kimablockchain.transaction.Msg",
+      "UpdateLiquidityProvisionParams",
+      data
+    );
+    return promise.then((data) =>
+      MsgUpdateLiquidityProvisionParamsResponse.decode(new _m0.Reader(data))
+    );
+  }
+
+  UpdateTransferLimitParams(
+    request: MsgUpdateTransferLimitParams
+  ): Promise<MsgUpdateTransferLimitParamsResponse> {
+    const data = MsgUpdateTransferLimitParams.encode(request).finish();
+    const promise = this.rpc.request(
+      "kimablockchain.transaction.Msg",
+      "UpdateTransferLimitParams",
+      data
+    );
+    return promise.then((data) =>
+      MsgUpdateTransferLimitParamsResponse.decode(new _m0.Reader(data))
+    );
+  }
+
+  FinalizeWithdrawTransaction(
+    request: MsgFinalizeWithdrawTransaction
+  ): Promise<MsgFinalizeWithdrawTransactionResponse> {
+    const data = MsgFinalizeWithdrawTransaction.encode(request).finish();
+    const promise = this.rpc.request(
+      "kimablockchain.transaction.Msg",
+      "FinalizeWithdrawTransaction",
+      data
+    );
+    return promise.then((data) =>
+      MsgFinalizeWithdrawTransactionResponse.decode(new _m0.Reader(data))
     );
   }
 }

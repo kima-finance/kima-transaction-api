@@ -96,7 +96,8 @@ interface RequestTxProps {
   originAddress: string;
   targetChain: SupportedNetworks;
   targetAddress: string;
-  symbol: CurrencyOptions;
+  originSymbol: CurrencyOptions;
+  targetSymbol: CurrencyOptions;
   amount: number;
   fee: number;
   htlcCreationHash: string;
@@ -115,7 +116,8 @@ export async function submitKimaTransaction({
   originAddress,
   targetChain,
   targetAddress,
-  symbol,
+  originSymbol,
+  targetSymbol,
   amount,
   fee,
   htlcCreationHash,
@@ -136,7 +138,8 @@ export async function submitKimaTransaction({
     originAddress,
     targetChain,
     targetAddress,
-    symbol,
+    originSymbol,
+    targetSymbol,
     amount: amount.toString(),
     fee: fee.toString(),
     htlcCreationHash,
@@ -144,6 +147,7 @@ export async function submitKimaTransaction({
     htlcExpirationTimestamp,
     htlcVersion,
     senderPubKey,
+    options: "",
   };
 
   let msg = await client.msgRequestTransaction(params);
