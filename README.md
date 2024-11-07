@@ -20,14 +20,15 @@ import {
   submitKimaTransaction,
   SupportNetworks,
   CurrencyOptions,
-} from "@kimafinance/kima-transaction-backend";
+} from "@kimafinance/kima-transaction-api";
 
 const txResult = await submitKimaTransaction({
   originAddress: "0x1234123412341234123412341234123412341234",
   originChain: "ETH",
+  originSymbol: "USDK",
   targetAddress: "0x1234123412341234123412341234123412341234",
   targetChain: "POL",
-  symbol: "USDK",
+  targetSymbol: "USDK",
   amount: 100,
   fee: 0.3,
 });
@@ -39,9 +40,10 @@ const txResult = await submitKimaTransaction({
 
     - `originAddress`: sending address
     - `originChain`: sending chain
+    - `originSymbol`: sending token symbol
     - `targetAddress`: receiving address
     - `targetChain`: receiving chain
-    - `symbol`: token symbol
+    - `targetSymbol`: receiving token symbol
     - `amount`: amount of token to transfer
     - `fee`: amount of token that kima consumes to pay gas fee for pulling & releasing token transactions
 
