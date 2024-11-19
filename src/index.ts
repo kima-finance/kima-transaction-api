@@ -30,6 +30,16 @@ interface RequestHtlcReclaimProps {
   txHash: string;
 }
 
+
+/**
+ * Cancel an HTCL lock by user taking back the funds
+ * @export
+ * @async
+ * @param {RequestHtlcReclaimProps} param0
+ * @param {string} param0.senderAddress - The creator wallet address
+ * @param {string} param0.txHash - The transaction hash of the HTLC lock
+ * @returns {Promise<DeliverTxResponse>}
+ */
 export async function HtlcReclaim({
   senderAddress,
   txHash,
@@ -61,6 +71,21 @@ interface RequestHtlcLockProps {
   htlcAddress: string;
 }
 
+
+/**
+ * Create an HTCL transaction
+ *
+ * @export
+ * @async
+ * @param {RequestHtlcLockProps} param0
+ * @param {string} param0.fromAddress - The creator wallet address
+ * @param {string} param0.senderPubkey - The creator wallet public key
+ * @param {string} param0.amount - The total amount to be locked including fees
+ * @param {string} param0.htlcTimeout - The time in seconds the HTLC will be valid for
+ * @param {string} param0.txHash - The transaction hash of the HTLC lock
+ * @param {string} param0.htlcAddress - The HTLC address
+ * @returns {Promise<DeliverTxResponse>}
+ */
 export async function submitHtlcLock({
   fromAddress,
   senderPubkey,
@@ -111,6 +136,29 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+
+/**
+ * Create a Kima transfer transaction. The HTLC parameters are only required on Bitcoin, use blank strings (or zeros) for other chains.
+ * The approval or HTLC transaction must be completed before submitting the Kima transaction or it will fail.
+ *
+ * @export
+ * @async
+ * @param {RequestTxProps} param0
+ * @param {SupportedNetworks} param0.originChain - The chain the funds are being transferred from
+ * @param {string} param0.originAddress - The user wallet address
+ * @param {SupportedNetworks} param0.targetChain - The chain the funds are being transferred to
+ * @param {string} param0.targetAddress - The destination wallet address
+ * @param {CurrencyOptions} param0.originSymbol - The starting token symbol
+ * @param {CurrencyOptions} param0.targetSymbol - The destination token symbol
+ * @param {number} param0.amount - amount of tokens to be transferred
+ * @param {number} param0.fee - The total fees to be paid
+ * @param {string} param0.htlcCreationHash - (if applicable) The transaction hash of the HTLC lock
+ * @param {number} param0.htlcCreationVout - (if applicable) The vout of the HTLC lock
+ * @param {string} param0.htlcExpirationTimestamp - (if applicable) The expiration timestamp of the HTLC lock
+ * @param {string} param0.htlcVersion - (if applicable) The version of the HTLC lock
+ * @param {Uint8Array} param0.senderPubKey - (if HTLC) The creator wallet public key
+ * @returns {Promise<DeliverTxResponse>}
+ */
 export async function submitKimaTransaction({
   originChain,
   originAddress,
