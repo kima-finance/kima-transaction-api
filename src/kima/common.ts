@@ -1,12 +1,10 @@
 import { SigningStargateClient, StdFee } from "@cosmjs/stargate";
 import dotenv from "dotenv";
 import { Registry, OfflineSigner, EncodeObject } from "@cosmjs/proto-signing";
-import {
-  MsgRequestHtlcLock,
-  MsgRequestTransaction,
-  MsgSetTxHash,
-  MsgHtlcReclaim,
-} from "./tx";
+import { MsgRequestTransaction } from "./tx/request";
+import { MsgRequestHtlcLock } from "./tx/htlc-lock";
+import { MsgSetTxHash } from "./tx/set-hash";
+import { MsgHtlcReclaim } from "./tx/htlc-reclaim";
 
 dotenv.config();
 
