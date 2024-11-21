@@ -1,6 +1,6 @@
 import { SigningStargateClient, StdFee } from "@cosmjs/stargate";
 import dotenv from "dotenv";
-import { Registry, OfflineSigner, EncodeObject } from "@cosmjs/proto-signing";
+import { Registry, OfflineSigner, EncodeObject, coin } from "@cosmjs/proto-signing";
 import {
   MsgRequestHtlcLock,
   MsgRequestTransaction,
@@ -11,8 +11,8 @@ import {
 dotenv.config();
 
 const defaultFee = {
-  amount: [],
-  gas: "10000000",
+  amount: [coin(200, "uKIMA")],
+  gas: "200000", // Gas limit
 };
 
 interface SignAndBroadcastOptions {
