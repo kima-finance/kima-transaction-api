@@ -105,6 +105,7 @@ interface RequestTxProps {
   htlcExpirationTimestamp: string;
   htlcVersion: string;
   senderPubKey: Uint8Array;
+  options: string;
 }
 
 function sleep(ms: number) {
@@ -125,6 +126,7 @@ export async function submitKimaTransaction({
   htlcExpirationTimestamp,
   htlcVersion,
   senderPubKey,
+  options,
 }: RequestTxProps) {
   const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
     process.env.KIMA_BACKEND_MNEMONIC as string,
@@ -147,7 +149,7 @@ export async function submitKimaTransaction({
     htlcExpirationTimestamp,
     htlcVersion,
     senderPubKey,
-    options: "",
+    options,
   };
 
   let msg = await client.msgRequestTransaction(params);
