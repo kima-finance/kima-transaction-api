@@ -112,6 +112,15 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+export async function getCreatorAddress() {
+  const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
+    process.env.KIMA_BACKEND_MNEMONIC as string,
+    { prefix: "kima" }
+  );
+  const [firstAccount] = await wallet.getAccounts();
+  return firstAccount
+}
+
 export async function submitKimaTransaction({
   originChain,
   originAddress,
