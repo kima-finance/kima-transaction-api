@@ -98,8 +98,8 @@ interface RequestTxProps {
   targetAddress: string;
   originSymbol: CurrencyOptions;
   targetSymbol: CurrencyOptions;
-  amount: number;
-  fee: number;
+  amount: string; // number in whole units i.e. "12.34"
+  fee: string; // number in whole units i.e "0.061234"
   htlcCreationHash: string;
   htlcCreationVout: number;
   htlcExpirationTimestamp: string;
