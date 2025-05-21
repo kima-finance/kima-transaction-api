@@ -118,7 +118,7 @@ export async function getCreatorAddress() {
     { prefix: "kima" }
   );
   const [firstAccount] = await wallet.getAccounts();
-  return firstAccount
+  return firstAccount;
 }
 
 export async function submitKimaTransaction({
@@ -161,8 +161,12 @@ export async function submitKimaTransaction({
     options,
   };
 
-  let msg = await client.msgRequestTransaction(params);
-  const result = await client.signAndBroadcast([msg]);
+  const msgTx = await client.msgRequestTransaction(params);
+  const result = await client.signAndBroadcast([msgTx]);
+
+  if (result.code !== 0) {
+    return result;
+  }
 
   let txId = 1;
 
@@ -176,18 +180,18 @@ export async function submitKimaTransaction({
     }
   }
 
-  msg = await client.msgSetTxHash({
+  const msgSetHash = await client.msgSetTxHash({
     creator: firstAccount.address,
     txId,
     txHash: result.transactionHash,
     txType: "request_transaction",
   });
 
-  console.log(msg);
+  console.log(msgSetHash);
 
   let hashResult;
   do {
-    hashResult = await client.signAndBroadcast([msg]);
+    hashResult = await client.signAndBroadcast([msgSetHash]);
     await sleep(1000);
   } while (hashResult.code !== 0);
 
