@@ -180,6 +180,8 @@ export async function submitKimaTransaction({
     }
   }
 
+  await sleep(5000);
+
   const msgSetHash = await client.msgSetTxHash({
     creator: firstAccount.address,
     txId,
@@ -191,9 +193,14 @@ export async function submitKimaTransaction({
 
   let hashResult;
   do {
-    hashResult = await client.signAndBroadcast([msgSetHash]);
-    await sleep(1000);
-  } while (hashResult.code !== 0);
+    try {
+      hashResult = await client.signAndBroadcast([msgSetHash]);
+    } catch (error) {
+      console.log(error);
+      await sleep(5000);
+      continue;
+    }
+  } while (hashResult?.code !== 0);
 
   return result;
 }
