@@ -1,6 +1,11 @@
 import { SigningStargateClient, StdFee } from "@cosmjs/stargate";
 import dotenv from "dotenv";
-import { Registry, OfflineSigner, EncodeObject, coin } from "@cosmjs/proto-signing";
+import {
+  Registry,
+  OfflineSigner,
+  EncodeObject,
+  coin,
+} from "@cosmjs/proto-signing";
 import {
   MsgRequestHtlcLock,
   MsgRequestTransaction,
@@ -35,13 +40,19 @@ export const TxClient = async (wallet: OfflineSigner) => {
     wallet,
     { registry }
   );
+
   const { address } = (await wallet.getAccounts())[0];
 
   return {
-    signAndBroadcast: (
-      msgs: EncodeObject[],
-      { fee, memo }: SignAndBroadcastOptions = { fee: defaultFee, memo: "" }
-    ) => client.signAndBroadcast(address, msgs, fee, memo),
+    signAndBroadcast: async (msgs: EncodeObject[]) => {
+      const gasInfo = await client.simulate(address, msgs, "");
+      return client.signAndBroadcast(
+        address,
+        msgs,
+        { ...defaultFee, gas: (gasInfo * 2).toString() },
+        ""
+      );
+    },
     msgRequestTransaction: (data: MsgRequestTransaction): EncodeObject => ({
       typeUrl: "/kimablockchain.transaction.MsgRequestTransaction",
       value: MsgRequestTransaction.fromPartial(data),
