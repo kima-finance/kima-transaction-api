@@ -20,16 +20,29 @@ import {
   submitKimaTransaction,
   SupportNetworks,
   CurrencyOptions,
-} from "@kimafinance/kima-transaction-backend";
+} from "@kimafinance/kima-transaction-api";
 
 const txResult = await submitKimaTransaction({
   originAddress: "0x1234123412341234123412341234123412341234",
   originChain: "ETH",
+  originSymbol: "USDK",
   targetAddress: "0x1234123412341234123412341234123412341234",
   targetChain: "POL",
-  symbol: "USDK",
-  amount: 100,
-  fee: 0.3,
+  targetSymbol: "USDK",
+  amount: "100",
+  fee: "0.3",
+  htlcCreationHash: "", // required to send empty strings for now
+  htlcCreationVout: "",
+  htlcExpirationTimestamp: "",
+  htlcVersion: "",
+  senderPubKey: "",
+  options: {
+    signature: "", // required: generated signature from the approval message
+    feeId: "", // required: id returned from calculated fee in fcs
+    chargeFeeAtTarget: false // required: wether to deduct fees from origin or target
+    transactionIdSeed: "", // optional: used in fiat on ramp payments
+    transactionIdSignature: "", // optional: used to validate transaction idempotency
+  }
 });
 ```
 
@@ -39,9 +52,10 @@ const txResult = await submitKimaTransaction({
 
     - `originAddress`: sending address
     - `originChain`: sending chain
+    - `originSymbol`: sending token symbol
     - `targetAddress`: receiving address
     - `targetChain`: receiving chain
-    - `symbol`: token symbol
+    - `targetSymbol`: receiving token symbol
     - `amount`: amount of token to transfer
     - `fee`: amount of token that kima consumes to pay gas fee for pulling & releasing token transactions
 
