@@ -6,12 +6,17 @@ import {
   EncodeObject,
   coin,
 } from "@cosmjs/proto-signing";
+
 import {
   MsgRequestHtlcLock,
   MsgRequestTransaction,
   MsgSetTxHash,
   MsgHtlcReclaim,
-} from "./tx";
+} from "./transfer_tx";
+
+import {
+  MsgRequestSwapTransaction,
+} from "./swap_tx";
 
 dotenv.config();
 
@@ -30,6 +35,7 @@ const types = [
   ["/kimablockchain.transaction.MsgRequestHtlcLock", MsgRequestHtlcLock],
   ["/kimablockchain.transaction.MsgSetTxHash", MsgSetTxHash],
   ["/kimablockchain.transaction.MsgHtlcReclaim", MsgHtlcReclaim],
+  ["/kimablockchain.swap.MsgRequestSwapTransaction", MsgRequestSwapTransaction],
 ];
 
 export const registry = new Registry(<any>types);
@@ -68,6 +74,10 @@ export const TxClient = async (wallet: OfflineSigner) => {
     msgHtlcReclaim: (data: MsgHtlcReclaim): EncodeObject => ({
       typeUrl: "/kimablockchain.transaction.MsgHtlcReclaim",
       value: MsgHtlcReclaim.fromPartial(data),
+    }),
+    msgRequestSwapTransaction: (data: MsgRequestSwapTransaction): EncodeObject => ({
+      typeUrl: "/kimablockchain.swap.MsgRequestSwapTransaction",
+      value: MsgRequestSwapTransaction.fromPartial(data),
     }),
   };
 };
