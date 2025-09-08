@@ -17,12 +17,13 @@ yarn add @kimafinance/kima-transaction-api
 
 ```ts
 import {
-  submitKimaTransaction,
+  submitKimaTransferTransaction,
+  submitKimaSwapTransaction,
   SupportNetworks,
   CurrencyOptions,
 } from "@kimafinance/kima-transaction-api";
 
-const txResult = await submitKimaTransaction({
+const txResult = await submitKimaTransferTransaction({
   originAddress: "0x1234123412341234123412341234123412341234",
   originChain: "ETH",
   originSymbol: "USDK",
@@ -44,11 +45,30 @@ const txResult = await submitKimaTransaction({
     transactionIdSignature: "", // optional: used to validate transaction idempotency
   }
 });
+
+
+const txResult = await submitKimaSwapTransaction({
+  originAddress: "0x1234123412341234123412341234123412341234",
+  originChain: "ETH",
+  originSymbol: "USDK",
+  targetAddress: "0x1234123412341234123412341234123412341234",
+  targetChain: "POL",
+  targetSymbol: "USDK",
+  amountIn: "100",
+  amountOut: "100",
+  fee: "0.3",
+  dex: "uniswap", // required to send empty strings for now
+  slippage: "0.05",
+  options: {
+    signature: "", // required: generated signature from the approval message
+    feeId: "", // required: id returned from calculated fee in fcs
+  }
+});
 ```
 
 ## Available Functions
 
-`submitKimaTransaction` : Submit a transaction to transfer liquidity from one change to another.
+`submitKimaTransferTransaction` : Submit a transaction to transfer liquidity from one change to another.
 
     - `originAddress`: sending address
     - `originChain`: sending chain
@@ -58,6 +78,20 @@ const txResult = await submitKimaTransaction({
     - `targetSymbol`: receiving token symbol
     - `amount`: amount of token to transfer
     - `fee`: amount of token that kima consumes to pay gas fee for pulling & releasing token transactions
+
+`submitKimaSwapTransaction` : Submit a transaction to swap token from one chain to another.
+
+    - `originAddress`: sending address
+    - `originChain`: sending chain
+    - `originSymbol`: sending token symbol
+    - `targetAddress`: receiving address
+    - `targetChain`: receiving chain
+    - `targetSymbol`: receiving token symbol
+    - `amountIn`: amount of token to swap
+    - `amountOut`: expected amount of token to receive
+    - `fee`: amount of token that kima consumes to pay gas fee for pulling & swapping token transactions
+    - `dex`: the name of the dex that user wants to interact with (optional)
+    - `slippage`: maximum acceptable slippage parameter
 
 ## Environment Variables
 
