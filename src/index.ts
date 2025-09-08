@@ -4,31 +4,18 @@ import {
   MsgHtlcReclaim,
   MsgRequestHtlcLock,
   MsgRequestTransaction,
-} from "./kima/tx";
+} from "./kima/transfer_tx";
 
-export enum SupportedNetworks {
-  ETHEREUM = "ETH",
-  POLYGON = "POL",
-  AVALANCHE = "AVX",
-  SOLANA = "SOL",
-  FUSE = "FUS",
-  CELO = "CEL",
-  BSC = "BSC",
-  ARBITRIUM = "ARB",
-  OPTIMISM = "OPT",
-  POLYGON_ZKEVM = "ZKE",
-}
+import {
+  MsgRequestSwapTransaction,
+} from "./kima/swap_tx";
 
-export enum CurrencyOptions {
-  USDT = "USDT",
-  USDC = "USDC",
-  USDK = "USDK",
-}
-
-interface RequestHtlcReclaimProps {
-  senderAddress: string;
-  txHash: string;
-}
+import {
+  RequestHtlcReclaimProps,
+  RequestHtlcLockProps,
+  RequestTransferTxProps,
+  RequestSwapTxProps,
+} from "./types";
 
 export async function HtlcReclaim({
   senderAddress,
@@ -50,15 +37,6 @@ export async function HtlcReclaim({
   const result = await client.signAndBroadcast([msg]);
 
   return result;
-}
-
-interface RequestHtlcLockProps {
-  fromAddress: string;
-  senderPubkey: string;
-  amount: string;
-  htlcTimeout: string;
-  txHash: string;
-  htlcAddress: string;
 }
 
 export async function submitHtlcLock({
@@ -91,27 +69,6 @@ export async function submitHtlcLock({
   return result;
 }
 
-interface RequestTxProps {
-  originChain: SupportedNetworks;
-  originAddress: string;
-  targetChain: SupportedNetworks;
-  targetAddress: string;
-  originSymbol: CurrencyOptions;
-  targetSymbol: CurrencyOptions;
-  amount: string; // number in whole units i.e. "12.34"
-  fee: string; // number in whole units i.e "0.061234"
-  htlcCreationHash: string;
-  htlcCreationVout: number;
-  htlcExpirationTimestamp: string;
-  htlcVersion: string;
-  senderPubKey: Uint8Array;
-  options: string;
-}
-
-function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 export async function getCreatorAddress() {
   const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
     process.env.KIMA_BACKEND_MNEMONIC as string,
@@ -121,7 +78,7 @@ export async function getCreatorAddress() {
   return firstAccount;
 }
 
-export async function submitKimaTransaction({
+export async function submitKimaTransferTransaction({
   originChain,
   originAddress,
   targetChain,
@@ -131,12 +88,12 @@ export async function submitKimaTransaction({
   amount,
   fee,
   htlcCreationHash,
-  htlcCreationVout,
+  htlcCreationVout = 0,
   htlcExpirationTimestamp,
-  htlcVersion,
+  htlcVersion = "",
   senderPubKey,
   options,
-}: RequestTxProps) {
+}: RequestTransferTxProps) {
   const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
     process.env.KIMA_BACKEND_MNEMONIC as string,
     { prefix: "kima" }
@@ -153,54 +110,58 @@ export async function submitKimaTransaction({
     targetSymbol,
     amount: amount,
     fee: fee,
-    htlcCreationHash,
-    htlcCreationVout,
-    htlcExpirationTimestamp,
+    htlcCreationHash: htlcCreationHash || "",
+    htlcCreationVout: htlcCreationVout || 0,
+    htlcExpirationTimestamp: htlcExpirationTimestamp || "",
     htlcVersion,
-    senderPubKey,
+    senderPubKey: senderPubKey || new Uint8Array(),
     options,
   };
 
   const msgTx = await client.msgRequestTransaction(params);
   const result = await client.signAndBroadcast([msgTx]);
 
-  if (result.code !== 0) {
-    return result;
-  }
+  return result;
+}
 
-  let txId = 1;
-
-  for (const event of result.events) {
-    if (event.type === "transaction_requested") {
-      for (const attr of event.attributes) {
-        if (attr.key === "txId") {
-          txId = +attr.value;
-        }
-      }
-    }
-  }
-
-  await sleep(5000);
-
-  const msgSetHash = await client.msgSetTxHash({
+export async function submitKimaSwapTransaction({
+  originChain,
+  originAddress,
+  targetChain,
+  targetAddress,
+  originSymbol,
+  targetSymbol,
+  amountIn,
+  amountOut,
+  fee,
+  dex,
+  slippage,
+  options,
+}: RequestSwapTxProps) {
+  const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
+    process.env.KIMA_BACKEND_MNEMONIC as string,
+    { prefix: "kima" }
+  );
+  const client = await TxClient(wallet);
+  const [firstAccount] = await wallet.getAccounts();
+  const params: MsgRequestSwapTransaction = {
     creator: firstAccount.address,
-    txId,
-    txHash: result.transactionHash,
-    txType: "request_transaction",
-  });
+    originChain,
+    originAddress,
+    targetChain,
+    targetAddress,
+    originSymbol,
+    targetSymbol,
+    amountIn: amountIn,
+    amountOut: amountOut,
+    fee: fee,
+    dex: dex,
+    slippage: slippage,
+    options: options,
+  };
 
-  console.log(msgSetHash);
-
-  let hashResult;
-  do {
-    try {
-      hashResult = await client.signAndBroadcast([msgSetHash]);
-    } catch (error) {
-      console.log(error);
-      await sleep(5000);
-      continue;
-    }
-  } while (hashResult?.code !== 0);
+  const msgTx = await client.msgRequestSwapTransaction(params);
+  const result = await client.signAndBroadcast([msgTx]);
 
   return result;
 }
