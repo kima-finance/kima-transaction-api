@@ -13,7 +13,7 @@ import {
 import {
   RequestHtlcReclaimProps,
   RequestHtlcLockProps,
-  RequestTxProps,
+  RequestTransferTxProps,
   RequestSwapTxProps,
 } from "./types";
 
@@ -88,12 +88,12 @@ export async function submitKimaTransferTransaction({
   amount,
   fee,
   htlcCreationHash,
-  htlcCreationVout,
+  htlcCreationVout = 0,
   htlcExpirationTimestamp,
-  htlcVersion,
+  htlcVersion = "",
   senderPubKey,
   options,
-}: RequestTxProps) {
+}: RequestTransferTxProps) {
   const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
     process.env.KIMA_BACKEND_MNEMONIC as string,
     { prefix: "kima" }
@@ -110,11 +110,11 @@ export async function submitKimaTransferTransaction({
     targetSymbol,
     amount: amount,
     fee: fee,
-    htlcCreationHash,
-    htlcCreationVout,
-    htlcExpirationTimestamp,
+    htlcCreationHash: htlcCreationHash || "",
+    htlcCreationVout: htlcCreationVout || 0,
+    htlcExpirationTimestamp: htlcExpirationTimestamp || "",
     htlcVersion,
-    senderPubKey,
+    senderPubKey: senderPubKey || new Uint8Array(),
     options,
   };
 

@@ -4,18 +4,27 @@ export enum SupportedNetworks {
     POLYGON = "POL",
     AVALANCHE = "AVX",
     SOLANA = "SOL",
-    FUSE = "FUS",
-    CELO = "CEL",
     BSC = "BSC",
     ARBITRIUM = "ARB",
     OPTIMISM = "OPT",
     POLYGON_ZKEVM = "ZKE",
+    BITCOIN = "BTC",
+    BERA = "BERA",
+    CFX = "CFX",
+    TRON = "TRX",
+    FIAT = "FIAT",
+    CREDITCARD = "CC",
+    BASE = "BASE",
 }
 
 export enum CurrencyOptions {
     USDT = "USDT",
     USDC = "USDC",
     USDK = "USDK",
+    EURC = "EURC",
+    EURK = "EURK",
+    EUR = "EUR",
+    USD = "USD",
 }
 
 export interface RequestHtlcReclaimProps {
@@ -32,7 +41,7 @@ export interface RequestHtlcLockProps {
     htlcAddress: string;
 }
 
-export interface RequestTxProps {
+export interface RequestTransferTxProps {
     originChain: SupportedNetworks;
     originAddress: string;
     targetChain: SupportedNetworks;
@@ -41,11 +50,11 @@ export interface RequestTxProps {
     targetSymbol: CurrencyOptions;
     amount: string; // number in whole units i.e. "12.34"
     fee: string; // number in whole units i.e "0.061234"
-    htlcCreationHash: string;
-    htlcCreationVout: number;
-    htlcExpirationTimestamp: string;
-    htlcVersion: string;
-    senderPubKey: Uint8Array;
+    htlcCreationHash?: string;
+    htlcCreationVout?: number;
+    htlcExpirationTimestamp?: string;
+    htlcVersion?: string;
+    senderPubKey?: Uint8Array;
     options: string;
 }
 
