@@ -15,6 +15,7 @@ export enum SupportedNetworks {
     FIAT = "FIAT",
     CREDITCARD = "CC",
     BASE = "BASE",
+    WORLDCHAIN="WLD"
 }
 
 export enum CurrencyOptions {
