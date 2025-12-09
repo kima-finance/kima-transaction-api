@@ -74,6 +74,18 @@ export interface RequestSwapTxProps {
     options: string;
 }
 
+export interface RequestExternalTxProps {
+    originChain: SupportedNetworks;
+    originAddress: string;
+    targetChain: SupportedNetworks;
+    targetAddress: string;
+    originSymbol: CurrencyOptions;
+    targetSymbol: CurrencyOptions;
+    amount: string;
+    fee: string;
+    options: string;
+}
+
 function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
