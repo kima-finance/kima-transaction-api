@@ -4,6 +4,7 @@ import {
   MsgHtlcReclaim,
   MsgRequestHtlcLock,
   MsgRequestTransaction,
+  MsgRequestExternalTransaction,
 } from "./kima/transfer_tx";
 
 import {
@@ -15,6 +16,7 @@ import {
   RequestHtlcLockProps,
   RequestTransferTxProps,
   RequestSwapTxProps,
+  RequestExternalTxProps,
 } from "./types";
 
 export async function HtlcReclaim({
@@ -161,6 +163,42 @@ export async function submitKimaSwapTransaction({
   };
 
   const msgTx = await client.msgRequestSwapTransaction(params);
+  const result = await client.signAndBroadcast([msgTx]);
+
+  return result;
+}
+
+export async function submitKimaExternalTransaction({
+  originChain,
+  originAddress,
+  targetChain,
+  targetAddress,
+  originSymbol,
+  targetSymbol,
+  amount,
+  fee,
+  options,
+}: RequestExternalTxProps) {
+  const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
+    process.env.KIMA_BACKEND_MNEMONIC as string,
+    { prefix: "kima" }
+  );
+  const client = await TxClient(wallet);
+  const [firstAccount] = await wallet.getAccounts();
+  const params: MsgRequestExternalTransaction = {
+    creator: firstAccount.address,
+    originChain,
+    originAddress,
+    targetChain,
+    targetAddress,
+    originSymbol,
+    targetSymbol,
+    amount: amount,
+    fee: fee,
+    options,
+  };
+
+  const msgTx = await client.msgRequestExternalTransaction(params);
   const result = await client.signAndBroadcast([msgTx]);
 
   return result;

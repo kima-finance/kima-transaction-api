@@ -12,6 +12,7 @@ import {
   MsgRequestTransaction,
   MsgSetTxHash,
   MsgHtlcReclaim,
+  MsgRequestExternalTransaction,
 } from "./transfer_tx";
 
 import {
@@ -78,6 +79,10 @@ export const TxClient = async (wallet: OfflineSigner) => {
     msgRequestSwapTransaction: (data: MsgRequestSwapTransaction): EncodeObject => ({
       typeUrl: "/kimablockchain.swap.MsgRequestSwapTransaction",
       value: MsgRequestSwapTransaction.fromPartial(data),
+    }),
+    msgRequestExternalTransaction: (data: MsgRequestExternalTransaction): EncodeObject => ({
+      typeUrl: "/kimablockchain.transaction.MsgRequestExternalTransaction",
+      value: MsgRequestExternalTransaction.fromPartial(data),
     }),
   };
 };
