@@ -41,6 +41,8 @@ export interface MsgFinalizeTransaction {
   success: boolean;
   signedKey: string;
   errReason: string;
+  tssMsgId: string;
+  txType: string;
 }
 
 export interface MsgFinalizeTransactionResponse {
@@ -55,6 +57,7 @@ export interface MsgFinalizeProvisionTransaction {
   success: boolean;
   signedKey: string;
   errReason: string;
+  tssMsgId: string;
 }
 
 export interface MsgFinalizeProvisionTransactionResponse {
@@ -115,11 +118,27 @@ export interface MsgSetTxProcess {
   txId: number;
   timestamp: number;
   msgId: string;
+  handleId: number;
   /** request_transaction, request_provision_transaction, request_drain_transaction, withdraw_pool */
   txType: string;
+  /** the fee id for the transaction */
+  feeId: string;
+  /** the origin gas fee of the transaction */
+  originGasFee: string;
+  /** the target gas fee of the transaction */
+  targetGasFee: string;
+  /** the kima processing fee of the transaction */
+  kimaProcessingFee: string;
+  /** the total fee of the transaction */
+  totalFee: string;
+  /** the pegged to of the transaction */
+  peggedTo: string;
+  /** the expiration of the transaction */
+  expiration: number;
 }
 
-export interface MsgSetTxProcessResponse {}
+export interface MsgSetTxProcessResponse {
+}
 
 export interface MsgRequestDrainTransaction {
   creator: string;
@@ -143,6 +162,7 @@ export interface MsgFinalizeDrainTransaction {
   success: boolean;
   signedKey: string;
   errReason: string;
+  tssMsgId: string;
 }
 
 export interface MsgFinalizeDrainTransactionResponse {
@@ -160,7 +180,8 @@ export interface MsgRequestHtlcLock {
   htlcAddress: string;
 }
 
-export interface MsgRequestHtlcLockResponse {}
+export interface MsgRequestHtlcLockResponse {
+}
 
 export interface MsgHtlcReclaim {
   creator: string;
@@ -168,7 +189,8 @@ export interface MsgHtlcReclaim {
   senderAddress: string;
 }
 
-export interface MsgHtlcReclaimResponse {}
+export interface MsgHtlcReclaimResponse {
+}
 
 export interface MsgUpdateLiquidityProvisionParams {
   authority: string;
@@ -176,7 +198,8 @@ export interface MsgUpdateLiquidityProvisionParams {
   maxUSDT: string;
 }
 
-export interface MsgUpdateLiquidityProvisionParamsResponse {}
+export interface MsgUpdateLiquidityProvisionParamsResponse {
+}
 
 export interface MsgUpdateTransferLimitParams {
   authority: string;
@@ -184,7 +207,16 @@ export interface MsgUpdateTransferLimitParams {
   maxUSDT: string;
 }
 
-export interface MsgUpdateTransferLimitParamsResponse {}
+export interface MsgUpdateTransferLimitParamsResponse {
+}
+
+export interface MsgSetFiatTransactionParams {
+  authority: string;
+  daca: string;
+}
+
+export interface MsgSetFiatTransactionParamsResponse {
+}
 
 export interface MsgFinalizeWithdrawTransaction {
   creator: string;
@@ -193,9 +225,65 @@ export interface MsgFinalizeWithdrawTransaction {
   success: boolean;
   signedKey: string;
   errReason: string;
+  tssMsgId: string;
 }
 
 export interface MsgFinalizeWithdrawTransactionResponse {
+  code: string;
+  msg: string;
+}
+
+export interface MsgConfirmTransaction {
+  creator: string;
+  transactionId: string;
+  amount: string;
+  currency: string;
+  confirmed: boolean;
+  failReason: string;
+  timestamp: number;
+}
+
+export interface MsgConfirmTransactionResponse {
+  code: string;
+  msg: string;
+}
+
+export interface MsgUpdateTransactionStatus {
+  creator: string;
+  txId: string;
+  newStatus: string;
+  failReason: string;
+}
+
+export interface MsgUpdateTransactionStatusResponse {
+  code: string;
+  msg: string;
+}
+
+export interface MsgUpdateMaxConcurrentLimit {
+  authority: string;
+  maxLimit: number;
+}
+
+export interface MsgUpdateMaxConcurrentLimitResponse {
+  code: string;
+  msg: string;
+}
+
+export interface MsgRequestExternalTransaction {
+  creator: string;
+  originChain: string;
+  originAddress: string;
+  targetChain: string;
+  targetAddress: string;
+  originSymbol: string;
+  targetSymbol: string;
+  amount: string;
+  fee: string;
+  options: string;
+}
+
+export interface MsgRequestExternalTransactionResponse {
   code: string;
   msg: string;
 }
@@ -221,10 +309,7 @@ function createBaseMsgRequestTransaction(): MsgRequestTransaction {
 }
 
 export const MsgRequestTransaction = {
-  encode(
-    message: MsgRequestTransaction,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgRequestTransaction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -273,10 +358,7 @@ export const MsgRequestTransaction = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgRequestTransaction {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRequestTransaction {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRequestTransaction();
@@ -340,34 +422,18 @@ export const MsgRequestTransaction = {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
       originChain: isSet(object.originChain) ? String(object.originChain) : "",
-      originAddress: isSet(object.originAddress)
-        ? String(object.originAddress)
-        : "",
+      originAddress: isSet(object.originAddress) ? String(object.originAddress) : "",
       targetChain: isSet(object.targetChain) ? String(object.targetChain) : "",
-      targetAddress: isSet(object.targetAddress)
-        ? String(object.targetAddress)
-        : "",
-      originSymbol: isSet(object.originSymbol)
-        ? String(object.originSymbol)
-        : "",
-      targetSymbol: isSet(object.targetSymbol)
-        ? String(object.targetSymbol)
-        : "",
+      targetAddress: isSet(object.targetAddress) ? String(object.targetAddress) : "",
+      originSymbol: isSet(object.originSymbol) ? String(object.originSymbol) : "",
+      targetSymbol: isSet(object.targetSymbol) ? String(object.targetSymbol) : "",
       amount: isSet(object.amount) ? String(object.amount) : "",
       fee: isSet(object.fee) ? String(object.fee) : "",
-      htlcExpirationTimestamp: isSet(object.htlcExpirationTimestamp)
-        ? String(object.htlcExpirationTimestamp)
-        : "",
-      htlcCreationHash: isSet(object.htlcCreationHash)
-        ? String(object.htlcCreationHash)
-        : "",
-      htlcCreationVout: isSet(object.htlcCreationVout)
-        ? Number(object.htlcCreationVout)
-        : 0,
+      htlcExpirationTimestamp: isSet(object.htlcExpirationTimestamp) ? String(object.htlcExpirationTimestamp) : "",
+      htlcCreationHash: isSet(object.htlcCreationHash) ? String(object.htlcCreationHash) : "",
+      htlcCreationVout: isSet(object.htlcCreationVout) ? Number(object.htlcCreationVout) : 0,
       htlcVersion: isSet(object.htlcVersion) ? String(object.htlcVersion) : "",
-      senderPubKey: isSet(object.senderPubKey)
-        ? bytesFromBase64(object.senderPubKey)
-        : new Uint8Array(),
+      senderPubKey: isSet(object.senderPubKey) ? bytesFromBase64(object.senderPubKey) : new Uint8Array(),
       options: isSet(object.options) ? String(object.options) : "",
     };
   },
@@ -375,41 +441,27 @@ export const MsgRequestTransaction = {
   toJSON(message: MsgRequestTransaction): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.originChain !== undefined &&
-      (obj.originChain = message.originChain);
-    message.originAddress !== undefined &&
-      (obj.originAddress = message.originAddress);
-    message.targetChain !== undefined &&
-      (obj.targetChain = message.targetChain);
-    message.targetAddress !== undefined &&
-      (obj.targetAddress = message.targetAddress);
-    message.originSymbol !== undefined &&
-      (obj.originSymbol = message.originSymbol);
-    message.targetSymbol !== undefined &&
-      (obj.targetSymbol = message.targetSymbol);
+    message.originChain !== undefined && (obj.originChain = message.originChain);
+    message.originAddress !== undefined && (obj.originAddress = message.originAddress);
+    message.targetChain !== undefined && (obj.targetChain = message.targetChain);
+    message.targetAddress !== undefined && (obj.targetAddress = message.targetAddress);
+    message.originSymbol !== undefined && (obj.originSymbol = message.originSymbol);
+    message.targetSymbol !== undefined && (obj.targetSymbol = message.targetSymbol);
     message.amount !== undefined && (obj.amount = message.amount);
     message.fee !== undefined && (obj.fee = message.fee);
-    message.htlcExpirationTimestamp !== undefined &&
-      (obj.htlcExpirationTimestamp = message.htlcExpirationTimestamp);
-    message.htlcCreationHash !== undefined &&
-      (obj.htlcCreationHash = message.htlcCreationHash);
-    message.htlcCreationVout !== undefined &&
-      (obj.htlcCreationVout = Math.round(message.htlcCreationVout));
-    message.htlcVersion !== undefined &&
-      (obj.htlcVersion = message.htlcVersion);
-    message.senderPubKey !== undefined &&
-      (obj.senderPubKey = base64FromBytes(
-        message.senderPubKey !== undefined
-          ? message.senderPubKey
-          : new Uint8Array()
+    message.htlcExpirationTimestamp !== undefined && (obj.htlcExpirationTimestamp = message.htlcExpirationTimestamp);
+    message.htlcCreationHash !== undefined && (obj.htlcCreationHash = message.htlcCreationHash);
+    message.htlcCreationVout !== undefined && (obj.htlcCreationVout = Math.round(message.htlcCreationVout));
+    message.htlcVersion !== undefined && (obj.htlcVersion = message.htlcVersion);
+    message.senderPubKey !== undefined
+      && (obj.senderPubKey = base64FromBytes(
+        message.senderPubKey !== undefined ? message.senderPubKey : new Uint8Array(),
       ));
     message.options !== undefined && (obj.options = message.options);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgRequestTransaction>, I>>(
-    object: I
-  ): MsgRequestTransaction {
+  fromPartial<I extends Exact<DeepPartial<MsgRequestTransaction>, I>>(object: I): MsgRequestTransaction {
     const message = createBaseMsgRequestTransaction();
     message.creator = object.creator ?? "";
     message.originChain = object.originChain ?? "";
@@ -435,10 +487,7 @@ function createBaseMsgRequestTransactionResponse(): MsgRequestTransactionRespons
 }
 
 export const MsgRequestTransactionResponse = {
-  encode(
-    message: MsgRequestTransactionResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgRequestTransactionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -451,10 +500,7 @@ export const MsgRequestTransactionResponse = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgRequestTransactionResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRequestTransactionResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRequestTransactionResponse();
@@ -495,7 +541,7 @@ export const MsgRequestTransactionResponse = {
   },
 
   fromPartial<I extends Exact<DeepPartial<MsgRequestTransactionResponse>, I>>(
-    object: I
+    object: I,
   ): MsgRequestTransactionResponse {
     const message = createBaseMsgRequestTransactionResponse();
     message.code = object.code ?? "";
@@ -506,21 +552,11 @@ export const MsgRequestTransactionResponse = {
 };
 
 function createBaseMsgFinalizeTransaction(): MsgFinalizeTransaction {
-  return {
-    creator: "",
-    txId: 0,
-    txHash: "",
-    success: false,
-    signedKey: "",
-    errReason: "",
-  };
+  return { creator: "", txId: 0, txHash: "", success: false, signedKey: "", errReason: "", tssMsgId: "", txType: "" };
 }
 
 export const MsgFinalizeTransaction = {
-  encode(
-    message: MsgFinalizeTransaction,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgFinalizeTransaction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -539,13 +575,16 @@ export const MsgFinalizeTransaction = {
     if (message.errReason !== "") {
       writer.uint32(50).string(message.errReason);
     }
+    if (message.tssMsgId !== "") {
+      writer.uint32(58).string(message.tssMsgId);
+    }
+    if (message.txType !== "") {
+      writer.uint32(66).string(message.txType);
+    }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgFinalizeTransaction {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgFinalizeTransaction {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgFinalizeTransaction();
@@ -570,6 +609,12 @@ export const MsgFinalizeTransaction = {
         case 6:
           message.errReason = reader.string();
           break;
+        case 7:
+          message.tssMsgId = reader.string();
+          break;
+        case 8:
+          message.txType = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -586,6 +631,8 @@ export const MsgFinalizeTransaction = {
       success: isSet(object.success) ? Boolean(object.success) : false,
       signedKey: isSet(object.signedKey) ? String(object.signedKey) : "",
       errReason: isSet(object.errReason) ? String(object.errReason) : "",
+      tssMsgId: isSet(object.tssMsgId) ? String(object.tssMsgId) : "",
+      txType: isSet(object.txType) ? String(object.txType) : "",
     };
   },
 
@@ -597,12 +644,12 @@ export const MsgFinalizeTransaction = {
     message.success !== undefined && (obj.success = message.success);
     message.signedKey !== undefined && (obj.signedKey = message.signedKey);
     message.errReason !== undefined && (obj.errReason = message.errReason);
+    message.tssMsgId !== undefined && (obj.tssMsgId = message.tssMsgId);
+    message.txType !== undefined && (obj.txType = message.txType);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgFinalizeTransaction>, I>>(
-    object: I
-  ): MsgFinalizeTransaction {
+  fromPartial<I extends Exact<DeepPartial<MsgFinalizeTransaction>, I>>(object: I): MsgFinalizeTransaction {
     const message = createBaseMsgFinalizeTransaction();
     message.creator = object.creator ?? "";
     message.txId = object.txId ?? 0;
@@ -610,6 +657,8 @@ export const MsgFinalizeTransaction = {
     message.success = object.success ?? false;
     message.signedKey = object.signedKey ?? "";
     message.errReason = object.errReason ?? "";
+    message.tssMsgId = object.tssMsgId ?? "";
+    message.txType = object.txType ?? "";
     return message;
   },
 };
@@ -619,10 +668,7 @@ function createBaseMsgFinalizeTransactionResponse(): MsgFinalizeTransactionRespo
 }
 
 export const MsgFinalizeTransactionResponse = {
-  encode(
-    message: MsgFinalizeTransactionResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgFinalizeTransactionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -632,10 +678,7 @@ export const MsgFinalizeTransactionResponse = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgFinalizeTransactionResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgFinalizeTransactionResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgFinalizeTransactionResponse();
@@ -657,10 +700,7 @@ export const MsgFinalizeTransactionResponse = {
   },
 
   fromJSON(object: any): MsgFinalizeTransactionResponse {
-    return {
-      code: isSet(object.code) ? String(object.code) : "",
-      msg: isSet(object.msg) ? String(object.msg) : "",
-    };
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgFinalizeTransactionResponse): unknown {
@@ -671,7 +711,7 @@ export const MsgFinalizeTransactionResponse = {
   },
 
   fromPartial<I extends Exact<DeepPartial<MsgFinalizeTransactionResponse>, I>>(
-    object: I
+    object: I,
   ): MsgFinalizeTransactionResponse {
     const message = createBaseMsgFinalizeTransactionResponse();
     message.code = object.code ?? "";
@@ -681,21 +721,11 @@ export const MsgFinalizeTransactionResponse = {
 };
 
 function createBaseMsgFinalizeProvisionTransaction(): MsgFinalizeProvisionTransaction {
-  return {
-    creator: "",
-    txId: 0,
-    txHash: "",
-    success: false,
-    signedKey: "",
-    errReason: "",
-  };
+  return { creator: "", txId: 0, txHash: "", success: false, signedKey: "", errReason: "", tssMsgId: "" };
 }
 
 export const MsgFinalizeProvisionTransaction = {
-  encode(
-    message: MsgFinalizeProvisionTransaction,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgFinalizeProvisionTransaction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -714,13 +744,13 @@ export const MsgFinalizeProvisionTransaction = {
     if (message.errReason !== "") {
       writer.uint32(50).string(message.errReason);
     }
+    if (message.tssMsgId !== "") {
+      writer.uint32(58).string(message.tssMsgId);
+    }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgFinalizeProvisionTransaction {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgFinalizeProvisionTransaction {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgFinalizeProvisionTransaction();
@@ -745,6 +775,9 @@ export const MsgFinalizeProvisionTransaction = {
         case 6:
           message.errReason = reader.string();
           break;
+        case 7:
+          message.tssMsgId = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -761,6 +794,7 @@ export const MsgFinalizeProvisionTransaction = {
       success: isSet(object.success) ? Boolean(object.success) : false,
       signedKey: isSet(object.signedKey) ? String(object.signedKey) : "",
       errReason: isSet(object.errReason) ? String(object.errReason) : "",
+      tssMsgId: isSet(object.tssMsgId) ? String(object.tssMsgId) : "",
     };
   },
 
@@ -772,11 +806,12 @@ export const MsgFinalizeProvisionTransaction = {
     message.success !== undefined && (obj.success = message.success);
     message.signedKey !== undefined && (obj.signedKey = message.signedKey);
     message.errReason !== undefined && (obj.errReason = message.errReason);
+    message.tssMsgId !== undefined && (obj.tssMsgId = message.tssMsgId);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<MsgFinalizeProvisionTransaction>, I>>(
-    object: I
+    object: I,
   ): MsgFinalizeProvisionTransaction {
     const message = createBaseMsgFinalizeProvisionTransaction();
     message.creator = object.creator ?? "";
@@ -785,6 +820,7 @@ export const MsgFinalizeProvisionTransaction = {
     message.success = object.success ?? false;
     message.signedKey = object.signedKey ?? "";
     message.errReason = object.errReason ?? "";
+    message.tssMsgId = object.tssMsgId ?? "";
     return message;
   },
 };
@@ -794,10 +830,7 @@ function createBaseMsgFinalizeProvisionTransactionResponse(): MsgFinalizeProvisi
 }
 
 export const MsgFinalizeProvisionTransactionResponse = {
-  encode(
-    message: MsgFinalizeProvisionTransactionResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgFinalizeProvisionTransactionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -807,10 +840,7 @@ export const MsgFinalizeProvisionTransactionResponse = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgFinalizeProvisionTransactionResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgFinalizeProvisionTransactionResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgFinalizeProvisionTransactionResponse();
@@ -832,10 +862,7 @@ export const MsgFinalizeProvisionTransactionResponse = {
   },
 
   fromJSON(object: any): MsgFinalizeProvisionTransactionResponse {
-    return {
-      code: isSet(object.code) ? String(object.code) : "",
-      msg: isSet(object.msg) ? String(object.msg) : "",
-    };
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgFinalizeProvisionTransactionResponse): unknown {
@@ -845,9 +872,9 @@ export const MsgFinalizeProvisionTransactionResponse = {
     return obj;
   },
 
-  fromPartial<
-    I extends Exact<DeepPartial<MsgFinalizeProvisionTransactionResponse>, I>
-  >(object: I): MsgFinalizeProvisionTransactionResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgFinalizeProvisionTransactionResponse>, I>>(
+    object: I,
+  ): MsgFinalizeProvisionTransactionResponse {
     const message = createBaseMsgFinalizeProvisionTransactionResponse();
     message.code = object.code ?? "";
     message.msg = object.msg ?? "";
@@ -872,10 +899,7 @@ function createBaseMsgRequestProvisionTransaction(): MsgRequestProvisionTransact
 }
 
 export const MsgRequestProvisionTransaction = {
-  encode(
-    message: MsgRequestProvisionTransaction,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgRequestProvisionTransaction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -912,10 +936,7 @@ export const MsgRequestProvisionTransaction = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgRequestProvisionTransaction {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRequestProvisionTransaction {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRequestProvisionTransaction();
@@ -971,19 +992,11 @@ export const MsgRequestProvisionTransaction = {
       symbol: isSet(object.symbol) ? String(object.symbol) : "",
       amount: isSet(object.amount) ? String(object.amount) : "",
       options: isSet(object.options) ? String(object.options) : "",
-      htlcExpirationTimestamp: isSet(object.htlcExpirationTimestamp)
-        ? String(object.htlcExpirationTimestamp)
-        : "",
-      htlcCreationHash: isSet(object.htlcCreationHash)
-        ? String(object.htlcCreationHash)
-        : "",
-      htlcCreationVout: isSet(object.htlcCreationVout)
-        ? Number(object.htlcCreationVout)
-        : 0,
+      htlcExpirationTimestamp: isSet(object.htlcExpirationTimestamp) ? String(object.htlcExpirationTimestamp) : "",
+      htlcCreationHash: isSet(object.htlcCreationHash) ? String(object.htlcCreationHash) : "",
+      htlcCreationVout: isSet(object.htlcCreationVout) ? Number(object.htlcCreationVout) : 0,
       htlcVersion: isSet(object.htlcVersion) ? String(object.htlcVersion) : "",
-      senderPubKey: isSet(object.senderPubKey)
-        ? bytesFromBase64(object.senderPubKey)
-        : new Uint8Array(),
+      senderPubKey: isSet(object.senderPubKey) ? bytesFromBase64(object.senderPubKey) : new Uint8Array(),
     };
   },
 
@@ -991,30 +1004,23 @@ export const MsgRequestProvisionTransaction = {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
     message.chain !== undefined && (obj.chain = message.chain);
-    message.fromAddress !== undefined &&
-      (obj.fromAddress = message.fromAddress);
+    message.fromAddress !== undefined && (obj.fromAddress = message.fromAddress);
     message.symbol !== undefined && (obj.symbol = message.symbol);
     message.amount !== undefined && (obj.amount = message.amount);
     message.options !== undefined && (obj.options = message.options);
-    message.htlcExpirationTimestamp !== undefined &&
-      (obj.htlcExpirationTimestamp = message.htlcExpirationTimestamp);
-    message.htlcCreationHash !== undefined &&
-      (obj.htlcCreationHash = message.htlcCreationHash);
-    message.htlcCreationVout !== undefined &&
-      (obj.htlcCreationVout = Math.round(message.htlcCreationVout));
-    message.htlcVersion !== undefined &&
-      (obj.htlcVersion = message.htlcVersion);
-    message.senderPubKey !== undefined &&
-      (obj.senderPubKey = base64FromBytes(
-        message.senderPubKey !== undefined
-          ? message.senderPubKey
-          : new Uint8Array()
+    message.htlcExpirationTimestamp !== undefined && (obj.htlcExpirationTimestamp = message.htlcExpirationTimestamp);
+    message.htlcCreationHash !== undefined && (obj.htlcCreationHash = message.htlcCreationHash);
+    message.htlcCreationVout !== undefined && (obj.htlcCreationVout = Math.round(message.htlcCreationVout));
+    message.htlcVersion !== undefined && (obj.htlcVersion = message.htlcVersion);
+    message.senderPubKey !== undefined
+      && (obj.senderPubKey = base64FromBytes(
+        message.senderPubKey !== undefined ? message.senderPubKey : new Uint8Array(),
       ));
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<MsgRequestProvisionTransaction>, I>>(
-    object: I
+    object: I,
   ): MsgRequestProvisionTransaction {
     const message = createBaseMsgRequestProvisionTransaction();
     message.creator = object.creator ?? "";
@@ -1037,10 +1043,7 @@ function createBaseMsgRequestProvisionTransactionResponse(): MsgRequestProvision
 }
 
 export const MsgRequestProvisionTransactionResponse = {
-  encode(
-    message: MsgRequestProvisionTransactionResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgRequestProvisionTransactionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -1053,10 +1056,7 @@ export const MsgRequestProvisionTransactionResponse = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgRequestProvisionTransactionResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRequestProvisionTransactionResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRequestProvisionTransactionResponse();
@@ -1096,9 +1096,9 @@ export const MsgRequestProvisionTransactionResponse = {
     return obj;
   },
 
-  fromPartial<
-    I extends Exact<DeepPartial<MsgRequestProvisionTransactionResponse>, I>
-  >(object: I): MsgRequestProvisionTransactionResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgRequestProvisionTransactionResponse>, I>>(
+    object: I,
+  ): MsgRequestProvisionTransactionResponse {
     const message = createBaseMsgRequestProvisionTransactionResponse();
     message.code = object.code ?? "";
     message.msg = object.msg ?? "";
@@ -1112,10 +1112,7 @@ function createBaseMsgCancelTransaction(): MsgCancelTransaction {
 }
 
 export const MsgCancelTransaction = {
-  encode(
-    message: MsgCancelTransaction,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgCancelTransaction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -1125,10 +1122,7 @@ export const MsgCancelTransaction = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgCancelTransaction {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCancelTransaction {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCancelTransaction();
@@ -1152,23 +1146,18 @@ export const MsgCancelTransaction = {
   fromJSON(object: any): MsgCancelTransaction {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
-      transactionId: isSet(object.transactionId)
-        ? String(object.transactionId)
-        : "",
+      transactionId: isSet(object.transactionId) ? String(object.transactionId) : "",
     };
   },
 
   toJSON(message: MsgCancelTransaction): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.transactionId !== undefined &&
-      (obj.transactionId = message.transactionId);
+    message.transactionId !== undefined && (obj.transactionId = message.transactionId);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCancelTransaction>, I>>(
-    object: I
-  ): MsgCancelTransaction {
+  fromPartial<I extends Exact<DeepPartial<MsgCancelTransaction>, I>>(object: I): MsgCancelTransaction {
     const message = createBaseMsgCancelTransaction();
     message.creator = object.creator ?? "";
     message.transactionId = object.transactionId ?? "";
@@ -1181,10 +1170,7 @@ function createBaseMsgCancelTransactionResponse(): MsgCancelTransactionResponse 
 }
 
 export const MsgCancelTransactionResponse = {
-  encode(
-    message: MsgCancelTransactionResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgCancelTransactionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -1194,10 +1180,7 @@ export const MsgCancelTransactionResponse = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgCancelTransactionResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCancelTransactionResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCancelTransactionResponse();
@@ -1219,10 +1202,7 @@ export const MsgCancelTransactionResponse = {
   },
 
   fromJSON(object: any): MsgCancelTransactionResponse {
-    return {
-      code: isSet(object.code) ? String(object.code) : "",
-      msg: isSet(object.msg) ? String(object.msg) : "",
-    };
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgCancelTransactionResponse): unknown {
@@ -1232,9 +1212,7 @@ export const MsgCancelTransactionResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCancelTransactionResponse>, I>>(
-    object: I
-  ): MsgCancelTransactionResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgCancelTransactionResponse>, I>>(object: I): MsgCancelTransactionResponse {
     const message = createBaseMsgCancelTransactionResponse();
     message.code = object.code ?? "";
     message.msg = object.msg ?? "";
@@ -1247,10 +1225,7 @@ function createBaseMsgSetTxHash(): MsgSetTxHash {
 }
 
 export const MsgSetTxHash = {
-  encode(
-    message: MsgSetTxHash,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgSetTxHash, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -1311,9 +1286,7 @@ export const MsgSetTxHash = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgSetTxHash>, I>>(
-    object: I
-  ): MsgSetTxHash {
+  fromPartial<I extends Exact<DeepPartial<MsgSetTxHash>, I>>(object: I): MsgSetTxHash {
     const message = createBaseMsgSetTxHash();
     message.creator = object.creator ?? "";
     message.txId = object.txId ?? 0;
@@ -1328,10 +1301,7 @@ function createBaseMsgSetTxHashResponse(): MsgSetTxHashResponse {
 }
 
 export const MsgSetTxHashResponse = {
-  encode(
-    message: MsgSetTxHashResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgSetTxHashResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -1341,10 +1311,7 @@ export const MsgSetTxHashResponse = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgSetTxHashResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetTxHashResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetTxHashResponse();
@@ -1366,10 +1333,7 @@ export const MsgSetTxHashResponse = {
   },
 
   fromJSON(object: any): MsgSetTxHashResponse {
-    return {
-      code: isSet(object.code) ? String(object.code) : "",
-      msg: isSet(object.msg) ? String(object.msg) : "",
-    };
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgSetTxHashResponse): unknown {
@@ -1379,9 +1343,7 @@ export const MsgSetTxHashResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgSetTxHashResponse>, I>>(
-    object: I
-  ): MsgSetTxHashResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgSetTxHashResponse>, I>>(object: I): MsgSetTxHashResponse {
     const message = createBaseMsgSetTxHashResponse();
     message.code = object.code ?? "";
     message.msg = object.msg ?? "";
@@ -1390,14 +1352,25 @@ export const MsgSetTxHashResponse = {
 };
 
 function createBaseMsgSetTxProcess(): MsgSetTxProcess {
-  return { creator: "", txId: 0, timestamp: 0, msgId: "", txType: "" };
+  return {
+    creator: "",
+    txId: 0,
+    timestamp: 0,
+    msgId: "",
+    handleId: 0,
+    txType: "",
+    feeId: "",
+    originGasFee: "",
+    targetGasFee: "",
+    kimaProcessingFee: "",
+    totalFee: "",
+    peggedTo: "",
+    expiration: 0,
+  };
 }
 
 export const MsgSetTxProcess = {
-  encode(
-    message: MsgSetTxProcess,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgSetTxProcess, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -1410,8 +1383,32 @@ export const MsgSetTxProcess = {
     if (message.msgId !== "") {
       writer.uint32(34).string(message.msgId);
     }
+    if (message.handleId !== 0) {
+      writer.uint32(40).uint64(message.handleId);
+    }
     if (message.txType !== "") {
-      writer.uint32(42).string(message.txType);
+      writer.uint32(50).string(message.txType);
+    }
+    if (message.feeId !== "") {
+      writer.uint32(58).string(message.feeId);
+    }
+    if (message.originGasFee !== "") {
+      writer.uint32(66).string(message.originGasFee);
+    }
+    if (message.targetGasFee !== "") {
+      writer.uint32(74).string(message.targetGasFee);
+    }
+    if (message.kimaProcessingFee !== "") {
+      writer.uint32(82).string(message.kimaProcessingFee);
+    }
+    if (message.totalFee !== "") {
+      writer.uint32(90).string(message.totalFee);
+    }
+    if (message.peggedTo !== "") {
+      writer.uint32(98).string(message.peggedTo);
+    }
+    if (message.expiration !== 0) {
+      writer.uint32(104).int32(message.expiration);
     }
     return writer;
   },
@@ -1436,7 +1433,31 @@ export const MsgSetTxProcess = {
           message.msgId = reader.string();
           break;
         case 5:
+          message.handleId = longToNumber(reader.uint64() as Long);
+          break;
+        case 6:
           message.txType = reader.string();
+          break;
+        case 7:
+          message.feeId = reader.string();
+          break;
+        case 8:
+          message.originGasFee = reader.string();
+          break;
+        case 9:
+          message.targetGasFee = reader.string();
+          break;
+        case 10:
+          message.kimaProcessingFee = reader.string();
+          break;
+        case 11:
+          message.totalFee = reader.string();
+          break;
+        case 12:
+          message.peggedTo = reader.string();
+          break;
+        case 13:
+          message.expiration = reader.int32();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1452,7 +1473,15 @@ export const MsgSetTxProcess = {
       txId: isSet(object.txId) ? Number(object.txId) : 0,
       timestamp: isSet(object.timestamp) ? Number(object.timestamp) : 0,
       msgId: isSet(object.msgId) ? String(object.msgId) : "",
+      handleId: isSet(object.handleId) ? Number(object.handleId) : 0,
       txType: isSet(object.txType) ? String(object.txType) : "",
+      feeId: isSet(object.feeId) ? String(object.feeId) : "",
+      originGasFee: isSet(object.originGasFee) ? String(object.originGasFee) : "",
+      targetGasFee: isSet(object.targetGasFee) ? String(object.targetGasFee) : "",
+      kimaProcessingFee: isSet(object.kimaProcessingFee) ? String(object.kimaProcessingFee) : "",
+      totalFee: isSet(object.totalFee) ? String(object.totalFee) : "",
+      peggedTo: isSet(object.peggedTo) ? String(object.peggedTo) : "",
+      expiration: isSet(object.expiration) ? Number(object.expiration) : 0,
     };
   },
 
@@ -1460,22 +1489,35 @@ export const MsgSetTxProcess = {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
     message.txId !== undefined && (obj.txId = Math.round(message.txId));
-    message.timestamp !== undefined &&
-      (obj.timestamp = Math.round(message.timestamp));
+    message.timestamp !== undefined && (obj.timestamp = Math.round(message.timestamp));
     message.msgId !== undefined && (obj.msgId = message.msgId);
+    message.handleId !== undefined && (obj.handleId = Math.round(message.handleId));
     message.txType !== undefined && (obj.txType = message.txType);
+    message.feeId !== undefined && (obj.feeId = message.feeId);
+    message.originGasFee !== undefined && (obj.originGasFee = message.originGasFee);
+    message.targetGasFee !== undefined && (obj.targetGasFee = message.targetGasFee);
+    message.kimaProcessingFee !== undefined && (obj.kimaProcessingFee = message.kimaProcessingFee);
+    message.totalFee !== undefined && (obj.totalFee = message.totalFee);
+    message.peggedTo !== undefined && (obj.peggedTo = message.peggedTo);
+    message.expiration !== undefined && (obj.expiration = Math.round(message.expiration));
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgSetTxProcess>, I>>(
-    object: I
-  ): MsgSetTxProcess {
+  fromPartial<I extends Exact<DeepPartial<MsgSetTxProcess>, I>>(object: I): MsgSetTxProcess {
     const message = createBaseMsgSetTxProcess();
     message.creator = object.creator ?? "";
     message.txId = object.txId ?? 0;
     message.timestamp = object.timestamp ?? 0;
     message.msgId = object.msgId ?? "";
+    message.handleId = object.handleId ?? 0;
     message.txType = object.txType ?? "";
+    message.feeId = object.feeId ?? "";
+    message.originGasFee = object.originGasFee ?? "";
+    message.targetGasFee = object.targetGasFee ?? "";
+    message.kimaProcessingFee = object.kimaProcessingFee ?? "";
+    message.totalFee = object.totalFee ?? "";
+    message.peggedTo = object.peggedTo ?? "";
+    message.expiration = object.expiration ?? 0;
     return message;
   },
 };
@@ -1485,17 +1527,11 @@ function createBaseMsgSetTxProcessResponse(): MsgSetTxProcessResponse {
 }
 
 export const MsgSetTxProcessResponse = {
-  encode(
-    _: MsgSetTxProcessResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgSetTxProcessResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgSetTxProcessResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetTxProcessResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetTxProcessResponse();
@@ -1519,30 +1555,18 @@ export const MsgSetTxProcessResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgSetTxProcessResponse>, I>>(
-    _: I
-  ): MsgSetTxProcessResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgSetTxProcessResponse>, I>>(_: I): MsgSetTxProcessResponse {
     const message = createBaseMsgSetTxProcessResponse();
     return message;
   },
 };
 
 function createBaseMsgRequestDrainTransaction(): MsgRequestDrainTransaction {
-  return {
-    creator: "",
-    toChain: "",
-    toAddress: "",
-    symbol: "",
-    amount: "",
-    options: "",
-  };
+  return { creator: "", toChain: "", toAddress: "", symbol: "", amount: "", options: "" };
 }
 
 export const MsgRequestDrainTransaction = {
-  encode(
-    message: MsgRequestDrainTransaction,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgRequestDrainTransaction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -1564,10 +1588,7 @@ export const MsgRequestDrainTransaction = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgRequestDrainTransaction {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRequestDrainTransaction {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRequestDrainTransaction();
@@ -1622,9 +1643,7 @@ export const MsgRequestDrainTransaction = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgRequestDrainTransaction>, I>>(
-    object: I
-  ): MsgRequestDrainTransaction {
+  fromPartial<I extends Exact<DeepPartial<MsgRequestDrainTransaction>, I>>(object: I): MsgRequestDrainTransaction {
     const message = createBaseMsgRequestDrainTransaction();
     message.creator = object.creator ?? "";
     message.toChain = object.toChain ?? "";
@@ -1641,10 +1660,7 @@ function createBaseMsgRequestDrainTransactionResponse(): MsgRequestDrainTransact
 }
 
 export const MsgRequestDrainTransactionResponse = {
-  encode(
-    message: MsgRequestDrainTransactionResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgRequestDrainTransactionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -1657,10 +1673,7 @@ export const MsgRequestDrainTransactionResponse = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgRequestDrainTransactionResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRequestDrainTransactionResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRequestDrainTransactionResponse();
@@ -1700,9 +1713,9 @@ export const MsgRequestDrainTransactionResponse = {
     return obj;
   },
 
-  fromPartial<
-    I extends Exact<DeepPartial<MsgRequestDrainTransactionResponse>, I>
-  >(object: I): MsgRequestDrainTransactionResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgRequestDrainTransactionResponse>, I>>(
+    object: I,
+  ): MsgRequestDrainTransactionResponse {
     const message = createBaseMsgRequestDrainTransactionResponse();
     message.code = object.code ?? "";
     message.msg = object.msg ?? "";
@@ -1712,21 +1725,11 @@ export const MsgRequestDrainTransactionResponse = {
 };
 
 function createBaseMsgFinalizeDrainTransaction(): MsgFinalizeDrainTransaction {
-  return {
-    creator: "",
-    txId: 0,
-    txHash: "",
-    success: false,
-    signedKey: "",
-    errReason: "",
-  };
+  return { creator: "", txId: 0, txHash: "", success: false, signedKey: "", errReason: "", tssMsgId: "" };
 }
 
 export const MsgFinalizeDrainTransaction = {
-  encode(
-    message: MsgFinalizeDrainTransaction,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgFinalizeDrainTransaction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -1745,13 +1748,13 @@ export const MsgFinalizeDrainTransaction = {
     if (message.errReason !== "") {
       writer.uint32(50).string(message.errReason);
     }
+    if (message.tssMsgId !== "") {
+      writer.uint32(58).string(message.tssMsgId);
+    }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgFinalizeDrainTransaction {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgFinalizeDrainTransaction {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgFinalizeDrainTransaction();
@@ -1776,6 +1779,9 @@ export const MsgFinalizeDrainTransaction = {
         case 6:
           message.errReason = reader.string();
           break;
+        case 7:
+          message.tssMsgId = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1792,6 +1798,7 @@ export const MsgFinalizeDrainTransaction = {
       success: isSet(object.success) ? Boolean(object.success) : false,
       signedKey: isSet(object.signedKey) ? String(object.signedKey) : "",
       errReason: isSet(object.errReason) ? String(object.errReason) : "",
+      tssMsgId: isSet(object.tssMsgId) ? String(object.tssMsgId) : "",
     };
   },
 
@@ -1803,12 +1810,11 @@ export const MsgFinalizeDrainTransaction = {
     message.success !== undefined && (obj.success = message.success);
     message.signedKey !== undefined && (obj.signedKey = message.signedKey);
     message.errReason !== undefined && (obj.errReason = message.errReason);
+    message.tssMsgId !== undefined && (obj.tssMsgId = message.tssMsgId);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgFinalizeDrainTransaction>, I>>(
-    object: I
-  ): MsgFinalizeDrainTransaction {
+  fromPartial<I extends Exact<DeepPartial<MsgFinalizeDrainTransaction>, I>>(object: I): MsgFinalizeDrainTransaction {
     const message = createBaseMsgFinalizeDrainTransaction();
     message.creator = object.creator ?? "";
     message.txId = object.txId ?? 0;
@@ -1816,6 +1822,7 @@ export const MsgFinalizeDrainTransaction = {
     message.success = object.success ?? false;
     message.signedKey = object.signedKey ?? "";
     message.errReason = object.errReason ?? "";
+    message.tssMsgId = object.tssMsgId ?? "";
     return message;
   },
 };
@@ -1825,10 +1832,7 @@ function createBaseMsgFinalizeDrainTransactionResponse(): MsgFinalizeDrainTransa
 }
 
 export const MsgFinalizeDrainTransactionResponse = {
-  encode(
-    message: MsgFinalizeDrainTransactionResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgFinalizeDrainTransactionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -1838,10 +1842,7 @@ export const MsgFinalizeDrainTransactionResponse = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgFinalizeDrainTransactionResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgFinalizeDrainTransactionResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgFinalizeDrainTransactionResponse();
@@ -1863,10 +1864,7 @@ export const MsgFinalizeDrainTransactionResponse = {
   },
 
   fromJSON(object: any): MsgFinalizeDrainTransactionResponse {
-    return {
-      code: isSet(object.code) ? String(object.code) : "",
-      msg: isSet(object.msg) ? String(object.msg) : "",
-    };
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgFinalizeDrainTransactionResponse): unknown {
@@ -1876,9 +1874,9 @@ export const MsgFinalizeDrainTransactionResponse = {
     return obj;
   },
 
-  fromPartial<
-    I extends Exact<DeepPartial<MsgFinalizeDrainTransactionResponse>, I>
-  >(object: I): MsgFinalizeDrainTransactionResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgFinalizeDrainTransactionResponse>, I>>(
+    object: I,
+  ): MsgFinalizeDrainTransactionResponse {
     const message = createBaseMsgFinalizeDrainTransactionResponse();
     message.code = object.code ?? "";
     message.msg = object.msg ?? "";
@@ -1887,22 +1885,11 @@ export const MsgFinalizeDrainTransactionResponse = {
 };
 
 function createBaseMsgRequestHtlcLock(): MsgRequestHtlcLock {
-  return {
-    creator: "",
-    fromAddress: "",
-    senderPubkey: "",
-    amount: "",
-    htlcTimeout: "",
-    txHash: "",
-    htlcAddress: "",
-  };
+  return { creator: "", fromAddress: "", senderPubkey: "", amount: "", htlcTimeout: "", txHash: "", htlcAddress: "" };
 }
 
 export const MsgRequestHtlcLock = {
-  encode(
-    message: MsgRequestHtlcLock,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgRequestHtlcLock, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -1967,9 +1954,7 @@ export const MsgRequestHtlcLock = {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
       fromAddress: isSet(object.fromAddress) ? String(object.fromAddress) : "",
-      senderPubkey: isSet(object.senderPubkey)
-        ? String(object.senderPubkey)
-        : "",
+      senderPubkey: isSet(object.senderPubkey) ? String(object.senderPubkey) : "",
       amount: isSet(object.amount) ? String(object.amount) : "",
       htlcTimeout: isSet(object.htlcTimeout) ? String(object.htlcTimeout) : "",
       txHash: isSet(object.txHash) ? String(object.txHash) : "",
@@ -1980,22 +1965,16 @@ export const MsgRequestHtlcLock = {
   toJSON(message: MsgRequestHtlcLock): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.fromAddress !== undefined &&
-      (obj.fromAddress = message.fromAddress);
-    message.senderPubkey !== undefined &&
-      (obj.senderPubkey = message.senderPubkey);
+    message.fromAddress !== undefined && (obj.fromAddress = message.fromAddress);
+    message.senderPubkey !== undefined && (obj.senderPubkey = message.senderPubkey);
     message.amount !== undefined && (obj.amount = message.amount);
-    message.htlcTimeout !== undefined &&
-      (obj.htlcTimeout = message.htlcTimeout);
+    message.htlcTimeout !== undefined && (obj.htlcTimeout = message.htlcTimeout);
     message.txHash !== undefined && (obj.txHash = message.txHash);
-    message.htlcAddress !== undefined &&
-      (obj.htlcAddress = message.htlcAddress);
+    message.htlcAddress !== undefined && (obj.htlcAddress = message.htlcAddress);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgRequestHtlcLock>, I>>(
-    object: I
-  ): MsgRequestHtlcLock {
+  fromPartial<I extends Exact<DeepPartial<MsgRequestHtlcLock>, I>>(object: I): MsgRequestHtlcLock {
     const message = createBaseMsgRequestHtlcLock();
     message.creator = object.creator ?? "";
     message.fromAddress = object.fromAddress ?? "";
@@ -2013,17 +1992,11 @@ function createBaseMsgRequestHtlcLockResponse(): MsgRequestHtlcLockResponse {
 }
 
 export const MsgRequestHtlcLockResponse = {
-  encode(
-    _: MsgRequestHtlcLockResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgRequestHtlcLockResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgRequestHtlcLockResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRequestHtlcLockResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRequestHtlcLockResponse();
@@ -2047,9 +2020,7 @@ export const MsgRequestHtlcLockResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgRequestHtlcLockResponse>, I>>(
-    _: I
-  ): MsgRequestHtlcLockResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgRequestHtlcLockResponse>, I>>(_: I): MsgRequestHtlcLockResponse {
     const message = createBaseMsgRequestHtlcLockResponse();
     return message;
   },
@@ -2060,10 +2031,7 @@ function createBaseMsgHtlcReclaim(): MsgHtlcReclaim {
 }
 
 export const MsgHtlcReclaim = {
-  encode(
-    message: MsgHtlcReclaim,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgHtlcReclaim, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -2104,9 +2072,7 @@ export const MsgHtlcReclaim = {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
       txHash: isSet(object.txHash) ? String(object.txHash) : "",
-      senderAddress: isSet(object.senderAddress)
-        ? String(object.senderAddress)
-        : "",
+      senderAddress: isSet(object.senderAddress) ? String(object.senderAddress) : "",
     };
   },
 
@@ -2114,14 +2080,11 @@ export const MsgHtlcReclaim = {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
     message.txHash !== undefined && (obj.txHash = message.txHash);
-    message.senderAddress !== undefined &&
-      (obj.senderAddress = message.senderAddress);
+    message.senderAddress !== undefined && (obj.senderAddress = message.senderAddress);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgHtlcReclaim>, I>>(
-    object: I
-  ): MsgHtlcReclaim {
+  fromPartial<I extends Exact<DeepPartial<MsgHtlcReclaim>, I>>(object: I): MsgHtlcReclaim {
     const message = createBaseMsgHtlcReclaim();
     message.creator = object.creator ?? "";
     message.txHash = object.txHash ?? "";
@@ -2135,17 +2098,11 @@ function createBaseMsgHtlcReclaimResponse(): MsgHtlcReclaimResponse {
 }
 
 export const MsgHtlcReclaimResponse = {
-  encode(
-    _: MsgHtlcReclaimResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgHtlcReclaimResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgHtlcReclaimResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgHtlcReclaimResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgHtlcReclaimResponse();
@@ -2169,9 +2126,7 @@ export const MsgHtlcReclaimResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgHtlcReclaimResponse>, I>>(
-    _: I
-  ): MsgHtlcReclaimResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgHtlcReclaimResponse>, I>>(_: I): MsgHtlcReclaimResponse {
     const message = createBaseMsgHtlcReclaimResponse();
     return message;
   },
@@ -2182,10 +2137,7 @@ function createBaseMsgUpdateLiquidityProvisionParams(): MsgUpdateLiquidityProvis
 }
 
 export const MsgUpdateLiquidityProvisionParams = {
-  encode(
-    message: MsgUpdateLiquidityProvisionParams,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgUpdateLiquidityProvisionParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -2198,10 +2150,7 @@ export const MsgUpdateLiquidityProvisionParams = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgUpdateLiquidityProvisionParams {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateLiquidityProvisionParams {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateLiquidityProvisionParams();
@@ -2241,9 +2190,9 @@ export const MsgUpdateLiquidityProvisionParams = {
     return obj;
   },
 
-  fromPartial<
-    I extends Exact<DeepPartial<MsgUpdateLiquidityProvisionParams>, I>
-  >(object: I): MsgUpdateLiquidityProvisionParams {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateLiquidityProvisionParams>, I>>(
+    object: I,
+  ): MsgUpdateLiquidityProvisionParams {
     const message = createBaseMsgUpdateLiquidityProvisionParams();
     message.authority = object.authority ?? "";
     message.maxBTC = object.maxBTC ?? "";
@@ -2257,17 +2206,11 @@ function createBaseMsgUpdateLiquidityProvisionParamsResponse(): MsgUpdateLiquidi
 }
 
 export const MsgUpdateLiquidityProvisionParamsResponse = {
-  encode(
-    _: MsgUpdateLiquidityProvisionParamsResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgUpdateLiquidityProvisionParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgUpdateLiquidityProvisionParamsResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateLiquidityProvisionParamsResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateLiquidityProvisionParamsResponse();
@@ -2291,9 +2234,9 @@ export const MsgUpdateLiquidityProvisionParamsResponse = {
     return obj;
   },
 
-  fromPartial<
-    I extends Exact<DeepPartial<MsgUpdateLiquidityProvisionParamsResponse>, I>
-  >(_: I): MsgUpdateLiquidityProvisionParamsResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateLiquidityProvisionParamsResponse>, I>>(
+    _: I,
+  ): MsgUpdateLiquidityProvisionParamsResponse {
     const message = createBaseMsgUpdateLiquidityProvisionParamsResponse();
     return message;
   },
@@ -2304,10 +2247,7 @@ function createBaseMsgUpdateTransferLimitParams(): MsgUpdateTransferLimitParams 
 }
 
 export const MsgUpdateTransferLimitParams = {
-  encode(
-    message: MsgUpdateTransferLimitParams,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgUpdateTransferLimitParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -2320,10 +2260,7 @@ export const MsgUpdateTransferLimitParams = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgUpdateTransferLimitParams {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateTransferLimitParams {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateTransferLimitParams();
@@ -2363,9 +2300,7 @@ export const MsgUpdateTransferLimitParams = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgUpdateTransferLimitParams>, I>>(
-    object: I
-  ): MsgUpdateTransferLimitParams {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateTransferLimitParams>, I>>(object: I): MsgUpdateTransferLimitParams {
     const message = createBaseMsgUpdateTransferLimitParams();
     message.authority = object.authority ?? "";
     message.maxBTC = object.maxBTC ?? "";
@@ -2379,17 +2314,11 @@ function createBaseMsgUpdateTransferLimitParamsResponse(): MsgUpdateTransferLimi
 }
 
 export const MsgUpdateTransferLimitParamsResponse = {
-  encode(
-    _: MsgUpdateTransferLimitParamsResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgUpdateTransferLimitParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgUpdateTransferLimitParamsResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateTransferLimitParamsResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateTransferLimitParamsResponse();
@@ -2413,30 +2342,119 @@ export const MsgUpdateTransferLimitParamsResponse = {
     return obj;
   },
 
-  fromPartial<
-    I extends Exact<DeepPartial<MsgUpdateTransferLimitParamsResponse>, I>
-  >(_: I): MsgUpdateTransferLimitParamsResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateTransferLimitParamsResponse>, I>>(
+    _: I,
+  ): MsgUpdateTransferLimitParamsResponse {
     const message = createBaseMsgUpdateTransferLimitParamsResponse();
     return message;
   },
 };
 
+function createBaseMsgSetFiatTransactionParams(): MsgSetFiatTransactionParams {
+  return { authority: "", daca: "" };
+}
+
+export const MsgSetFiatTransactionParams = {
+  encode(message: MsgSetFiatTransactionParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.daca !== "") {
+      writer.uint32(18).string(message.daca);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetFiatTransactionParams {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSetFiatTransactionParams();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.daca = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgSetFiatTransactionParams {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      daca: isSet(object.daca) ? String(object.daca) : "",
+    };
+  },
+
+  toJSON(message: MsgSetFiatTransactionParams): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.daca !== undefined && (obj.daca = message.daca);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgSetFiatTransactionParams>, I>>(object: I): MsgSetFiatTransactionParams {
+    const message = createBaseMsgSetFiatTransactionParams();
+    message.authority = object.authority ?? "";
+    message.daca = object.daca ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgSetFiatTransactionParamsResponse(): MsgSetFiatTransactionParamsResponse {
+  return {};
+}
+
+export const MsgSetFiatTransactionParamsResponse = {
+  encode(_: MsgSetFiatTransactionParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetFiatTransactionParamsResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSetFiatTransactionParamsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgSetFiatTransactionParamsResponse {
+    return {};
+  },
+
+  toJSON(_: MsgSetFiatTransactionParamsResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgSetFiatTransactionParamsResponse>, I>>(
+    _: I,
+  ): MsgSetFiatTransactionParamsResponse {
+    const message = createBaseMsgSetFiatTransactionParamsResponse();
+    return message;
+  },
+};
+
 function createBaseMsgFinalizeWithdrawTransaction(): MsgFinalizeWithdrawTransaction {
-  return {
-    creator: "",
-    txId: 0,
-    txHash: "",
-    success: false,
-    signedKey: "",
-    errReason: "",
-  };
+  return { creator: "", txId: 0, txHash: "", success: false, signedKey: "", errReason: "", tssMsgId: "" };
 }
 
 export const MsgFinalizeWithdrawTransaction = {
-  encode(
-    message: MsgFinalizeWithdrawTransaction,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgFinalizeWithdrawTransaction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
@@ -2455,13 +2473,13 @@ export const MsgFinalizeWithdrawTransaction = {
     if (message.errReason !== "") {
       writer.uint32(50).string(message.errReason);
     }
+    if (message.tssMsgId !== "") {
+      writer.uint32(58).string(message.tssMsgId);
+    }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgFinalizeWithdrawTransaction {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgFinalizeWithdrawTransaction {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgFinalizeWithdrawTransaction();
@@ -2486,6 +2504,9 @@ export const MsgFinalizeWithdrawTransaction = {
         case 6:
           message.errReason = reader.string();
           break;
+        case 7:
+          message.tssMsgId = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -2502,6 +2523,7 @@ export const MsgFinalizeWithdrawTransaction = {
       success: isSet(object.success) ? Boolean(object.success) : false,
       signedKey: isSet(object.signedKey) ? String(object.signedKey) : "",
       errReason: isSet(object.errReason) ? String(object.errReason) : "",
+      tssMsgId: isSet(object.tssMsgId) ? String(object.tssMsgId) : "",
     };
   },
 
@@ -2513,11 +2535,12 @@ export const MsgFinalizeWithdrawTransaction = {
     message.success !== undefined && (obj.success = message.success);
     message.signedKey !== undefined && (obj.signedKey = message.signedKey);
     message.errReason !== undefined && (obj.errReason = message.errReason);
+    message.tssMsgId !== undefined && (obj.tssMsgId = message.tssMsgId);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<MsgFinalizeWithdrawTransaction>, I>>(
-    object: I
+    object: I,
   ): MsgFinalizeWithdrawTransaction {
     const message = createBaseMsgFinalizeWithdrawTransaction();
     message.creator = object.creator ?? "";
@@ -2526,6 +2549,7 @@ export const MsgFinalizeWithdrawTransaction = {
     message.success = object.success ?? false;
     message.signedKey = object.signedKey ?? "";
     message.errReason = object.errReason ?? "";
+    message.tssMsgId = object.tssMsgId ?? "";
     return message;
   },
 };
@@ -2535,10 +2559,7 @@ function createBaseMsgFinalizeWithdrawTransactionResponse(): MsgFinalizeWithdraw
 }
 
 export const MsgFinalizeWithdrawTransactionResponse = {
-  encode(
-    message: MsgFinalizeWithdrawTransactionResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgFinalizeWithdrawTransactionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -2548,10 +2569,7 @@ export const MsgFinalizeWithdrawTransactionResponse = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgFinalizeWithdrawTransactionResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgFinalizeWithdrawTransactionResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgFinalizeWithdrawTransactionResponse();
@@ -2573,10 +2591,7 @@ export const MsgFinalizeWithdrawTransactionResponse = {
   },
 
   fromJSON(object: any): MsgFinalizeWithdrawTransactionResponse {
-    return {
-      code: isSet(object.code) ? String(object.code) : "",
-      msg: isSet(object.msg) ? String(object.msg) : "",
-    };
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
   },
 
   toJSON(message: MsgFinalizeWithdrawTransactionResponse): unknown {
@@ -2586,10 +2601,618 @@ export const MsgFinalizeWithdrawTransactionResponse = {
     return obj;
   },
 
-  fromPartial<
-    I extends Exact<DeepPartial<MsgFinalizeWithdrawTransactionResponse>, I>
-  >(object: I): MsgFinalizeWithdrawTransactionResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgFinalizeWithdrawTransactionResponse>, I>>(
+    object: I,
+  ): MsgFinalizeWithdrawTransactionResponse {
     const message = createBaseMsgFinalizeWithdrawTransactionResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgConfirmTransaction(): MsgConfirmTransaction {
+  return { creator: "", transactionId: "", amount: "", currency: "", confirmed: false, failReason: "", timestamp: 0 };
+}
+
+export const MsgConfirmTransaction = {
+  encode(message: MsgConfirmTransaction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.transactionId !== "") {
+      writer.uint32(18).string(message.transactionId);
+    }
+    if (message.amount !== "") {
+      writer.uint32(26).string(message.amount);
+    }
+    if (message.currency !== "") {
+      writer.uint32(34).string(message.currency);
+    }
+    if (message.confirmed === true) {
+      writer.uint32(40).bool(message.confirmed);
+    }
+    if (message.failReason !== "") {
+      writer.uint32(50).string(message.failReason);
+    }
+    if (message.timestamp !== 0) {
+      writer.uint32(56).uint64(message.timestamp);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgConfirmTransaction {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgConfirmTransaction();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.transactionId = reader.string();
+          break;
+        case 3:
+          message.amount = reader.string();
+          break;
+        case 4:
+          message.currency = reader.string();
+          break;
+        case 5:
+          message.confirmed = reader.bool();
+          break;
+        case 6:
+          message.failReason = reader.string();
+          break;
+        case 7:
+          message.timestamp = longToNumber(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgConfirmTransaction {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      transactionId: isSet(object.transactionId) ? String(object.transactionId) : "",
+      amount: isSet(object.amount) ? String(object.amount) : "",
+      currency: isSet(object.currency) ? String(object.currency) : "",
+      confirmed: isSet(object.confirmed) ? Boolean(object.confirmed) : false,
+      failReason: isSet(object.failReason) ? String(object.failReason) : "",
+      timestamp: isSet(object.timestamp) ? Number(object.timestamp) : 0,
+    };
+  },
+
+  toJSON(message: MsgConfirmTransaction): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.transactionId !== undefined && (obj.transactionId = message.transactionId);
+    message.amount !== undefined && (obj.amount = message.amount);
+    message.currency !== undefined && (obj.currency = message.currency);
+    message.confirmed !== undefined && (obj.confirmed = message.confirmed);
+    message.failReason !== undefined && (obj.failReason = message.failReason);
+    message.timestamp !== undefined && (obj.timestamp = Math.round(message.timestamp));
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgConfirmTransaction>, I>>(object: I): MsgConfirmTransaction {
+    const message = createBaseMsgConfirmTransaction();
+    message.creator = object.creator ?? "";
+    message.transactionId = object.transactionId ?? "";
+    message.amount = object.amount ?? "";
+    message.currency = object.currency ?? "";
+    message.confirmed = object.confirmed ?? false;
+    message.failReason = object.failReason ?? "";
+    message.timestamp = object.timestamp ?? 0;
+    return message;
+  },
+};
+
+function createBaseMsgConfirmTransactionResponse(): MsgConfirmTransactionResponse {
+  return { code: "", msg: "" };
+}
+
+export const MsgConfirmTransactionResponse = {
+  encode(message: MsgConfirmTransactionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.code !== "") {
+      writer.uint32(10).string(message.code);
+    }
+    if (message.msg !== "") {
+      writer.uint32(18).string(message.msg);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgConfirmTransactionResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgConfirmTransactionResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.code = reader.string();
+          break;
+        case 2:
+          message.msg = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgConfirmTransactionResponse {
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
+  },
+
+  toJSON(message: MsgConfirmTransactionResponse): unknown {
+    const obj: any = {};
+    message.code !== undefined && (obj.code = message.code);
+    message.msg !== undefined && (obj.msg = message.msg);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgConfirmTransactionResponse>, I>>(
+    object: I,
+  ): MsgConfirmTransactionResponse {
+    const message = createBaseMsgConfirmTransactionResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgUpdateTransactionStatus(): MsgUpdateTransactionStatus {
+  return { creator: "", txId: "", newStatus: "", failReason: "" };
+}
+
+export const MsgUpdateTransactionStatus = {
+  encode(message: MsgUpdateTransactionStatus, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.txId !== "") {
+      writer.uint32(18).string(message.txId);
+    }
+    if (message.newStatus !== "") {
+      writer.uint32(26).string(message.newStatus);
+    }
+    if (message.failReason !== "") {
+      writer.uint32(34).string(message.failReason);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateTransactionStatus {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateTransactionStatus();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.txId = reader.string();
+          break;
+        case 3:
+          message.newStatus = reader.string();
+          break;
+        case 4:
+          message.failReason = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdateTransactionStatus {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      txId: isSet(object.txId) ? String(object.txId) : "",
+      newStatus: isSet(object.newStatus) ? String(object.newStatus) : "",
+      failReason: isSet(object.failReason) ? String(object.failReason) : "",
+    };
+  },
+
+  toJSON(message: MsgUpdateTransactionStatus): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.txId !== undefined && (obj.txId = message.txId);
+    message.newStatus !== undefined && (obj.newStatus = message.newStatus);
+    message.failReason !== undefined && (obj.failReason = message.failReason);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateTransactionStatus>, I>>(object: I): MsgUpdateTransactionStatus {
+    const message = createBaseMsgUpdateTransactionStatus();
+    message.creator = object.creator ?? "";
+    message.txId = object.txId ?? "";
+    message.newStatus = object.newStatus ?? "";
+    message.failReason = object.failReason ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgUpdateTransactionStatusResponse(): MsgUpdateTransactionStatusResponse {
+  return { code: "", msg: "" };
+}
+
+export const MsgUpdateTransactionStatusResponse = {
+  encode(message: MsgUpdateTransactionStatusResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.code !== "") {
+      writer.uint32(10).string(message.code);
+    }
+    if (message.msg !== "") {
+      writer.uint32(18).string(message.msg);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateTransactionStatusResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateTransactionStatusResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.code = reader.string();
+          break;
+        case 2:
+          message.msg = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdateTransactionStatusResponse {
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
+  },
+
+  toJSON(message: MsgUpdateTransactionStatusResponse): unknown {
+    const obj: any = {};
+    message.code !== undefined && (obj.code = message.code);
+    message.msg !== undefined && (obj.msg = message.msg);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateTransactionStatusResponse>, I>>(
+    object: I,
+  ): MsgUpdateTransactionStatusResponse {
+    const message = createBaseMsgUpdateTransactionStatusResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgUpdateMaxConcurrentLimit(): MsgUpdateMaxConcurrentLimit {
+  return { authority: "", maxLimit: 0 };
+}
+
+export const MsgUpdateMaxConcurrentLimit = {
+  encode(message: MsgUpdateMaxConcurrentLimit, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.maxLimit !== 0) {
+      writer.uint32(16).int64(message.maxLimit);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateMaxConcurrentLimit {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateMaxConcurrentLimit();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.maxLimit = longToNumber(reader.int64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdateMaxConcurrentLimit {
+    return {
+      authority: isSet(object.authority) ? String(object.authority) : "",
+      maxLimit: isSet(object.maxLimit) ? Number(object.maxLimit) : 0,
+    };
+  },
+
+  toJSON(message: MsgUpdateMaxConcurrentLimit): unknown {
+    const obj: any = {};
+    message.authority !== undefined && (obj.authority = message.authority);
+    message.maxLimit !== undefined && (obj.maxLimit = Math.round(message.maxLimit));
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateMaxConcurrentLimit>, I>>(object: I): MsgUpdateMaxConcurrentLimit {
+    const message = createBaseMsgUpdateMaxConcurrentLimit();
+    message.authority = object.authority ?? "";
+    message.maxLimit = object.maxLimit ?? 0;
+    return message;
+  },
+};
+
+function createBaseMsgUpdateMaxConcurrentLimitResponse(): MsgUpdateMaxConcurrentLimitResponse {
+  return { code: "", msg: "" };
+}
+
+export const MsgUpdateMaxConcurrentLimitResponse = {
+  encode(message: MsgUpdateMaxConcurrentLimitResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.code !== "") {
+      writer.uint32(10).string(message.code);
+    }
+    if (message.msg !== "") {
+      writer.uint32(18).string(message.msg);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateMaxConcurrentLimitResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateMaxConcurrentLimitResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.code = reader.string();
+          break;
+        case 2:
+          message.msg = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdateMaxConcurrentLimitResponse {
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
+  },
+
+  toJSON(message: MsgUpdateMaxConcurrentLimitResponse): unknown {
+    const obj: any = {};
+    message.code !== undefined && (obj.code = message.code);
+    message.msg !== undefined && (obj.msg = message.msg);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateMaxConcurrentLimitResponse>, I>>(
+    object: I,
+  ): MsgUpdateMaxConcurrentLimitResponse {
+    const message = createBaseMsgUpdateMaxConcurrentLimitResponse();
+    message.code = object.code ?? "";
+    message.msg = object.msg ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgRequestExternalTransaction(): MsgRequestExternalTransaction {
+  return {
+    creator: "",
+    originChain: "",
+    originAddress: "",
+    targetChain: "",
+    targetAddress: "",
+    originSymbol: "",
+    targetSymbol: "",
+    amount: "",
+    fee: "",
+    options: "",
+  };
+}
+
+export const MsgRequestExternalTransaction = {
+  encode(message: MsgRequestExternalTransaction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.originChain !== "") {
+      writer.uint32(18).string(message.originChain);
+    }
+    if (message.originAddress !== "") {
+      writer.uint32(26).string(message.originAddress);
+    }
+    if (message.targetChain !== "") {
+      writer.uint32(34).string(message.targetChain);
+    }
+    if (message.targetAddress !== "") {
+      writer.uint32(42).string(message.targetAddress);
+    }
+    if (message.originSymbol !== "") {
+      writer.uint32(50).string(message.originSymbol);
+    }
+    if (message.targetSymbol !== "") {
+      writer.uint32(58).string(message.targetSymbol);
+    }
+    if (message.amount !== "") {
+      writer.uint32(66).string(message.amount);
+    }
+    if (message.fee !== "") {
+      writer.uint32(74).string(message.fee);
+    }
+    if (message.options !== "") {
+      writer.uint32(82).string(message.options);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRequestExternalTransaction {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgRequestExternalTransaction();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.originChain = reader.string();
+          break;
+        case 3:
+          message.originAddress = reader.string();
+          break;
+        case 4:
+          message.targetChain = reader.string();
+          break;
+        case 5:
+          message.targetAddress = reader.string();
+          break;
+        case 6:
+          message.originSymbol = reader.string();
+          break;
+        case 7:
+          message.targetSymbol = reader.string();
+          break;
+        case 8:
+          message.amount = reader.string();
+          break;
+        case 9:
+          message.fee = reader.string();
+          break;
+        case 10:
+          message.options = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgRequestExternalTransaction {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      originChain: isSet(object.originChain) ? String(object.originChain) : "",
+      originAddress: isSet(object.originAddress) ? String(object.originAddress) : "",
+      targetChain: isSet(object.targetChain) ? String(object.targetChain) : "",
+      targetAddress: isSet(object.targetAddress) ? String(object.targetAddress) : "",
+      originSymbol: isSet(object.originSymbol) ? String(object.originSymbol) : "",
+      targetSymbol: isSet(object.targetSymbol) ? String(object.targetSymbol) : "",
+      amount: isSet(object.amount) ? String(object.amount) : "",
+      fee: isSet(object.fee) ? String(object.fee) : "",
+      options: isSet(object.options) ? String(object.options) : "",
+    };
+  },
+
+  toJSON(message: MsgRequestExternalTransaction): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.originChain !== undefined && (obj.originChain = message.originChain);
+    message.originAddress !== undefined && (obj.originAddress = message.originAddress);
+    message.targetChain !== undefined && (obj.targetChain = message.targetChain);
+    message.targetAddress !== undefined && (obj.targetAddress = message.targetAddress);
+    message.originSymbol !== undefined && (obj.originSymbol = message.originSymbol);
+    message.targetSymbol !== undefined && (obj.targetSymbol = message.targetSymbol);
+    message.amount !== undefined && (obj.amount = message.amount);
+    message.fee !== undefined && (obj.fee = message.fee);
+    message.options !== undefined && (obj.options = message.options);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgRequestExternalTransaction>, I>>(
+    object: I,
+  ): MsgRequestExternalTransaction {
+    const message = createBaseMsgRequestExternalTransaction();
+    message.creator = object.creator ?? "";
+    message.originChain = object.originChain ?? "";
+    message.originAddress = object.originAddress ?? "";
+    message.targetChain = object.targetChain ?? "";
+    message.targetAddress = object.targetAddress ?? "";
+    message.originSymbol = object.originSymbol ?? "";
+    message.targetSymbol = object.targetSymbol ?? "";
+    message.amount = object.amount ?? "";
+    message.fee = object.fee ?? "";
+    message.options = object.options ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgRequestExternalTransactionResponse(): MsgRequestExternalTransactionResponse {
+  return { code: "", msg: "" };
+}
+
+export const MsgRequestExternalTransactionResponse = {
+  encode(message: MsgRequestExternalTransactionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.code !== "") {
+      writer.uint32(10).string(message.code);
+    }
+    if (message.msg !== "") {
+      writer.uint32(18).string(message.msg);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRequestExternalTransactionResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgRequestExternalTransactionResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.code = reader.string();
+          break;
+        case 2:
+          message.msg = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgRequestExternalTransactionResponse {
+    return { code: isSet(object.code) ? String(object.code) : "", msg: isSet(object.msg) ? String(object.msg) : "" };
+  },
+
+  toJSON(message: MsgRequestExternalTransactionResponse): unknown {
+    const obj: any = {};
+    message.code !== undefined && (obj.code = message.code);
+    message.msg !== undefined && (obj.msg = message.msg);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgRequestExternalTransactionResponse>, I>>(
+    object: I,
+  ): MsgRequestExternalTransactionResponse {
+    const message = createBaseMsgRequestExternalTransactionResponse();
     message.code = object.code ?? "";
     message.msg = object.msg ?? "";
     return message;
@@ -2598,42 +3221,29 @@ export const MsgFinalizeWithdrawTransactionResponse = {
 
 /** Msg defines the Msg service. */
 export interface Msg {
-  RequestTransaction(
-    request: MsgRequestTransaction
-  ): Promise<MsgRequestTransactionResponse>;
-  FinalizeTransaction(
-    request: MsgFinalizeTransaction
-  ): Promise<MsgFinalizeTransactionResponse>;
-  RequestProvisionTransaction(
-    request: MsgRequestProvisionTransaction
-  ): Promise<MsgRequestProvisionTransactionResponse>;
-  CancelTransaction(
-    request: MsgCancelTransaction
-  ): Promise<MsgCancelTransactionResponse>;
+  RequestTransaction(request: MsgRequestTransaction): Promise<MsgRequestTransactionResponse>;
+  FinalizeTransaction(request: MsgFinalizeTransaction): Promise<MsgFinalizeTransactionResponse>;
+  RequestProvisionTransaction(request: MsgRequestProvisionTransaction): Promise<MsgRequestProvisionTransactionResponse>;
+  CancelTransaction(request: MsgCancelTransaction): Promise<MsgCancelTransactionResponse>;
   SetTxHash(request: MsgSetTxHash): Promise<MsgSetTxHashResponse>;
   SetTxProcess(request: MsgSetTxProcess): Promise<MsgSetTxProcessResponse>;
   FinalizeProvisionTransaction(
-    request: MsgFinalizeProvisionTransaction
+    request: MsgFinalizeProvisionTransaction,
   ): Promise<MsgFinalizeProvisionTransactionResponse>;
-  RequestDrainTransaction(
-    request: MsgRequestDrainTransaction
-  ): Promise<MsgRequestDrainTransactionResponse>;
-  FinalizeDrainTransaction(
-    request: MsgFinalizeDrainTransaction
-  ): Promise<MsgFinalizeDrainTransactionResponse>;
-  RequestHtlcLock(
-    request: MsgRequestHtlcLock
-  ): Promise<MsgRequestHtlcLockResponse>;
+  RequestDrainTransaction(request: MsgRequestDrainTransaction): Promise<MsgRequestDrainTransactionResponse>;
+  FinalizeDrainTransaction(request: MsgFinalizeDrainTransaction): Promise<MsgFinalizeDrainTransactionResponse>;
+  RequestHtlcLock(request: MsgRequestHtlcLock): Promise<MsgRequestHtlcLockResponse>;
   HtlcReclaim(request: MsgHtlcReclaim): Promise<MsgHtlcReclaimResponse>;
   UpdateLiquidityProvisionParams(
-    request: MsgUpdateLiquidityProvisionParams
+    request: MsgUpdateLiquidityProvisionParams,
   ): Promise<MsgUpdateLiquidityProvisionParamsResponse>;
-  UpdateTransferLimitParams(
-    request: MsgUpdateTransferLimitParams
-  ): Promise<MsgUpdateTransferLimitParamsResponse>;
-  FinalizeWithdrawTransaction(
-    request: MsgFinalizeWithdrawTransaction
-  ): Promise<MsgFinalizeWithdrawTransactionResponse>;
+  UpdateTransferLimitParams(request: MsgUpdateTransferLimitParams): Promise<MsgUpdateTransferLimitParamsResponse>;
+  FinalizeWithdrawTransaction(request: MsgFinalizeWithdrawTransaction): Promise<MsgFinalizeWithdrawTransactionResponse>;
+  SetFiatTransactionParams(request: MsgSetFiatTransactionParams): Promise<MsgSetFiatTransactionParamsResponse>;
+  ConfirmTransaction(request: MsgConfirmTransaction): Promise<MsgConfirmTransactionResponse>;
+  UpdateTransactionStatus(request: MsgUpdateTransactionStatus): Promise<MsgUpdateTransactionStatusResponse>;
+  UpdateMaxConcurrentLimit(request: MsgUpdateMaxConcurrentLimit): Promise<MsgUpdateMaxConcurrentLimitResponse>;
+  RequestExternalTransaction(request: MsgRequestExternalTransaction): Promise<MsgRequestExternalTransactionResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -2642,220 +3252,149 @@ export class MsgClientImpl implements Msg {
     this.rpc = rpc;
     this.RequestTransaction = this.RequestTransaction.bind(this);
     this.FinalizeTransaction = this.FinalizeTransaction.bind(this);
-    this.RequestProvisionTransaction =
-      this.RequestProvisionTransaction.bind(this);
+    this.RequestProvisionTransaction = this.RequestProvisionTransaction.bind(this);
     this.CancelTransaction = this.CancelTransaction.bind(this);
     this.SetTxHash = this.SetTxHash.bind(this);
     this.SetTxProcess = this.SetTxProcess.bind(this);
-    this.FinalizeProvisionTransaction =
-      this.FinalizeProvisionTransaction.bind(this);
+    this.FinalizeProvisionTransaction = this.FinalizeProvisionTransaction.bind(this);
     this.RequestDrainTransaction = this.RequestDrainTransaction.bind(this);
     this.FinalizeDrainTransaction = this.FinalizeDrainTransaction.bind(this);
     this.RequestHtlcLock = this.RequestHtlcLock.bind(this);
     this.HtlcReclaim = this.HtlcReclaim.bind(this);
-    this.UpdateLiquidityProvisionParams =
-      this.UpdateLiquidityProvisionParams.bind(this);
+    this.UpdateLiquidityProvisionParams = this.UpdateLiquidityProvisionParams.bind(this);
     this.UpdateTransferLimitParams = this.UpdateTransferLimitParams.bind(this);
-    this.FinalizeWithdrawTransaction =
-      this.FinalizeWithdrawTransaction.bind(this);
+    this.FinalizeWithdrawTransaction = this.FinalizeWithdrawTransaction.bind(this);
+    this.SetFiatTransactionParams = this.SetFiatTransactionParams.bind(this);
+    this.ConfirmTransaction = this.ConfirmTransaction.bind(this);
+    this.UpdateTransactionStatus = this.UpdateTransactionStatus.bind(this);
+    this.UpdateMaxConcurrentLimit = this.UpdateMaxConcurrentLimit.bind(this);
+    this.RequestExternalTransaction = this.RequestExternalTransaction.bind(this);
   }
-  RequestTransaction(
-    request: MsgRequestTransaction
-  ): Promise<MsgRequestTransactionResponse> {
+  RequestTransaction(request: MsgRequestTransaction): Promise<MsgRequestTransactionResponse> {
     const data = MsgRequestTransaction.encode(request).finish();
-    const promise = this.rpc.request(
-      "kimablockchain.transaction.Msg",
-      "RequestTransaction",
-      data
-    );
-    return promise.then((data) =>
-      MsgRequestTransactionResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.transaction.Msg", "RequestTransaction", data);
+    return promise.then((data) => MsgRequestTransactionResponse.decode(new _m0.Reader(data)));
   }
 
-  FinalizeTransaction(
-    request: MsgFinalizeTransaction
-  ): Promise<MsgFinalizeTransactionResponse> {
+  FinalizeTransaction(request: MsgFinalizeTransaction): Promise<MsgFinalizeTransactionResponse> {
     const data = MsgFinalizeTransaction.encode(request).finish();
-    const promise = this.rpc.request(
-      "kimablockchain.transaction.Msg",
-      "FinalizeTransaction",
-      data
-    );
-    return promise.then((data) =>
-      MsgFinalizeTransactionResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.transaction.Msg", "FinalizeTransaction", data);
+    return promise.then((data) => MsgFinalizeTransactionResponse.decode(new _m0.Reader(data)));
   }
 
   RequestProvisionTransaction(
-    request: MsgRequestProvisionTransaction
+    request: MsgRequestProvisionTransaction,
   ): Promise<MsgRequestProvisionTransactionResponse> {
     const data = MsgRequestProvisionTransaction.encode(request).finish();
-    const promise = this.rpc.request(
-      "kimablockchain.transaction.Msg",
-      "RequestProvisionTransaction",
-      data
-    );
-    return promise.then((data) =>
-      MsgRequestProvisionTransactionResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.transaction.Msg", "RequestProvisionTransaction", data);
+    return promise.then((data) => MsgRequestProvisionTransactionResponse.decode(new _m0.Reader(data)));
   }
 
-  CancelTransaction(
-    request: MsgCancelTransaction
-  ): Promise<MsgCancelTransactionResponse> {
+  CancelTransaction(request: MsgCancelTransaction): Promise<MsgCancelTransactionResponse> {
     const data = MsgCancelTransaction.encode(request).finish();
-    const promise = this.rpc.request(
-      "kimablockchain.transaction.Msg",
-      "CancelTransaction",
-      data
-    );
-    return promise.then((data) =>
-      MsgCancelTransactionResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.transaction.Msg", "CancelTransaction", data);
+    return promise.then((data) => MsgCancelTransactionResponse.decode(new _m0.Reader(data)));
   }
 
   SetTxHash(request: MsgSetTxHash): Promise<MsgSetTxHashResponse> {
     const data = MsgSetTxHash.encode(request).finish();
-    const promise = this.rpc.request(
-      "kimablockchain.transaction.Msg",
-      "SetTxHash",
-      data
-    );
-    return promise.then((data) =>
-      MsgSetTxHashResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.transaction.Msg", "SetTxHash", data);
+    return promise.then((data) => MsgSetTxHashResponse.decode(new _m0.Reader(data)));
   }
 
   SetTxProcess(request: MsgSetTxProcess): Promise<MsgSetTxProcessResponse> {
     const data = MsgSetTxProcess.encode(request).finish();
-    const promise = this.rpc.request(
-      "kimablockchain.transaction.Msg",
-      "SetTxProcess",
-      data
-    );
-    return promise.then((data) =>
-      MsgSetTxProcessResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.transaction.Msg", "SetTxProcess", data);
+    return promise.then((data) => MsgSetTxProcessResponse.decode(new _m0.Reader(data)));
   }
 
   FinalizeProvisionTransaction(
-    request: MsgFinalizeProvisionTransaction
+    request: MsgFinalizeProvisionTransaction,
   ): Promise<MsgFinalizeProvisionTransactionResponse> {
     const data = MsgFinalizeProvisionTransaction.encode(request).finish();
-    const promise = this.rpc.request(
-      "kimablockchain.transaction.Msg",
-      "FinalizeProvisionTransaction",
-      data
-    );
-    return promise.then((data) =>
-      MsgFinalizeProvisionTransactionResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.transaction.Msg", "FinalizeProvisionTransaction", data);
+    return promise.then((data) => MsgFinalizeProvisionTransactionResponse.decode(new _m0.Reader(data)));
   }
 
-  RequestDrainTransaction(
-    request: MsgRequestDrainTransaction
-  ): Promise<MsgRequestDrainTransactionResponse> {
+  RequestDrainTransaction(request: MsgRequestDrainTransaction): Promise<MsgRequestDrainTransactionResponse> {
     const data = MsgRequestDrainTransaction.encode(request).finish();
-    const promise = this.rpc.request(
-      "kimablockchain.transaction.Msg",
-      "RequestDrainTransaction",
-      data
-    );
-    return promise.then((data) =>
-      MsgRequestDrainTransactionResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.transaction.Msg", "RequestDrainTransaction", data);
+    return promise.then((data) => MsgRequestDrainTransactionResponse.decode(new _m0.Reader(data)));
   }
 
-  FinalizeDrainTransaction(
-    request: MsgFinalizeDrainTransaction
-  ): Promise<MsgFinalizeDrainTransactionResponse> {
+  FinalizeDrainTransaction(request: MsgFinalizeDrainTransaction): Promise<MsgFinalizeDrainTransactionResponse> {
     const data = MsgFinalizeDrainTransaction.encode(request).finish();
-    const promise = this.rpc.request(
-      "kimablockchain.transaction.Msg",
-      "FinalizeDrainTransaction",
-      data
-    );
-    return promise.then((data) =>
-      MsgFinalizeDrainTransactionResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.transaction.Msg", "FinalizeDrainTransaction", data);
+    return promise.then((data) => MsgFinalizeDrainTransactionResponse.decode(new _m0.Reader(data)));
   }
 
-  RequestHtlcLock(
-    request: MsgRequestHtlcLock
-  ): Promise<MsgRequestHtlcLockResponse> {
+  RequestHtlcLock(request: MsgRequestHtlcLock): Promise<MsgRequestHtlcLockResponse> {
     const data = MsgRequestHtlcLock.encode(request).finish();
-    const promise = this.rpc.request(
-      "kimablockchain.transaction.Msg",
-      "RequestHtlcLock",
-      data
-    );
-    return promise.then((data) =>
-      MsgRequestHtlcLockResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.transaction.Msg", "RequestHtlcLock", data);
+    return promise.then((data) => MsgRequestHtlcLockResponse.decode(new _m0.Reader(data)));
   }
 
   HtlcReclaim(request: MsgHtlcReclaim): Promise<MsgHtlcReclaimResponse> {
     const data = MsgHtlcReclaim.encode(request).finish();
-    const promise = this.rpc.request(
-      "kimablockchain.transaction.Msg",
-      "HtlcReclaim",
-      data
-    );
-    return promise.then((data) =>
-      MsgHtlcReclaimResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.transaction.Msg", "HtlcReclaim", data);
+    return promise.then((data) => MsgHtlcReclaimResponse.decode(new _m0.Reader(data)));
   }
 
   UpdateLiquidityProvisionParams(
-    request: MsgUpdateLiquidityProvisionParams
+    request: MsgUpdateLiquidityProvisionParams,
   ): Promise<MsgUpdateLiquidityProvisionParamsResponse> {
     const data = MsgUpdateLiquidityProvisionParams.encode(request).finish();
-    const promise = this.rpc.request(
-      "kimablockchain.transaction.Msg",
-      "UpdateLiquidityProvisionParams",
-      data
-    );
-    return promise.then((data) =>
-      MsgUpdateLiquidityProvisionParamsResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.transaction.Msg", "UpdateLiquidityProvisionParams", data);
+    return promise.then((data) => MsgUpdateLiquidityProvisionParamsResponse.decode(new _m0.Reader(data)));
   }
 
-  UpdateTransferLimitParams(
-    request: MsgUpdateTransferLimitParams
-  ): Promise<MsgUpdateTransferLimitParamsResponse> {
+  UpdateTransferLimitParams(request: MsgUpdateTransferLimitParams): Promise<MsgUpdateTransferLimitParamsResponse> {
     const data = MsgUpdateTransferLimitParams.encode(request).finish();
-    const promise = this.rpc.request(
-      "kimablockchain.transaction.Msg",
-      "UpdateTransferLimitParams",
-      data
-    );
-    return promise.then((data) =>
-      MsgUpdateTransferLimitParamsResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.transaction.Msg", "UpdateTransferLimitParams", data);
+    return promise.then((data) => MsgUpdateTransferLimitParamsResponse.decode(new _m0.Reader(data)));
   }
 
   FinalizeWithdrawTransaction(
-    request: MsgFinalizeWithdrawTransaction
+    request: MsgFinalizeWithdrawTransaction,
   ): Promise<MsgFinalizeWithdrawTransactionResponse> {
     const data = MsgFinalizeWithdrawTransaction.encode(request).finish();
-    const promise = this.rpc.request(
-      "kimablockchain.transaction.Msg",
-      "FinalizeWithdrawTransaction",
-      data
-    );
-    return promise.then((data) =>
-      MsgFinalizeWithdrawTransactionResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("kimablockchain.transaction.Msg", "FinalizeWithdrawTransaction", data);
+    return promise.then((data) => MsgFinalizeWithdrawTransactionResponse.decode(new _m0.Reader(data)));
+  }
+
+  SetFiatTransactionParams(request: MsgSetFiatTransactionParams): Promise<MsgSetFiatTransactionParamsResponse> {
+    const data = MsgSetFiatTransactionParams.encode(request).finish();
+    const promise = this.rpc.request("kimablockchain.transaction.Msg", "SetFiatTransactionParams", data);
+    return promise.then((data) => MsgSetFiatTransactionParamsResponse.decode(new _m0.Reader(data)));
+  }
+
+  ConfirmTransaction(request: MsgConfirmTransaction): Promise<MsgConfirmTransactionResponse> {
+    const data = MsgConfirmTransaction.encode(request).finish();
+    const promise = this.rpc.request("kimablockchain.transaction.Msg", "ConfirmTransaction", data);
+    return promise.then((data) => MsgConfirmTransactionResponse.decode(new _m0.Reader(data)));
+  }
+
+  UpdateTransactionStatus(request: MsgUpdateTransactionStatus): Promise<MsgUpdateTransactionStatusResponse> {
+    const data = MsgUpdateTransactionStatus.encode(request).finish();
+    const promise = this.rpc.request("kimablockchain.transaction.Msg", "UpdateTransactionStatus", data);
+    return promise.then((data) => MsgUpdateTransactionStatusResponse.decode(new _m0.Reader(data)));
+  }
+
+  UpdateMaxConcurrentLimit(request: MsgUpdateMaxConcurrentLimit): Promise<MsgUpdateMaxConcurrentLimitResponse> {
+    const data = MsgUpdateMaxConcurrentLimit.encode(request).finish();
+    const promise = this.rpc.request("kimablockchain.transaction.Msg", "UpdateMaxConcurrentLimit", data);
+    return promise.then((data) => MsgUpdateMaxConcurrentLimitResponse.decode(new _m0.Reader(data)));
+  }
+
+  RequestExternalTransaction(request: MsgRequestExternalTransaction): Promise<MsgRequestExternalTransactionResponse> {
+    const data = MsgRequestExternalTransaction.encode(request).finish();
+    const promise = this.rpc.request("kimablockchain.transaction.Msg", "RequestExternalTransaction", data);
+    return promise.then((data) => MsgRequestExternalTransactionResponse.decode(new _m0.Reader(data)));
   }
 }
 
 interface Rpc {
-  request(
-    service: string,
-    method: string,
-    data: Uint8Array
-  ): Promise<Uint8Array>;
+  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
 }
 
 declare var self: any | undefined;
@@ -2902,31 +3441,16 @@ function base64FromBytes(arr: Uint8Array): string {
   }
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
-      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
-    };
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToNumber(long: Long): number {
   if (long.gt(Number.MAX_SAFE_INTEGER)) {
