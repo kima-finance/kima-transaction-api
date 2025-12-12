@@ -33,6 +33,7 @@ interface SignAndBroadcastOptions {
 
 const types = [
   ["/kimablockchain.transaction.MsgRequestTransaction", MsgRequestTransaction],
+  ["/kimablockchain.transaction.MsgRequestExternalTransaction", MsgRequestExternalTransaction],
   ["/kimablockchain.transaction.MsgRequestHtlcLock", MsgRequestHtlcLock],
   ["/kimablockchain.transaction.MsgSetTxHash", MsgSetTxHash],
   ["/kimablockchain.transaction.MsgHtlcReclaim", MsgHtlcReclaim],
