@@ -86,6 +86,35 @@ export interface RequestExternalTxProps {
     options: string;
 }
 
+export interface HtlcLockingTransaction {
+    id: string;
+    senderAddress: string;
+    senderPubkey: string;
+    htlcTimestamp: string;
+    amount: string;
+    txHash: string;
+    status: string;
+    errReason: string;
+    creator: string;
+    htlcAddress: string;
+    pull_status: string;
+}
+
+export interface HtlcLockingTransactionResponse {
+    htlcLockingTransaction: HtlcLockingTransaction[];
+    pagination?: {
+        next_key?: string | null;
+        total?: string;
+    };
+}
+
+export interface QueryHtlcLockingTransactionParams {
+    baseUrl: string;
+    limit?: number;
+    offset?: number;
+    paginationKey?: string;
+}
+
 function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
