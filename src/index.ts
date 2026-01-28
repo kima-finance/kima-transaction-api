@@ -29,12 +29,12 @@ const requestJson = async <T>(url: string): Promise<T> => {
     const parsed = new URL(url);
     const transport = parsed.protocol === "https:" ? https : http;
     const req = transport.get(parsed, (res) => {
-      const chunks: Buffer[] = [];
-      res.on("data", (chunk) => {
-        chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+      res.setEncoding("utf8");
+      let body = "";
+      res.on("data", (chunk: string) => {
+        body += chunk;
       });
       res.on("end", () => {
-        const body = Buffer.concat(chunks).toString("utf8");
         const status = res.statusCode ?? 0;
         if (status < 200 || status >= 300) {
           const error = new Error(`Request failed with status ${status}`);
