@@ -192,7 +192,12 @@ export async function submitKimaSwapTransaction({
   fee,
   dex,
   slippage,
-  options,
+  htlcExpirationTimestamp,
+  htlcCreationHash,
+  htlcCreationVout,
+  htlcVersion,
+  senderPubKey,
+  options
 }: RequestSwapTxProps) {
   const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
     process.env.KIMA_BACKEND_MNEMONIC as string,
@@ -213,6 +218,11 @@ export async function submitKimaSwapTransaction({
     fee: fee,
     dex: dex,
     slippage: slippage,
+    htlcExpirationTimestamp: htlcExpirationTimestamp || "",
+    htlcCreationHash: htlcCreationHash || "",
+    htlcCreationVout: htlcCreationVout || 0,
+    htlcVersion: htlcVersion || "",
+    senderPubKey: senderPubKey || new Uint8Array(),
     options: options,
   };
 

@@ -71,6 +71,11 @@ export interface RequestSwapTxProps {
     fee: string;
     dex: string;
     slippage: string;
+    htlcExpirationTimestamp?: string;
+    htlcCreationHash?: string;
+    htlcCreationVout?: number;
+    htlcVersion?: string;
+    senderPubKey?: Uint8Array;
     options: string;
 }
 

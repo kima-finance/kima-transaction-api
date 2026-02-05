@@ -28,6 +28,16 @@ export interface MsgRequestSwapTransaction {
   dex: string;
   /** the slippage of the swap transaction */
   slippage: string;
+  /** the timestamp when the HTLC contract expires and the user can reclaim the funds locked there */
+  htlcExpirationTimestamp: string;
+  /** the txhash locking the funds in the HTLC */
+  htlcCreationHash: string;
+  /** the output index of the locked funds in the HTLC creation transaction */
+  htlcCreationVout: number;
+  /** a version denoting which HTLC script version is being used for the HTLC transaction */
+  htlcVersion: string;
+  /** for bitcoin transaction this is the public key of the sender */
+  senderPubKey: Uint8Array;
   /** the options of the swap transaction */
   options: string;
 }
@@ -142,6 +152,11 @@ function createBaseMsgRequestSwapTransaction(): MsgRequestSwapTransaction {
     fee: "",
     dex: "",
     slippage: "",
+    htlcExpirationTimestamp: "",
+    htlcCreationHash: "",
+    htlcCreationVout: 0,
+    htlcVersion: "",
+    senderPubKey: new Uint8Array(),
     options: "",
   };
 }
@@ -184,8 +199,23 @@ export const MsgRequestSwapTransaction = {
     if (message.slippage !== "") {
       writer.uint32(98).string(message.slippage);
     }
+    if (message.htlcExpirationTimestamp !== "") {
+      writer.uint32(106).string(message.htlcExpirationTimestamp);
+    }
+    if (message.htlcCreationHash !== "") {
+      writer.uint32(114).string(message.htlcCreationHash);
+    }
+    if (message.htlcCreationVout !== 0) {
+      writer.uint32(120).uint32(message.htlcCreationVout);
+    }
+    if (message.htlcVersion !== "") {
+      writer.uint32(130).string(message.htlcVersion);
+    }
+    if (message.senderPubKey.length !== 0) {
+      writer.uint32(138).bytes(message.senderPubKey);
+    }
     if (message.options !== "") {
-      writer.uint32(106).string(message.options);
+      writer.uint32(146).string(message.options);
     }
     return writer;
   },
@@ -234,6 +264,21 @@ export const MsgRequestSwapTransaction = {
           message.slippage = reader.string();
           break;
         case 13:
+          message.htlcExpirationTimestamp = reader.string();
+          break;
+        case 14:
+          message.htlcCreationHash = reader.string();
+          break;
+        case 15:
+          message.htlcCreationVout = reader.uint32();
+          break;
+        case 16:
+          message.htlcVersion = reader.string();
+          break;
+        case 17:
+          message.senderPubKey = reader.bytes();
+          break;
+        case 18:
           message.options = reader.string();
           break;
         default:
@@ -258,6 +303,11 @@ export const MsgRequestSwapTransaction = {
       fee: isSet(object.fee) ? String(object.fee) : "",
       dex: isSet(object.dex) ? String(object.dex) : "",
       slippage: isSet(object.slippage) ? String(object.slippage) : "",
+      htlcExpirationTimestamp: isSet(object.htlcExpirationTimestamp) ? String(object.htlcExpirationTimestamp) : "",
+      htlcCreationHash: isSet(object.htlcCreationHash) ? String(object.htlcCreationHash) : "",
+      htlcCreationVout: isSet(object.htlcCreationVout) ? Number(object.htlcCreationVout) : 0,
+      htlcVersion: isSet(object.htlcVersion) ? String(object.htlcVersion) : "",
+      senderPubKey: isSet(object.senderPubKey) ? bytesFromBase64(object.senderPubKey) : new Uint8Array(),
       options: isSet(object.options) ? String(object.options) : "",
     };
   },
@@ -276,6 +326,14 @@ export const MsgRequestSwapTransaction = {
     message.fee !== undefined && (obj.fee = message.fee);
     message.dex !== undefined && (obj.dex = message.dex);
     message.slippage !== undefined && (obj.slippage = message.slippage);
+    message.htlcExpirationTimestamp !== undefined && (obj.htlcExpirationTimestamp = message.htlcExpirationTimestamp);
+    message.htlcCreationHash !== undefined && (obj.htlcCreationHash = message.htlcCreationHash);
+    message.htlcCreationVout !== undefined && (obj.htlcCreationVout = Math.round(message.htlcCreationVout));
+    message.htlcVersion !== undefined && (obj.htlcVersion = message.htlcVersion);
+    message.senderPubKey !== undefined
+      && (obj.senderPubKey = base64FromBytes(
+        message.senderPubKey !== undefined ? message.senderPubKey : new Uint8Array(),
+      ));
     message.options !== undefined && (obj.options = message.options);
     return obj;
   },
@@ -294,6 +352,11 @@ export const MsgRequestSwapTransaction = {
     message.fee = object.fee ?? "";
     message.dex = object.dex ?? "";
     message.slippage = object.slippage ?? "";
+    message.htlcExpirationTimestamp = object.htlcExpirationTimestamp ?? "";
+    message.htlcCreationHash = object.htlcCreationHash ?? "";
+    message.htlcCreationVout = object.htlcCreationVout ?? 0;
+    message.htlcVersion = object.htlcVersion ?? "";
+    message.senderPubKey = object.senderPubKey ?? new Uint8Array();
     message.options = object.options ?? "";
     return message;
   },
@@ -1324,6 +1387,31 @@ var globalThis: any = (() => {
   }
   throw "Unable to locate global object";
 })();
+
+function bytesFromBase64(b64: string): Uint8Array {
+  if (globalThis.Buffer) {
+    return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
+  } else {
+    const bin = globalThis.atob(b64);
+    const arr = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; ++i) {
+      arr[i] = bin.charCodeAt(i);
+    }
+    return arr;
+  }
+}
+
+function base64FromBytes(arr: Uint8Array): string {
+  if (globalThis.Buffer) {
+    return globalThis.Buffer.from(arr).toString("base64");
+  } else {
+    const bin: string[] = [];
+    arr.forEach((byte) => {
+      bin.push(String.fromCharCode(byte));
+    });
+    return globalThis.btoa(bin.join(""));
+  }
+}
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
