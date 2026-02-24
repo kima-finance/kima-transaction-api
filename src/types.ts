@@ -28,6 +28,23 @@ export enum CurrencyOptions {
     USD = "USD",
 }
 
+export interface Permit2SubmitOptions {
+    r: string;
+    s: string;
+    v: number; // 27 | 28
+    deadline: number; // unix timestamp (seconds)
+}
+
+export interface SubmitOptionsPayload {
+    signature?: string;
+    feeId?: string;
+    chargeFeeAtTarget?: boolean;
+    transactionIdSeed?: string;
+    transactionIdSignature?: string;
+    permit2?: Permit2SubmitOptions;
+    [key: string]: unknown;
+}
+
 export interface RequestHtlcReclaimProps {
     senderAddress: string;
     txHash: string;
@@ -56,6 +73,7 @@ export interface RequestTransferTxProps {
     htlcExpirationTimestamp?: string;
     htlcVersion?: string;
     senderPubKey?: Uint8Array;
+    // JSON-serialized SubmitOptionsPayload
     options: string;
 }
 
@@ -76,6 +94,7 @@ export interface RequestSwapTxProps {
     htlcCreationVout?: number;
     htlcVersion?: string;
     senderPubKey?: Uint8Array;
+    // JSON-serialized SubmitOptionsPayload
     options: string;
 }
 
@@ -88,6 +107,7 @@ export interface RequestExternalTxProps {
     targetSymbol: CurrencyOptions;
     amount: string;
     fee: string;
+    // JSON-serialized SubmitOptionsPayload
     options: string;
 }
 

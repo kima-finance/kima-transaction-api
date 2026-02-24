@@ -24,6 +24,8 @@ import {
   RequestExternalTxProps,
 } from "./types";
 
+export * from "./types";
+
 const requestJson = async <T>(url: string): Promise<T> => {
   return new Promise((resolve, reject) => {
     const parsed = new URL(url);

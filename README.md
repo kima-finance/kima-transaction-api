@@ -19,9 +19,24 @@ yarn add @kimafinance/kima-transaction-api
 import {
   submitKimaTransferTransaction,
   submitKimaSwapTransaction,
-  SupportNetworks,
+  SupportedNetworks,
   CurrencyOptions,
+  SubmitOptionsPayload,
 } from "@kimafinance/kima-transaction-api";
+
+const transferOptions: SubmitOptionsPayload = {
+  signature: "", // approval message signature
+  feeId: "", // fee id from fee quote
+  chargeFeeAtTarget: false,
+  transactionIdSeed: "",
+  transactionIdSignature: "",
+  permit2: {
+    r: "0x...",
+    s: "0x...",
+    v: 27,
+    deadline: 1735689600,
+  },
+};
 
 const txResult = await submitKimaTransferTransaction({
   originAddress: "0x1234123412341234123412341234123412341234",
@@ -37,13 +52,8 @@ const txResult = await submitKimaTransferTransaction({
   htlcExpirationTimestamp: "",
   htlcVersion: "",
   senderPubKey: "",
-  options: {
-    signature: "", // required: generated signature from the approval message
-    feeId: "", // required: id returned from calculated fee in fcs
-    chargeFeeAtTarget: false // required: wether to deduct fees from origin or target
-    transactionIdSeed: "", // optional: used in fiat on ramp payments
-    transactionIdSignature: "", // optional: used to validate transaction idempotency
-  }
+  // Runtime wire format stays a serialized JSON string
+  options: JSON.stringify(transferOptions),
 });
 
 
@@ -59,10 +69,16 @@ const txResult = await submitKimaSwapTransaction({
   fee: "0.3",
   dex: "uniswap", // required to send empty strings for now
   slippage: "0.05",
-  options: {
-    signature: "", // required: generated signature from the approval message
-    feeId: "", // required: id returned from calculated fee in fcs
-  }
+  options: JSON.stringify({
+    signature: "",
+    feeId: "",
+    permit2: {
+      r: "0x...",
+      s: "0x...",
+      v: 28,
+      deadline: 1735689600,
+    },
+  } satisfies SubmitOptionsPayload),
 });
 ```
 
